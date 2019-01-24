@@ -305,44 +305,44 @@ The fields for the configuration item are:
 | ignore | Elements that are not counted | RegExp , object | undefined |
 | cutOut | Whether to cut | boolean | fasle |
 
-example
+### Example
 
-1. Limit the length of a string to no more than 3
+* Limit the length of a string to no more than 3
 
 ```html
 <div>{{hello | limitTo(3)}}</div>
 <!-- hel -->
 ```
 
-1. Limit the length of a string to no more than 3 characters starting with the second letter
+* Limit the length of a string to no more than 3 characters starting with the second letter
 
 ```html
 <div>{{hello | limitTo(3, {startWithIndex:1})}}</div>
 <!-- hell -->
 ```
 
-1. If you want to cutout the front part you can add cutout
+* If you want to cutout the front part you can add cutout
 
 ```html
 <div>{{hello | limitTo(3, {startWithIndex:1, cutOut: true})}}</div>
 <!-- ell -->
 ```
 
-1. You can also specify the starting position based on the element
+* You can also specify the starting position based on the element
 
 ```html
 <div>{{3.1415 | limitTo(2, {startWith:'.'})}}</div>
 <!-- 3.1 -->
 ```
 
-1. You can ignore it if you don't want irrelevant elements to affect the count
+* You can ignore it if you don't want irrelevant elements to affect the count
 
 ```html
 <div>{{3.1415 | limitTo(2, {startWith:'.', ignore: /\./'})}}</div>
 <!-- 3.14 -->
 ```
 
-1. Displays a number of eight bits of data
+* Displays a number of eight bits of data
 
 ```html
 <div>{{123456789 | limitTo(8, {ignore: /\./'})}}</div>
