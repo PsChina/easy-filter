@@ -276,6 +276,83 @@ Creates a new array or string containing only a specified number of elements.
 The elements are taken from either the beginning of the source array,
 string or number.
 
+```js
+export default{
+  methods: {
+    limitTo (input, limit, options) {
+      return this.easyFilter.limitTo(input, limit, options);
+    }
+  }
+}
+```
+
+The first parameter `input` is the data to be filtered, which can be an array, a number, or a string.
+
+The second parameter is the limit count to limit `input`'s length.
+
+| second parameter | instructions | type | default value |
+| limit | Limit the length | number | Number.POSITIVE_INFINITY |
+
+The third parameter is the configuration item which says how do I filter this data.
+
+The fields for the configuration item are:
+
+| attr | instructions | type | default value |
+| :--:| :--:| :--: | :--: |
+| startWithIndex | Start counting by index | number | 0 |
+| startWith | Start counting by element | not number | undefined |
+| ignore | Elements that are not counted | RegExp , object | undefined |
+| cutOut | Whether to cut | boolean | fasle |
+
+example
+
+1. Limit the length of a string to no more than 3
+
+```html
+<div>{{hello | limitTo(3)}}</div>
+<!-- hel -->
+```
+
+1. Limit the length of a string to no more than 3 characters starting with the second letter
+
+```html
+<div>{{hello | limitTo(3, {startWithIndex:1})}}</div>
+<!-- hell -->
+```
+
+1. If you want to cutout the front part you can add cutout
+
+```html
+<div>{{hello | limitTo(3, {startWithIndex:1, cutOut: true})}}</div>
+<!-- ell -->
+```
+
+1. You can also specify the starting position based on the element
+
+```html
+<div>{{3.1415 | limitTo(2, {startWith:'.'})}}</div>
+<!-- 3.1 -->
+```
+
+1. You can ignore it if you don't want irrelevant elements to affect the count
+
+```html
+<div>{{3.1415 | limitTo(2, {startWith:'.', ignore: /\./'})}}</div>
+<!-- 3.14 -->
+```
+
+1. Displays a number of eight bits of data
+
+```html
+<div>{{123456789 | limitTo(8, {ignore: /\./'})}}</div>
+<!-- 12345678 -->
+```
+
+```html
+<div>{{3.141592653 | limitTo(8, {ignore: /\./'})}}</div>
+<!-- 3.1415926 -->
+```
+
 ## number
 
 When you pass in an integer, you will default to two decimal places,

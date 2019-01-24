@@ -306,21 +306,63 @@ function number (input, digits = 3) {
  * string or number,
  * as specified by the value and sign (positive or negative) of limit.
 */
-function limitTo (input, limit = Number.POSITIVE_INFINITY, begin = 0) {
+function limitTo(input, limit = Number.POSITIVE_INFINITY, {startWithIndex = 0, startWith, ignore, cutOut = false}={}) {
   const type = typeof input
   switch (type) {
-    case 'number':
-      return input.toString().substring(begin, limit)
-    case 'string':
-      return input.substring(begin, limit)
-    case 'object':
+    case 'string': {
+      const arrayData = input.split('')
+      const itemIndex = arrayData.indexOf(startWith)
+      const startIndex = itemIndex === -1 ? startWithIndex : itemIndex
+      return getOutput(arrayData, {startIndex, limit, ignore, type, cutOut})
+    }
+    default: {
       if (input instanceof Array) {
-        let newArr = input.concat()
-        return newArr.splice(begin, limit)
+        const arrayData = input.concat()
+        const itemIndex = arrayData.indexOf(startWith)
+        const startIndex = itemIndex === -1 ? startWithIndex : itemIndex
+        return getOutput(arrayData, {startIndex, limit, ignore, type, cutOut})
+      } else {
+        const arrayData = input.toString().split('')
+        const itemIndex = arrayData.indexOf(startWith)
+        const startIndex = itemIndex === -1 ? startWithIndex : itemIndex
+        return getOutput(arrayData, {startIndex, limit, ignore, type, cutOut})
       }
-      return input
+    }
+  }
+}
+
+function getOutput(array, {startIndex, limit, ignore, type, cutOut}) {
+  let endIndex = startIndex + Number(limit)
+  const newArr = []
+  let count = 0
+  array.forEach((item, index)=>{
+    if (index>=startIndex && index<endIndex) {
+      const regExp = new RegExp(ignore)
+      if (!ignore) {
+        count++
+      } else if (!regExp.test(item)) {
+        count++
+        endIndex++
+      }
+      if (count<=limit&&cutOut) {
+        if (limit===0 && index<=startIndex && startIndex!==0 || limit!==0 && index<endIndex) {
+          newArr.push(item)
+        }
+      }
+    }
+    if (count<=limit&&!cutOut) {
+      if (limit===0 && index<=startIndex && startIndex!==0 || limit!==0 && index<endIndex) {
+        newArr.push(item)
+      }
+    }
+  })
+  switch (type) {
+    case 'number':
+      return Number(newArr.join(''))
+    case 'string':
+      return newArr.join('')
     default:
-      return input
+      return newArr
   }
 }
 // Default Comparator
