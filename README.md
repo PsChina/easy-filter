@@ -291,6 +291,7 @@ The first parameter `input` is the data to be filtered, which can be an array, a
 The second parameter is the limit count to limit `input`'s length.
 
 | second parameter | instructions | type | default value |
+| :--:| :--:| :--: | :--: |
 | limit | Limit the length | number | Number.POSITIVE_INFINITY |
 
 The third parameter is the configuration item which says how do I filter this data.
