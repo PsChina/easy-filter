@@ -338,19 +338,19 @@ The fields for the configuration item are:
 * You can ignore it if you don't want irrelevant elements to affect the count
 
 ```html
-<div>{{3.1415 | limitTo(2, {startWith:'.', ignore: /\./'})}}</div>
+<div>{{3.1415 | limitTo(2, {startWith:'.', ignore: /\./})}}</div>
 <!-- 3.14 -->
 ```
 
 * Displays a number of eight bits of data
 
 ```html
-<div>{{123456789 | limitTo(8, {ignore: /\./'})}}</div>
+<div>{{123456789 | limitTo(8, {ignore: /\./})}}</div>
 <!-- 12345678 -->
 ```
 
 ```html
-<div>{{3.141592653 | limitTo(8, {ignore: /\./'})}}</div>
+<div>{{3.141592653 | limitTo(8, {ignore: /\./})}}</div>
 <!-- 3.1415926 -->
 ```
 
