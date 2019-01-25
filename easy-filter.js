@@ -322,10 +322,13 @@ function limitTo(input, limit = Number.POSITIVE_INFINITY, {startWithIndex = 0, s
         const startIndex = itemIndex === -1 ? startWithIndex : itemIndex
         return getOutput(arrayData, {startIndex, limit, ignore, type, cutOut})
       } else {
-        const arrayData = input.toString().split('')
-        const itemIndex = arrayData.indexOf(startWith)
-        const startIndex = itemIndex === -1 ? startWithIndex : itemIndex
-        return getOutput(arrayData, {startIndex, limit, ignore, type, cutOut})
+        if(type === 'number' || input !== undefined && input !== null && 'toString' in input){
+          const arrayData = input.toString().split('')
+          const itemIndex = arrayData.indexOf(startWith)
+          const startIndex = itemIndex === -1 ? startWithIndex : itemIndex
+          return getOutput(arrayData, {startIndex, limit, ignore, type, cutOut})
+        }
+        return input
       }
     }
   }

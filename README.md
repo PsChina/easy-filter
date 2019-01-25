@@ -354,6 +354,18 @@ The fields for the configuration item are:
 <!-- 3.1415926 -->
 ```
 
+* Limit Array
+
+```js
+limitTo([1,2,3,4,5], 2)
+// [1,2]
+```
+
+```js
+limitTo([1,2,3,4,5], 2, {startWith: 3,cutOut: true})
+// [3,4]
+```
+
 ## number
 
 When you pass in an integer, you will default to two decimal places,
