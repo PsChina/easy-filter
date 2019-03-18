@@ -1,7 +1,9 @@
 /**
  * @description This plug-in defines a portion of the Vue custom filter.
  */
-
+function isEmpty (val){
+  return val === undefined || val === '' || val === null || JSON.stringify(val) === '[]' || JSON.stringify(val) === '{}'
+}
 /**
  * @upperCase Uppercase string.
  */
@@ -47,6 +49,7 @@ function formatStrToArr (str, arr = []) {
     return formatStrToArr(residual, arr)
   } else {
     arr.push(residual)
+    arr = arr.filter(item=>item)
     return arr.reverse()
   }
 }
@@ -285,19 +288,32 @@ function json (input) {
  * and when you enter a decimal, you will round it to the nearest thousandth.
  * You can also change the exact number of digits by passing in parameters.
 */
-function number (input, digits = 3) {
+function number (input, digits = 3, round = true) {
+  if( isEmpty(input) ){
+    return `0.${'0'.padEnd(digits,'0')}`
+  }
   let temp = input.toString()
+  let int = '0'
+  let decimal = '0'
   if (temp.indexOf('.') !== -1) {
     let numberArr = temp.split('.')
     let intPart = numberArr[0]
     let decimalPart = numberArr[1]
-    let int = formatStrToArr(intPart).join(',')
-    let decimal = Number(decimalPart.substring(0, digits)) + Math.round(Number(`0.${decimalPart.substr(digits, 1)}`))
-    return `${int}.${decimal}`
+    int = formatStrToArr(intPart).join(',')
+    if(round){
+      decimal = Number(decimalPart.substring(0, digits)) + Math.round(Number(`0.${decimalPart.substr(digits, 1)}`))
+      decimal = String(decimal)
+    } else {
+      decimal = String(decimalPart.substring(0, digits))
+    }
   } else {
-    let int = formatStrToArr(temp).join(',')
-    return `${int}.00`
+    int = formatStrToArr(temp).join(',')
+    if(isEmpty(int)){
+      int = '0'
+    }
   }
+  decimal = decimal.padEnd(digits,'0')
+  return `${int}.${decimal}`
 }
 /**
  * @limitTo
