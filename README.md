@@ -371,3 +371,18 @@ limitTo([1,2,3,4,5], 2, {startWith: 3,cutOut: true})
 When you pass in an integer, you will default to two decimal places,
 and when you enter a decimal, you will round it to the nearest thousandth.
 You can also change the exact number of digits by passing in parameters.
+
+```html
+<div>{{3.141592653 | number}}</div>
+<!-- 3.142 -->
+```
+
+```html
+<div>{{3.141592653 | number(4)}}</div>
+<!-- 3.1416 -->
+```
+
+```html
+<div>{{3.141592653 | number(4,false)}}</div>
+<!-- 3.1415 -->
+```
