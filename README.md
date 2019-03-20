@@ -114,7 +114,7 @@ Use multiple options:
             <th>age</th>
             <th>sex</th>
         </tr>
-        <tr v-for="(value,index) in filter(personArray, new RegExp(match,'i') )" :key="index">
+        <tr v-for="value in filter(personArray, new RegExp(match,'i') )" :key="value.id">
             <td v-text="value.name"></td>
             <td v-text="value.age"></td>
             <td v-text="value.sex"></td>
@@ -130,11 +130,11 @@ export default {
     return {
       match: null,
       personArray: [
-        {name: 'Kimi', sex: 'male', age: 8},
-        {name: 'Cindy', sex: 'female', age: 4},
-        {name: 'Angela', sex: 'female', age: 6},
-        {name: 'Shitou', sex: 'male', age: 7},
-        {name: 'Tiantian', sex: 'male', age: 5}
+        {name: 'Kimi', sex: 'male', age: 8, id: 1},
+        {name: 'Cindy', sex: 'female', age: 4, id: 2},
+        {name: 'Angela', sex: 'female', age: 6, id: 3},
+        {name: 'Shitou', sex: 'male', age: 7, id: 4},
+        {name: 'Tiantian', sex: 'male', age: 5, id: 5}
       ]
     }
   },
@@ -169,15 +169,15 @@ Tiantian	5	male
 The filter can also filter the range conditions.
 
 ```js
-  // <div v-for="(item, index) in filter(personArray, matchFn)" :key="index">{{item}}</div>
+  // <div v-for="item in filter(personArray, matchFn)" :key="item.id">{{item}}</div>
   data () {
       return {
         personArray: [
-            {name: 'Kimi', sex: 'male', age: 8},
-            {name: 'Cindy', sex: 'female', age: 4},
-            {name: 'Angela', sex: 'female', age: 6},
-            {name: 'Shitou', sex: 'male', age: 7},
-            {name: 'Tiantian', sex: 'male', age: 5}
+          {name: 'Kimi', sex: 'male', age: 8, id: 1},
+          {name: 'Cindy', sex: 'female', age: 4, id: 2},
+          {name: 'Angela', sex: 'female', age: 6, id: 3},
+          {name: 'Shitou', sex: 'male', age: 7, id: 4},
+          {name: 'Tiantian', sex: 'male', age: 5, id: 5}
         ]
       }
   },
@@ -202,7 +202,7 @@ The filter can also filter the range conditions.
             <th @click="click('age')">age</th>
             <th @click="click('sex')">sex</th>
         </tr>
-        <tr v-for="(value,index) in orderBy(personArray, rule)" :key="index">
+        <tr v-for="value in orderBy(personArray, rule)" :key="value.id">
             <td v-text="value.name"></td>
             <td v-text="value.age"></td>
             <td v-text="value.sex"></td>
@@ -216,11 +216,11 @@ export default {
   data () {
     return {
       personArray: [
-        {name: 'Kimi', sex: 'male', age: 8},
-        {name: 'Cindy', sex: 'female', age: 4},
-        {name: 'Angela', sex: 'female', age: 6},
-        {name: 'Shitou', sex: 'male', age: 7},
-        {name: 'Tiantian', sex: 'male', age: 5}
+        {name: 'Kimi', sex: 'male', age: 8, id: 1},
+        {name: 'Cindy', sex: 'female', age: 4, id: 2},
+        {name: 'Angela', sex: 'female', age: 6, id: 3},
+        {name: 'Shitou', sex: 'male', age: 7, id: 4},
+        {name: 'Tiantian', sex: 'male', age: 5, id: 5}
       ],
       rule: null
     }
@@ -385,4 +385,9 @@ You can also change the exact number of digits by passing in parameters.
 ```html
 <div>{{3.141592653 | number(4,false)}}</div>
 <!-- 3.1415 -->
+```
+
+```html
+<div>{{3.1 | number(4,false)}}</div>
+<!-- 3.1000 -->
 ```
