@@ -4,6 +4,8 @@ The simple implementation of some angularjs built-in filters in vue.
 
 This package is very small and it only contains nine functions.
 
+[![996.icu](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu)
+
 ## filter list
 
 * currency
