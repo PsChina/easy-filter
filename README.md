@@ -394,3 +394,8 @@ You can also change the exact number of digits by passing in parameters.
 <div>{{3.1 | number(4,false)}}</div>
 <!-- 3.1000 -->
 ```
+
+License
+---
+
+[Anti-996 License](LICENSE)
