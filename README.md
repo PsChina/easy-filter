@@ -385,6 +385,8 @@ You can also change the exact number of digits by passing in parameters.
 <!-- 3.1416 -->
 ```
 
+Pass the second parameter false if rounding is not required
+
 ```html
 <div>{{3.141592653 | number(4,false)}}</div>
 <!-- 3.1415 -->

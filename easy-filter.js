@@ -311,6 +311,7 @@ function number (input, digits = 3, round = true) {
     if(isEmpty(int)){
       int = '0'
     }
+    return `${int}.00`
   }
   decimal = decimal.padEnd(digits,'0')
   return `${int}.${decimal}`
