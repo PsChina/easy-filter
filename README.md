@@ -376,8 +376,11 @@ When you pass in an integer, you will default to one decimal places,
 and when you enter a decimal, you will get its string.
 You can also change the exact number of digits by passing in parameters,
 and set options parameters to determine whether you want to round, and fill in zeros.
+
 @param1 input
+
 @param2 digits
+
 @param3 options {round:false, pad:false}
 
 For example:
