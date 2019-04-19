@@ -19,14 +19,14 @@ This package is very small and it only contains nine functions.
 * [upperCase](#upperCase)
 * [orderBy](#orderBy)
 
-## get start
+## Get start
 
 ```bash
 # install plugin
 npm install easy-filter --save
 ```
 
-## usage
+## Usage
 
 Import this plugin.
 
@@ -38,15 +38,20 @@ import Vue from 'vue';
 Vue.use(easyFilter);
 ```
 
-Use it like use angularjs filters.
-
-in some component
+Use it in a component
 
 ## lowerCase
 
 ```html
 <div>{{ 'Hello' | lowerCase }}</div>
 <!-- hello -->
+```
+
+## upperCase
+
+```html
+<div>{{ 'Hello' | upperCase }}</div>
+<!-- HELLO -->
 ```
 
 ## currency
