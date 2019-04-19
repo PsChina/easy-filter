@@ -386,6 +386,12 @@ and set options parameters to determine whether you want to round, and fill in z
 For example:
 
 No parameter
+
+```html
+<div>{{3 | number}}</div>
+<!-- 3.0 -->
+```
+
 ```html
 <div>{{3.14 | number}}</div>
 <!-- 3.14 -->
