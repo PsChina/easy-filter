@@ -13,11 +13,11 @@ This package is very small and it only contains nine functions.
 * [date](#date)
 * [filter](#filter)
 * [json](#json)
-* [limitTo](#limitTo)
-* [lowerCase](#lowerCase)
+* [limitTo](#limitto)
+* [lowerCase](#lowercase)
 * [number](#number)
-* [upperCase](#upperCase)
-* [orderBy](#orderBy)
+* [upperCase](#uppercase)
+* [orderBy](#orderby)
 
 ## Get start
 
