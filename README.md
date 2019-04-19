@@ -9,15 +9,15 @@ This package is very small and it only contains nine functions.
 
 ## filter list
 
-* currency
-* date
-* filter
-* json
-* limitTo
-* lowerCase
-* number
-* upperCase
-* orderBy
+* [currency](#currency)
+* [date](#date)
+* [filter](#filter)
+* [json](#json)
+* [limitTo](#limitTo)
+* [lowerCase](#lowerCase)
+* [number](#number)
+* [upperCase](#upperCase)
+* [orderBy](#orderBy)
 
 ## get start
 
@@ -383,7 +383,7 @@ and set options parameters to determine whether you want to round, and fill in z
 
 @param3 options {round:false, pad:false}
 
-For example:
+### Example
 
 No parameter
 
