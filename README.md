@@ -371,30 +371,60 @@ limitTo([1,2,3,4,5], 2, {startWith: 3,cutOut: true})
 
 ## number
 
-When you pass in an integer, you will default to two decimal places,
-and when you enter a decimal, you will round it to the nearest thousandth.
-You can also change the exact number of digits by passing in parameters.
+Format the number into a string.
+When you pass in an integer, you will default to one decimal places,
+and when you enter a decimal, you will get its string.
+You can also change the exact number of digits by passing in parameters,
+and set options parameters to determine whether you want to round, and fill in zeros.
+@param1 input
+@param2 digits
+@param3 options {round:false, pad:false}
 
+For example:
+
+No parameter
 ```html
-<div>{{3.141592653 | number}}</div>
-<!-- 3.142 -->
+<div>{{3.14 | number}}</div>
+<!-- 3.14 -->
 ```
 
+Limit digits
 ```html
-<div>{{3.141592653 | number(4)}}</div>
-<!-- 3.1416 -->
-```
-
-Pass the second parameter false if rounding is not required
-
-```html
-<div>{{3.141592653 | number(4,false)}}</div>
+<div>{{3.1415926 | number(4)}}</div>
 <!-- 3.1415 -->
 ```
 
+Limit digits & Fill zero
 ```html
-<div>{{3.1 | number(4,false)}}</div>
-<!-- 3.1000 -->
+<div>{{1 | number(2, {pad:true})}}</div>
+<!-- 1.00 -->
+```
+
+Limit digits & Rounding
+
+```html
+<div>{{3.1415 | number(3, {round: true})}}</div>
+<!-- 3.142 -->
+```
+
+Limit digits & Fill zero & Rounding
+
+```jsx
+var arr = [
+  1,
+  2.2,
+  3.333,
+  4.4444,
+  5.55555
+  ]
+
+<div v-for="num in arr">{{num | number(3, {pad: true, round: true})}}</div>
+
+// 1.000
+// 2.200
+// 3.333
+// 4.444
+// 5.556
 ```
 
 License

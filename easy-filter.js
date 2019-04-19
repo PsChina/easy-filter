@@ -284,17 +284,22 @@ function json (input) {
 }
 /**
  * @number Format the number into a string.
- * When you pass in an integer, you will default to two decimal places,
- * and when you enter a decimal, you will round it to the nearest thousandth.
+ * When you pass in an integer, you will default to one decimal places,
+ * and when you enter a decimal, you will get its string.
  * You can also change the exact number of digits by passing in parameters.
+ * And set options parameters to determine whether you want to round, and fill in zeros.
+ * @param1 input
+ * @param2 digits
+ * @param3 options {round:false, pad:false}
 */
-function number (input, digits = 3, round = true) {
+function number (input, digits = 3, options = {round:false, pad:false}) {
+  const {round, pad} = options
   if( isEmpty(input) ){
-    return `0.${'0'.padEnd(digits,'0')}`
+    return pad ? `0.${'0'.padEnd(digits,'0')}` : '0'
   }
   let temp = input.toString()
-  let int = '0'
-  let decimal = '0'
+  let int = String(input)
+  let decimal = digits ? '0' : false
   if (temp.indexOf('.') !== -1) {
     let numberArr = temp.split('.')
     let intPart = numberArr[0]
@@ -306,15 +311,8 @@ function number (input, digits = 3, round = true) {
     } else {
       decimal = String(decimalPart.substring(0, digits))
     }
-  } else {
-    int = formatStrToArr(temp).join(',')
-    if(isEmpty(int)){
-      int = '0'
-    }
-    return `${int}.00`
   }
-  decimal = decimal.padEnd(digits,'0')
-  return `${int}.${decimal}`
+  return pad ? `${int}${decimal?`.${decimal.padEnd(digits,'0')}`:''}` : (decimal ? `${int}.${decimal}` : int)
 }
 /**
  * @limitTo
