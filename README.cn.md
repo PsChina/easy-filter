@@ -2,7 +2,7 @@
 
 [English](./README.md)
 
-这是一个简单 vue 过滤器插件灵感来自 angularjs 的内置过滤器
+这是一个简单 vue 过滤器插件，灵感来自 angularjs 的内置过滤器。
 
 这个包很小他只有9个函数。
 
