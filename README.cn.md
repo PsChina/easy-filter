@@ -449,7 +449,7 @@ var arr = [
 // 5.556
 ```
 
-License
+许可证
 ---
 
 [Anti-996 License](LICENSE)
