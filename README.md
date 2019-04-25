@@ -1,5 +1,7 @@
 # easy-filter
 
+[中文](README.cn.md)
+
 The simple implementation of some angularjs built-in filters in vue.
 
 This package is very small and it only contains nine functions.
