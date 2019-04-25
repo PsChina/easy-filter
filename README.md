@@ -1,6 +1,6 @@
 # easy-filter
 
-[中文](README.cn.md)
+[中文文档](README.cn.md)
 
 The simple implementation of some angularjs built-in filters in vue.
 
