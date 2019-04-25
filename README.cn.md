@@ -24,13 +24,13 @@
 ## 用 npm 下载
 
 ```bash
-# install plugin
+# 安装插件
 npm install easy-filter --save
 ```
 
 ## 在Vue项目中使用
 
-Import this plugin.
+引入插件
 
 ```js
 import easyFilter from 'easy-filter';
@@ -40,7 +40,7 @@ import Vue from 'vue';
 Vue.use(easyFilter);
 ```
 
-Use it in a component
+在组件中使用:
 
 ## lowerCase
 
