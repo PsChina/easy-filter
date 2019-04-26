@@ -84,7 +84,7 @@ Vue.use(easyFilter);
 <!-- 1000 => ¥1.000 -->
 ```
 
-让符号再右边显示
+让符号在右边显示
 
 ```html
 <div>{{ 1000 | currency('¥', 0, {symbolOnLeft: false}) }}</div>
