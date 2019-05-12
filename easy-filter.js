@@ -59,10 +59,13 @@ function formatStrToArr (str, arr = []) {
  * When no currency symbol is provided,
  * default symbol for current locale is used.
  */
-function currency (input, currencySymbol = '$', digits = 2, options = {symbolOnLeft:true, separator:',', addSpace: false}) {
+function currency (input, currencySymbol = '$', digits = 2, options = {symbolOnLeft:true, separator:',', addSpace: false, pad: true, round:false}) {
   let output = input
   const type = typeof input
-  let {separator, symbolOnLeft, addSpace} = options
+  let {separator, symbolOnLeft, addSpace, pad, round} = options
+  if(pad === undefined){
+    pad = true
+  }
   if(symbolOnLeft === undefined){
     symbolOnLeft = true
   }
@@ -81,17 +84,24 @@ function currency (input, currencySymbol = '$', digits = 2, options = {symbolOnL
       let numberArr = data.split('.')
       let intPart = numberArr[0]
       let decimalsPart = numberArr[1]
+      let decimals = Number(decimalsPart.substring(0, digits)) + (round ? Math.round(Number('0.' + decimalsPart.substr(digits, 1))) : Math.floor(Number('0.' + decimalsPart.substr(digits, 1))) )
+      if(String(decimals).length>digits){
+        intPart = String(Number(intPart) + 1)
+        decimals = 0
+      }
       // Partition the integer part.
       let cutStrArr = formatStrToArr(intPart)
       // Round the decimal part and add the thousandth.
       let int = cutStrArr.join(separator)
-      let decimals = Number(decimalsPart.substring(0, digits)) + Math.floor(Number('0.' + decimalsPart.substr(digits, 1)))
-      data = `${int}.${decimals}`
+      data = `${int}.${ pad ? String(decimals).padEnd(digits,'0') : decimals }`
     } else {
       // Else, split the integer part directly.
       let cutStrArr = formatStrToArr(data)
       // Add the decimal part.
-      data = `${cutStrArr.join(separator)}.00`
+      if(digits <= 0){
+        return `${cutStrArr.join(separator)}`
+      }
+      data = `${cutStrArr.join(separator)}${ pad ? '.'.padEnd(digits+1,'0') : '' }`
     }
     if(data.charAt(0)===separator) {
       data = data.substring(1,data.length)
@@ -304,13 +314,17 @@ function number (input, digits = 3, options = {round:false, pad:false}) {
     let numberArr = temp.split('.')
     let intPart = numberArr[0]
     let decimalPart = numberArr[1]
-    int = formatStrToArr(intPart).join(',')
     if(round){
       decimal = Number(decimalPart.substring(0, digits)) + Math.round(Number(`0.${decimalPart.substr(digits, 1)}`))
       decimal = String(decimal)
+      if(decimal.length > digits){
+        intPart = String(Number(intPart) + 1) 
+        decimal = '0'
+      }
     } else {
       decimal = String(decimalPart.substring(0, digits))
     }
+    int = formatStrToArr(intPart).join(',')
   }
   return pad ? `${int}${decimal?`.${decimal.padEnd(digits,'0')}`:''}` : (decimal ? `${int}.${decimal}` : int)
 }
@@ -385,7 +399,10 @@ function getOutput(array, {startIndex, limit, ignore, type, cutOut}) {
 }
 // Default Comparator
 function builtInComparator (v1, v2) {
-  return v1 > v2
+  if(typeof v1 === 'string' && typeof v1 === 'string'){
+    return v1 > v2 ? 1 : -1
+  }
+  return v1 - v2
 }
 /**
  * @orderBy
@@ -401,7 +418,8 @@ function orderBy (input, expression, reverse, comparator = builtInComparator) {
     }
     if (input instanceof Array) {
       let newArr = input.concat()
-      newArr.sort((value, nextValue) => {
+      window._newArr = newArr
+      newArr = newArr.sort((value, nextValue) => {
         return comparator(value[key], nextValue[key])
       })
       input = newArr

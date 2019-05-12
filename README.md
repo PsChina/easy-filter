@@ -98,6 +98,27 @@ Add space between amound and symbol:
 <!-- 1000 => ¥ 1,000 -->
 ```
 
+Open round
+
+```html
+<div>{{ 1000.999 | currency('¥', 2, {round: true}) }}</div>
+<!-- 1000.999 => ¥1,001.00 -->
+```
+
+Close padding
+
+```html
+<div>{{ 1000.5 | currency('¥', 2) }}</div>
+<!-- 1000.5 => ¥1,000.50 -->
+```
+
+```html
+<div>{{ 1000.123 | currency('¥', 2, {pad: false}) }}</div>
+<!-- 1000.123 => ¥1,000.12 -->
+<div>{{ 1000.5 | currency('¥', 2, {pad: false}) }}</div>
+<!-- 1000.5 => ¥1,000.5 -->
+```
+
 Use multiple options:
 
 ```html
@@ -208,9 +229,9 @@ The filter can also filter the range conditions.
 <div>
     <table>
         <tr>
-            <th @click="click('name')">name</th>
-            <th @click="click('age')">age</th>
-            <th @click="click('sex')">sex</th>
+            <th><button @click="click('name')">name</button></th>
+            <th><button @click="click('age')">age</button></th>
+            <th><button @click="click('sex')">sex</button></th>
         </tr>
         <tr v-for="value in orderBy(personArray, rule)" :key="value.id">
             <td v-text="value.name"></td>
