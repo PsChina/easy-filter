@@ -79,7 +79,7 @@ function currency (input, currencySymbol = '$', digits = 2, options = {symbolOnL
     let data = input.toString()
     // Gets the position of the decimal point.
     // Decide if you're a decimal.
-    if (data.indexOf('.') !== -1) {
+    if (data.indexOf('.') !== -1 && digits != 0) {
       // If it is a decimal, separate the decimal part from the integer part.
       let numberArr = data.split('.')
       let intPart = numberArr[0]
@@ -95,8 +95,14 @@ function currency (input, currencySymbol = '$', digits = 2, options = {symbolOnL
       let int = cutStrArr.join(separator)
       data = `${int}.${ pad ? String(decimals).padEnd(digits,'0') : decimals }`
     } else {
+      let numberArr = data.split('.')
+      let intPart = numberArr[0]
+      let decimalsPart = numberArr[1]
+      if(round&&decimalsPart){
+        intPart = String( Math.round(input) )
+      }
       // Else, split the integer part directly.
-      let cutStrArr = formatStrToArr(data)
+      let cutStrArr = formatStrToArr(intPart)
       // Add the decimal part.
       if(digits <= 0){
         return `${cutStrArr.join(separator)}`
