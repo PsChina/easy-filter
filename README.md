@@ -131,6 +131,17 @@ Use multiple options:
 ```html
 <div>{{ 1523169365575 | date('yyyy-MM-dd HH:mm:ss EEE', 'cn') }}</div>
 <!-- 2018-4-8 14:36:5 星期日 -->
+
+<div>{{ 1523169365575 | date('yyyy') }}</div>
+<!-- 2018 -->
+
+<div>{{ 1523169365575 | date('MM') }}</div>
+<!-- 4 -->
+
+<div>{{ 1523169365575 | date('EEE','en') }}</div>
+<!-- Sunday -->
+
+<!-- yyyy MM dd HH hh mm ss EEE Can be used alone. -->
 ```
 
 ## filter
