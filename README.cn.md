@@ -4,22 +4,22 @@
 
 这是一个简单 vue 过滤器插件，灵感来自 angularjs 的内置过滤器。
 
-这个包很小他只有9个函数。
+这个包很小他只有 9 个函数。
 
 [![LICENSE](https://img.shields.io/badge/license-Anti%20996-blue.svg)](https://github.com/996icu/996.ICU/blob/master/LICENSE)
 [![996.icu](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu)
 
 ## 过滤器列表
 
-* [currency](#currency)
-* [date](#date)
-* [filter](#filter)
-* [json](#json)
-* [limitTo](#limitto)
-* [lowerCase](#lowercase)
-* [number](#number)
-* [upperCase](#uppercase)
-* [orderBy](#orderby)
+- [currency](#currency)
+- [date](#date)
+- [filter](#filter)
+- [json](#json)
+- [limitTo](#limitto)
+- [lowerCase](#lowercase)
+- [number](#number)
+- [upperCase](#uppercase)
+- [orderBy](#orderby)
 
 ## 用 npm 下载
 
@@ -28,14 +28,14 @@
 npm install easy-filter --save
 ```
 
-## 在Vue项目中使用
+## 在 Vue 项目中使用
 
 引入插件
 
 ```js
-import easyFilter from 'easy-filter';
+import easyFilter from "easy-filter";
 
-import Vue from 'vue';
+import Vue from "vue";
 
 Vue.use(easyFilter);
 ```
@@ -131,62 +131,76 @@ Vue.use(easyFilter);
 ```html
 <div>{{ 1523169365575 | date('yyyy-MM-dd HH:mm:ss EEE', 'cn') }}</div>
 <!-- 2018-4-8 14:36:5 星期日 -->
+
+<div>{{ 1523169365575 | date('yyyy') }}</div>
+<!-- 2018 -->
+
+<div>{{ 1523169365575 | date('MM') }}</div>
+<!-- 4 -->
+
+<div>{{ 1523169365575 | date('EEE','en') }}</div>
+<!-- Sunday -->
+
+<!-- yyyy MM dd HH hh mm ss EEE 都可以单独使用 -->
 ```
 
 ## filter
 
 ```html
 <template>
-<div>
-    <input type="text" v-model="match">
+  <div>
+    <input type="text" v-model="match" />
     <table>
-        <tr>
-            <th>name</th>
-            <th>age</th>
-            <th>sex</th>
-        </tr>
-        <tr v-for="value in filter(personArray, new RegExp(match,'i') )" :key="value.id">
-            <td v-text="value.name"></td>
-            <td v-text="value.age"></td>
-            <td v-text="value.sex"></td>
-        </tr>
+      <tr>
+        <th>name</th>
+        <th>age</th>
+        <th>sex</th>
+      </tr>
+      <tr
+        v-for="value in filter(personArray, new RegExp(match,'i') )"
+        :key="value.id"
+      >
+        <td v-text="value.name"></td>
+        <td v-text="value.age"></td>
+        <td v-text="value.sex"></td>
+      </tr>
     </table>
-</div>
+  </div>
 </template>
 
 <script>
-export default {
-  name: 'easyFilter.filter',
-  data () {
-    return {
-      match: null,
-      personArray: [
-        {name: 'Kimi', sex: 'male', age: 8, id: 1},
-        {name: 'Cindy', sex: 'female', age: 4, id: 2},
-        {name: 'Angela', sex: 'female', age: 6, id: 3},
-        {name: 'Shitou', sex: 'male', age: 7, id: 4},
-        {name: 'Tiantian', sex: 'male', age: 5, id: 5}
-      ]
-    }
-  },
-  methods: {
-    filter (input, match) {
-      // 在js中使用
-      return this.easyFilter.filter(input, match);
-      // 使用其他过滤器
-      // this.easyFilter.lowerCase('WORLD')
-      // this.easyFilter.currency(1000,'¥')
-      // this.easyFilter.date(1523169365575,'yy-MM-dd')
-      // ...
-    }
-  },
-  // 优化性能
-  computed: {
-      usefulData () {
-          return this.easyFilter.filter(this.personArray, new RegExp(this.match));
+  export default {
+    name: "easyFilter.filter",
+    data() {
+      return {
+        match: null,
+        personArray: [
+          { name: "Kimi", sex: "male", age: 8, id: 1 },
+          { name: "Cindy", sex: "female", age: 4, id: 2 },
+          { name: "Angela", sex: "female", age: 6, id: 3 },
+          { name: "Shitou", sex: "male", age: 7, id: 4 },
+          { name: "Tiantian", sex: "male", age: 5, id: 5 }
+        ]
+      };
+    },
+    methods: {
+      filter(input, match) {
+        // 在js中使用
+        return this.easyFilter.filter(input, match);
+        // 使用其他过滤器
+        // this.easyFilter.lowerCase('WORLD')
+        // this.easyFilter.currency(1000,'¥')
+        // this.easyFilter.date(1523169365575,'yy-MM-dd')
+        // ...
       }
-  }
-}
+    },
+    // 优化性能
+    computed: {
+      usefulData() {
+        return this.easyFilter.filter(this.personArray, new RegExp(this.match));
+      }
+    }
+  };
 </script>
 <!-- 
 当在输入框输入 an 会展示：
@@ -226,45 +240,45 @@ filter 过滤器还支持范围过滤。
 
 ```html
 <template>
-<div>
+  <div>
     <table>
-        <tr>
-            <th @click="click('name')">name</th>
-            <th @click="click('age')">age</th>
-            <th @click="click('sex')">sex</th>
-        </tr>
-        <tr v-for="value in orderBy(personArray, rule)" :key="value.id">
-            <td v-text="value.name"></td>
-            <td v-text="value.age"></td>
-            <td v-text="value.sex"></td>
-        </tr>
+      <tr>
+        <th @click="click('name')">name</th>
+        <th @click="click('age')">age</th>
+        <th @click="click('sex')">sex</th>
+      </tr>
+      <tr v-for="value in orderBy(personArray, rule)" :key="value.id">
+        <td v-text="value.name"></td>
+        <td v-text="value.age"></td>
+        <td v-text="value.sex"></td>
+      </tr>
     </table>
-</div>
+  </div>
 </template>
 <script>
-export default {
-  name: 'easyFilter.orderBy',
-  data () {
-    return {
-      personArray: [
-        {name: 'Kimi', sex: 'male', age: 8, id: 1},
-        {name: 'Cindy', sex: 'female', age: 4, id: 2},
-        {name: 'Angela', sex: 'female', age: 6, id: 3},
-        {name: 'Shitou', sex: 'male', age: 7, id: 4},
-        {name: 'Tiantian', sex: 'male', age: 5, id: 5}
-      ],
-      rule: null
-    }
-  },
-  methods: {
-    click (rule) {
-      this.rule = rule;
+  export default {
+    name: "easyFilter.orderBy",
+    data() {
+      return {
+        personArray: [
+          { name: "Kimi", sex: "male", age: 8, id: 1 },
+          { name: "Cindy", sex: "female", age: 4, id: 2 },
+          { name: "Angela", sex: "female", age: 6, id: 3 },
+          { name: "Shitou", sex: "male", age: 7, id: 4 },
+          { name: "Tiantian", sex: "male", age: 5, id: 5 }
+        ],
+        rule: null
+      };
     },
-    orderBy (input, rule, reverse) {
-      return this.easyFilter.orderBy(input, rule, reverse);
+    methods: {
+      click(rule) {
+        this.rule = rule;
+      },
+      orderBy(input, rule, reverse) {
+        return this.easyFilter.orderBy(input, rule, reverse);
+      }
     }
-  }
-}
+  };
 </script>
 <!-- 
 当点击 name 的时候。
@@ -299,7 +313,7 @@ Tiantian	5	male
 
 ## json
 
-Json 将会把一个js对象转换为一个 JSON 格式的字符串对象，它使用了 JSON.stringify。
+Json 将会把一个 js 对象转换为一个 JSON 格式的字符串对象，它使用了 JSON.stringify。
 
 ## limitTo
 
@@ -310,92 +324,92 @@ Json 将会把一个js对象转换为一个 JSON 格式的字符串对象，它�
 这些元素取自源数组。
 
 ```js
-export default{
+export default {
   methods: {
-    limitTo (input, limit, options) {
+    limitTo(input, limit, options) {
       return this.easyFilter.limitTo(input, limit, options);
     }
   }
-}
+};
 ```
 
 第一个参数“input”是要过滤的数据，可以是数组、数字或字符串。
 
 第二个参数是想要限制的长度。
 
-| 第二个参数 | 作用 | 参数类型 | 默认参数 |
-| :--:| :--:| :--: | :--: |
-| limit | 限制长度 | number | Number.POSITIVE_INFINITY |
+| 第二个参数 |   作用   | 参数类型 |         默认参数         |
+| :--------: | :------: | :------: | :----------------------: |
+|   limit    | 限制长度 |  number  | Number.POSITIVE_INFINITY |
 
 第三个参数是配置项，可以通过它告诉过滤器如何过滤这些数据。
 
 配置项的字段为:
 
-| 属性 | 作用 | 参数类型 | 默认参数 |
-| :--:| :--:| :--: | :--: |
-| startWithIndex | 根据索引开始计算要限制的元素个数 | number | 0 |
-| startWith | 根据元素开始计算要限制的元素个数 | not number | undefined |
-| ignore | 计数时忽略被匹配的元素 | RegExp , object | undefined |
-| cutOut | 是否截取 | boolean | fasle |
+|      属性      |               作用               |    参数类型     | 默认参数  |
+| :------------: | :------------------------------: | :-------------: | :-------: |
+| startWithIndex | 根据索引开始计算要限制的元素个数 |     number      |     0     |
+|   startWith    | 根据元素开始计算要限制的元素个数 |   not number    | undefined |
+|     ignore     |      计数时忽略被匹配的元素      | RegExp , object | undefined |
+|     cutOut     |             是否截取             |     boolean     |   fasle   |
 
 ### 例
 
-* 将字符串的长度限制为不超过3
+- 将字符串的长度限制为不超过 3
 
 ```html
-<div>{{hello | limitTo(3)}}</div>
+<div>{{ 'hello' | limitTo(3) }}</div>
 <!-- hel -->
 ```
 
-* 以第二个字母开始，接下来的字符串的长度限制为不超过3个字符
+- 以第二个字母开始，接下来的字符串的长度限制为不超过 3 个字符
 
 ```html
-<div>{{hello | limitTo(3, {startWithIndex:1})}}</div>
+<div>{{ 'hello' | limitTo(3, {startWithIndex:1}) }}</div>
 <!-- hell -->
 ```
 
-* 如果你想剪掉前面的部分，你这样裁剪。
+- 如果你想剪掉前面的部分，你这样裁剪。
 
 ```html
-<div>{{hello | limitTo(3, {startWithIndex:1, cutOut: true})}}</div>
+<div>{{ 'hello' | limitTo(3, {startWithIndex:1, cutOut: true}) }}</div>
 <!-- ell -->
 ```
 
-* 还可以根据元素指定起始位置
+- 还可以根据元素指定起始位置
 
 ```html
-<div>{{3.1415 | limitTo(2, {startWith:'.'})}}</div>
+<div>{{ 3.1415 | limitTo(2, {startWith:'.'}) }}</div>
 <!-- 3.1 -->
 ```
 
-* 如果不想让不相关的元素影响计数，可以忽略它。
+- 如果不想让不相关的元素影响计数，可以忽略它。
 
 ```html
-<div>{{3.1415 | limitTo(2, {startWith:'.', ignore: /\./})}}</div>
+<div>{{ 3.1415 | limitTo(2, {startWith:'.', ignore: /\./}) }}</div>
 <!-- 3.14 -->
 ```
 
-* 示8位数据
+- 示 8 位数据
 
 ```html
-<div>{{123456789 | limitTo(8, {ignore: /\./})}}</div>
+<div>{{ 123456789 | limitTo(8, {ignore: /\./}) }}</div>
 <!-- 12345678 -->
 ```
 
 ```html
-<div>{{3.141592653 | limitTo(8, {ignore: /\./})}}</div>
+<div>{{ 3.141592653 | limitTo(8, {ignore: /\./}) }}</div>
 <!-- 3.1415926 -->
 ```
 
-* 对数组同样生效
+- 对数组同样生效
 
 ```js
-limitTo([1,2,3,4,5], 2)
+limitTo([1, 2, 3, 4, 5], 2);
 // [1,2]
 ```
 
 ```js
-limitTo([1,2,3,4,5], 2, {startWith: 3,cutOut: true})
+limitTo([1, 2, 3, 4, 5], 2, { startWith: 3, cutOut: true });
 // [3,4]
 ```
 
@@ -403,7 +417,7 @@ limitTo([1,2,3,4,5], 2, {startWith: 3,cutOut: true})
 
 将数字格式化为字符串。
 
-当您传入一个整数时，默认值会有一位值为0的小数位，
+当您传入一个整数时，默认值会有一位值为 0 的小数位，
 
 当您输入一个小数，您会得到字符串类型的数字。
 
@@ -411,46 +425,48 @@ limitTo([1,2,3,4,5], 2, {startWith: 3,cutOut: true})
 
 并配置第三个参数以确定是否要四舍五入，以及是否需要自动填充零。
 
-@参数1 input
+@参数 1 input
 
-@参数2 digits
+@参数 2 digits
 
-@参数3 options {round:false, pad:false}
+@参数 3 options {round:false, pad:false}
 
 ### 例
 
 无参
 
 ```html
-<div>{{3 | number}}</div>
+<div>{{ 3 | number }}</div>
 <!-- 3.0 -->
 ```
 
 ```html
-<div>{{3.14 | number}}</div>
+<div>{{ 3.14 | number }}</div>
 <!-- 3.14 -->
 ```
 
-限制最多显示4位小数
+限制最多显示 4 位小数
+
 ```html
-<div>{{3.1415926 | number(4)}}</div>
+<div>{{ 3.1415926 | number(4) }}</div>
 <!-- 3.1415 -->
 ```
 
-限制最多显示2位小数，不足自动填充零。
+限制最多显示 2 位小数，不足自动填充零。
+
 ```html
-<div>{{1 | number(2, {pad:true})}}</div>
+<div>{{ 1 | number(2, {pad:true}) }}</div>
 <!-- 1.00 -->
 ```
 
-最多显示3位小数 & 四舍五入
+最多显示 3 位小数 & 四舍五入
 
 ```html
-<div>{{3.1415 | number(3, {round: true})}}</div>
+<div>{{ 3.1415 | number(3, {round: true}) }}</div>
 <!-- 3.142 -->
 ```
 
-显示3位小数 & 自动填充零 & 四舍五入
+显示 3 位小数 & 自动填充零 & 四舍五入
 
 ```jsx
 var arr = [
@@ -461,7 +477,7 @@ var arr = [
   5.55555
   ]
 
-<div v-for="num in arr">{{num | number(3, {pad: true, round: true})}}</div>
+<div v-for="num in arr">{{ num | number(3, {pad: true, round: true} )}}</div>
 
 // 1.000
 // 2.200
@@ -470,7 +486,6 @@ var arr = [
 // 5.556
 ```
 
-许可证
----
+## 许可证
 
 [Anti-996 License](LICENSE)

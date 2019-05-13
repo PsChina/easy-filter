@@ -11,15 +11,15 @@ This package is very small and it only contains nine functions.
 
 ## filter list
 
-* [currency](#currency)
-* [date](#date)
-* [filter](#filter)
-* [json](#json)
-* [limitTo](#limitto)
-* [lowerCase](#lowercase)
-* [number](#number)
-* [upperCase](#uppercase)
-* [orderBy](#orderby)
+- [currency](#currency)
+- [date](#date)
+- [filter](#filter)
+- [json](#json)
+- [limitTo](#limitto)
+- [lowerCase](#lowercase)
+- [number](#number)
+- [upperCase](#uppercase)
+- [orderBy](#orderby)
 
 ## Get start
 
@@ -33,9 +33,9 @@ npm install easy-filter --save
 Import this plugin.
 
 ```js
-import easyFilter from 'easy-filter';
+import easyFilter from "easy-filter";
 
-import Vue from 'vue';
+import Vue from "vue";
 
 Vue.use(easyFilter);
 ```
@@ -137,56 +137,59 @@ Use multiple options:
 
 ```html
 <template>
-<div>
-    <input type="text" v-model="match">
+  <div>
+    <input type="text" v-model="match" />
     <table>
-        <tr>
-            <th>name</th>
-            <th>age</th>
-            <th>sex</th>
-        </tr>
-        <tr v-for="value in filter(personArray, new RegExp(match,'i') )" :key="value.id">
-            <td v-text="value.name"></td>
-            <td v-text="value.age"></td>
-            <td v-text="value.sex"></td>
-        </tr>
+      <tr>
+        <th>name</th>
+        <th>age</th>
+        <th>sex</th>
+      </tr>
+      <tr
+        v-for="value in filter(personArray, new RegExp(match,'i') )"
+        :key="value.id"
+      >
+        <td v-text="value.name"></td>
+        <td v-text="value.age"></td>
+        <td v-text="value.sex"></td>
+      </tr>
     </table>
-</div>
+  </div>
 </template>
 
 <script>
-export default {
-  name: 'easyFilter.filter',
-  data () {
-    return {
-      match: null,
-      personArray: [
-        {name: 'Kimi', sex: 'male', age: 8, id: 1},
-        {name: 'Cindy', sex: 'female', age: 4, id: 2},
-        {name: 'Angela', sex: 'female', age: 6, id: 3},
-        {name: 'Shitou', sex: 'male', age: 7, id: 4},
-        {name: 'Tiantian', sex: 'male', age: 5, id: 5}
-      ]
-    }
-  },
-  methods: {
-    filter (input, match) {
-      // Used in js
-      return this.easyFilter.filter(input, match);
-      // Use of other filters.
-      // this.easyFilter.lowerCase('WORLD')
-      // this.easyFilter.currency(1000,'¥')
-      // this.easyFilter.date(1523169365575,'yy-MM-dd')
-      // ...
-    }
-  },
-  // How do you want to improve performance? You can do this.
-  computed: {
-      usefulData () {
-          return this.easyFilter.filter(this.personArray, new RegExp(this.match));
+  export default {
+    name: "easyFilter.filter",
+    data() {
+      return {
+        match: null,
+        personArray: [
+          { name: "Kimi", sex: "male", age: 8, id: 1 },
+          { name: "Cindy", sex: "female", age: 4, id: 2 },
+          { name: "Angela", sex: "female", age: 6, id: 3 },
+          { name: "Shitou", sex: "male", age: 7, id: 4 },
+          { name: "Tiantian", sex: "male", age: 5, id: 5 }
+        ]
+      };
+    },
+    methods: {
+      filter(input, match) {
+        // Used in js
+        return this.easyFilter.filter(input, match);
+        // Use of other filters.
+        // this.easyFilter.lowerCase('WORLD')
+        // this.easyFilter.currency(1000,'¥')
+        // this.easyFilter.date(1523169365575,'yy-MM-dd')
+        // ...
       }
-  }
-}
+    },
+    // How do you want to improve performance? You can do this.
+    computed: {
+      usefulData() {
+        return this.easyFilter.filter(this.personArray, new RegExp(this.match));
+      }
+    }
+  };
 </script>
 <!-- 
 When you enter 'an' in the input box will show:
@@ -226,45 +229,45 @@ The filter can also filter the range conditions.
 
 ```html
 <template>
-<div>
+  <div>
     <table>
-        <tr>
-            <th><button @click="click('name')">name</button></th>
-            <th><button @click="click('age')">age</button></th>
-            <th><button @click="click('sex')">sex</button></th>
-        </tr>
-        <tr v-for="value in orderBy(personArray, rule)" :key="value.id">
-            <td v-text="value.name"></td>
-            <td v-text="value.age"></td>
-            <td v-text="value.sex"></td>
-        </tr>
+      <tr>
+        <th><button @click="click('name')">name</button></th>
+        <th><button @click="click('age')">age</button></th>
+        <th><button @click="click('sex')">sex</button></th>
+      </tr>
+      <tr v-for="value in orderBy(personArray, rule)" :key="value.id">
+        <td v-text="value.name"></td>
+        <td v-text="value.age"></td>
+        <td v-text="value.sex"></td>
+      </tr>
     </table>
-</div>
+  </div>
 </template>
 <script>
-export default {
-  name: 'easyFilter.orderBy',
-  data () {
-    return {
-      personArray: [
-        {name: 'Kimi', sex: 'male', age: 8, id: 1},
-        {name: 'Cindy', sex: 'female', age: 4, id: 2},
-        {name: 'Angela', sex: 'female', age: 6, id: 3},
-        {name: 'Shitou', sex: 'male', age: 7, id: 4},
-        {name: 'Tiantian', sex: 'male', age: 5, id: 5}
-      ],
-      rule: null
-    }
-  },
-  methods: {
-    click (rule) {
-      this.rule = rule;
+  export default {
+    name: "easyFilter.orderBy",
+    data() {
+      return {
+        personArray: [
+          { name: "Kimi", sex: "male", age: 8, id: 1 },
+          { name: "Cindy", sex: "female", age: 4, id: 2 },
+          { name: "Angela", sex: "female", age: 6, id: 3 },
+          { name: "Shitou", sex: "male", age: 7, id: 4 },
+          { name: "Tiantian", sex: "male", age: 5, id: 5 }
+        ],
+        rule: null
+      };
     },
-    orderBy (input, rule, reverse) {
-      return this.easyFilter.orderBy(input, rule, reverse);
+    methods: {
+      click(rule) {
+        this.rule = rule;
+      },
+      orderBy(input, rule, reverse) {
+        return this.easyFilter.orderBy(input, rule, reverse);
+      }
     }
-  }
-}
+  };
 </script>
 <!-- 
 When you click on the name.
@@ -308,92 +311,92 @@ The elements are taken from either the beginning of the source array,
 string or number.
 
 ```js
-export default{
+export default {
   methods: {
-    limitTo (input, limit, options) {
+    limitTo(input, limit, options) {
       return this.easyFilter.limitTo(input, limit, options);
     }
   }
-}
+};
 ```
 
 The first parameter `input` is the data to be filtered, which can be an array, a number, or a string.
 
 The second parameter is the limit count to limit `input`'s length.
 
-| second parameter | instructions | type | default value |
-| :--:| :--:| :--: | :--: |
-| limit | Limit the length | number | Number.POSITIVE_INFINITY |
+| second parameter |   instructions   |  type  |      default value       |
+| :--------------: | :--------------: | :----: | :----------------------: |
+|      limit       | Limit the length | number | Number.POSITIVE_INFINITY |
 
 The third parameter is the configuration item which says how do I filter this data.
 
 The fields for the configuration item are:
 
-| attr | instructions | type | default value |
-| :--:| :--:| :--: | :--: |
-| startWithIndex | Start counting by index | number | 0 |
-| startWith | Start counting by element | not number | undefined |
-| ignore | Elements that are not counted | RegExp , object | undefined |
-| cutOut | Whether to cut | boolean | fasle |
+|      attr      |         instructions          |      type       | default value |
+| :------------: | :---------------------------: | :-------------: | :-----------: |
+| startWithIndex |    Start counting by index    |     number      |       0       |
+|   startWith    |   Start counting by element   |   not number    |   undefined   |
+|     ignore     | Elements that are not counted | RegExp , object |   undefined   |
+|     cutOut     |        Whether to cut         |     boolean     |     fasle     |
 
 ### Example
 
-* Limit the length of a string to no more than 3
+- Limit the length of a string to no more than 3
 
 ```html
-<div>{{hello | limitTo(3)}}</div>
+<div>{{ 'hello' | limitTo(3) }}</div>
 <!-- hel -->
 ```
 
-* Limit the length of a string to no more than 3 characters starting with the second letter
+- Limit the length of a string to no more than 3 characters starting with the second letter
 
 ```html
-<div>{{hello | limitTo(3, {startWithIndex:1})}}</div>
+<div>{{ 'hello' | limitTo(3, {startWithIndex:1}) }}</div>
 <!-- hell -->
 ```
 
-* If you want to cutout the front part you can add cutout
+- If you want to cutout the front part you can add cutout
 
 ```html
-<div>{{hello | limitTo(3, {startWithIndex:1, cutOut: true})}}</div>
+<div>{{ 'hello' | limitTo(3, {startWithIndex:1, cutOut: true}) }}</div>
 <!-- ell -->
 ```
 
-* You can also specify the starting position based on the element
+- You can also specify the starting position based on the element
 
 ```html
-<div>{{3.1415 | limitTo(2, {startWith:'.'})}}</div>
+<div>{{ 3.1415 | limitTo(2, {startWith:'.'}) }}</div>
 <!-- 3.1 -->
 ```
 
-* You can ignore it if you don't want irrelevant elements to affect the count
+- You can ignore it if you don't want irrelevant elements to affect the count
 
 ```html
-<div>{{3.1415 | limitTo(2, {startWith:'.', ignore: /\./})}}</div>
+<div>{{ 3.1415 | limitTo(2, {startWith:'.', ignore: /\./}) }}</div>
 <!-- 3.14 -->
 ```
 
-* Displays a number of eight bits of data
+- Displays a number of eight bits of data
 
 ```html
-<div>{{123456789 | limitTo(8, {ignore: /\./})}}</div>
+<div>{{ 123456789 | limitTo(8, {ignore: /\./}) }}</div>
 <!-- 12345678 -->
 ```
 
 ```html
-<div>{{3.141592653 | limitTo(8, {ignore: /\./})}}</div>
+<div>{{ 3.141592653 | limitTo(8, {ignore: /\./}) }}</div>
 <!-- 3.1415926 -->
 ```
 
-* Limit Array
+- Limit Array
 
 ```js
-limitTo([1,2,3,4,5], 2)
+limitTo([1, 2, 3, 4, 5], 2);
 // [1,2]
 ```
 
 ```js
-limitTo([1,2,3,4,5], 2, {startWith: 3,cutOut: true})
+limitTo([1, 2, 3, 4, 5], 2, { startWith: 3, cutOut: true });
 // [3,4]
 ```
 
@@ -416,31 +419,33 @@ and set options parameters to determine whether you want to round, and fill in z
 No parameter
 
 ```html
-<div>{{3 | number}}</div>
+<div>{{ 3 | number }}</div>
 <!-- 3.0 -->
 ```
 
 ```html
-<div>{{3.14 | number}}</div>
+<div>{{ 3.14 | number }}</div>
 <!-- 3.14 -->
 ```
 
 Limit digits
+
 ```html
-<div>{{3.1415926 | number(4)}}</div>
+<div>{{ 3.1415926 | number(4) }}</div>
 <!-- 3.1415 -->
 ```
 
 Limit digits & Fill zero
+
 ```html
-<div>{{1 | number(2, {pad:true})}}</div>
+<div>{{ 1 | number(2, {pad:true}) }}</div>
 <!-- 1.00 -->
 ```
 
 Limit digits & Rounding
 
 ```html
-<div>{{3.1415 | number(3, {round: true})}}</div>
+<div>{{ 3.1415 | number(3, {round: true}) }}</div>
 <!-- 3.142 -->
 ```
 
@@ -455,7 +460,7 @@ var arr = [
   5.55555
   ]
 
-<div v-for="num in arr">{{num | number(3, {pad: true, round: true})}}</div>
+<div v-for="num in arr">{{ num | number(3, {pad: true, round: true}) }}</div>
 
 // 1.000
 // 2.200
@@ -464,7 +469,6 @@ var arr = [
 // 5.556
 ```
 
-License
----
+## License
 
 [Anti-996 License](LICENSE)
