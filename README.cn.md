@@ -153,7 +153,7 @@ Vue.use(easyFilter);
 <div>{{ 1523169365575 | date('EE','en') }}</div>
 <!-- Sun -->
 
-<!-- yyyy、MM、dd、HH、hh、mm、ss、EEE, 都可以单独使用。 -->
+<!-- yyyy、MM、dd、HH、hh、mm、ss、EEE, 都可以单独使用，或者随意组合使用。 -->
 ```
 
 ## filter
