@@ -130,18 +130,30 @@ Vue.use(easyFilter);
 
 ```html
 <div>{{ 1523169365575 | date('yyyy-MM-dd HH:mm:ss EEE', 'cn') }}</div>
-<!-- 2018-4-8 14:36:5 星期日 -->
+<!-- 2018-04-08 14:36:05 星期日 -->
+
+<div>{{ 1523169365575 | date('yyyy-MM-dd HH:mm:ss EE', 'cn') }}</div>
+<!-- 2018-04-08 14:36:05 周日 -->
 
 <div>{{ 1523169365575 | date('yyyy') }}</div>
 <!-- 2018 -->
 
-<div>{{ 1523169365575 | date('MM') }}</div>
-<!-- 4 -->
+<div>{{ 1523169365575 | date('yy') }}</div>
+<!-- 18 -->
+
+<div>{{ 1523169365575 | date('HH:mm:ss') }}</div>
+<!-- 14:36:05 -->
+
+<div>{{ 1523169365575 | date('hh:mm:ss') }}</div>
+<!-- 02:36:05 -->
 
 <div>{{ 1523169365575 | date('EEE','en') }}</div>
 <!-- Sunday -->
 
-<!-- yyyy MM dd HH hh mm ss EEE 都可以单独使用 -->
+<div>{{ 1523169365575 | date('EE','en') }}</div>
+<!-- Sun -->
+
+<!-- yyyy、MM、dd、HH、hh、mm、ss、EEE, 都可以单独使用。 -->
 ```
 
 ## filter

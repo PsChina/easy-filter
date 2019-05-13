@@ -134,17 +134,17 @@ function date (input, formatMode, country) {
     mode = mode.replace(/y{1,4}|MM|dd|hh|HH|mm|ss|E{1,4}/g, function (value) {
       switch (value) {
         case 'MM': // Replace the month.
-          return date.getMonth() + 1
+          return `${date.getMonth() + 1}`.padStart(2, 0)
         case 'dd': // Replace the date.
-          return date.getDate()
+          return `${date.getDate()}`.padStart(2, 0)
         case 'hh': // Replace the hours (12-hour system).
-          return (date.getHours() - 12).toString().padStart(2, '0')
+          return `${date.getHours() - 12}`.padStart(2, 0)
         case 'HH': // Replace the hours (24 hour system).
-          return date.getHours()
+          return `${date.getHours()}`.padStart(2, 0)
         case 'mm': // Replace the minutes.
-          return date.getMinutes()
+          return `${date.getMinutes()}`.padStart(2, 0)
         case 'ss': // Replace the second.
-          return date.getSeconds()
+          return `${date.getSeconds()}`.padStart(2, 0)
         default: // Replace the years and week.
           if (value.indexOf('y') !== -1) { // y{1,4} Replace the years.
             const year = date.getFullYear()
