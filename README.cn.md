@@ -401,7 +401,7 @@ export default {
 <!-- 3.14 -->
 ```
 
-- 示 8 位数据
+- 显示 8 位数
 
 ```html
 <div>{{ 123456789 | limitTo(8, {ignore: /\./}) }}</div>
