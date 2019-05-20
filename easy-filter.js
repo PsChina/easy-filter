@@ -341,7 +341,7 @@ function number (input, digits = 3, options = {round:false, pad:false}) {
     } else {
       decimal = String(decimalPart.substring(0, digits))
     }
-    cutStrArr = formatStrToArr(intPart)
+    let cutStrArr = formatStrToArr(intPart)
     if(cutStrArr.includes('-')) {
       int = `-${ cutStrArr.filter(item=>item!=='-').join(',') }`
     } else {
