@@ -92,7 +92,12 @@ function currency (input, currencySymbol = '$', digits = 2, options = {symbolOnL
       // Partition the integer part.
       let cutStrArr = formatStrToArr(intPart)
       // Round the decimal part and add the thousandth.
-      let int = cutStrArr.join(separator)
+      let int
+      if(cutStrArr.includes('-')) {
+        int = `-${ cutStrArr.filter(item=>item!=='-').join(separator) }`
+      } else {
+        int = cutStrArr.join(separator)
+      }
       data = `${int}.${ pad ? String(decimals).padEnd(digits,'0') : decimals }`
     } else {
       let numberArr = data.split('.')
@@ -103,11 +108,17 @@ function currency (input, currencySymbol = '$', digits = 2, options = {symbolOnL
       }
       // Else, split the integer part directly.
       let cutStrArr = formatStrToArr(intPart)
-      // Add the decimal part.
-      if(digits <= 0){
-        return `${cutStrArr.join(separator)}`
+      let int
+      if(cutStrArr.includes('-')) {
+        int = `-${ cutStrArr.filter(item=>item!=='-').join(separator) }`
+      } else {
+        int = cutStrArr.join(separator)
       }
-      data = `${cutStrArr.join(separator)}${ pad ? '.'.padEnd(digits+1,'0') : '' }`
+      // Add the decimal part.
+      data = `${int}${ pad ? '.'.padEnd(digits+1,'0') : '' }`
+      if(digits <= 0){
+        data = `${int}`
+      }
     }
     if(data.charAt(0)===separator) {
       data = data.substring(1,data.length)
@@ -330,7 +341,12 @@ function number (input, digits = 3, options = {round:false, pad:false}) {
     } else {
       decimal = String(decimalPart.substring(0, digits))
     }
-    int = formatStrToArr(intPart).join(',')
+    cutStrArr = formatStrToArr(intPart)
+    if(cutStrArr.includes('-')) {
+      int = `-${ cutStrArr.filter(item=>item!=='-').join(',') }`
+    } else {
+      int = cutStrArr.join(',')
+    }
   }
   return pad ? `${int}${decimal?`.${decimal.padEnd(digits,'0')}`:''}` : (decimal ? `${int}.${decimal}` : int)
 }
