@@ -192,7 +192,7 @@ Vue.use(easyFilter);
     name: "easyFilter.filter",
     data() {
       return {
-        match: null,
+        match: "",
         personArray: [
           { name: "Kimi", sex: "male", age: 8, id: 1 },
           { name: "Cindy", sex: "female", age: 4, id: 2 },
@@ -477,8 +477,9 @@ limitTo([1, 2, 3, 4, 5], 2, { startWith: 3, cutOut: true });
 ```
 
 转换科学计数
+
 ```html
-<div>{{5.2e-7|number(8)}}</div>
+<div>{{ 5.2e-7 | number(8) }}</div>
 <!-- 0.00000052 -->
 ```
 

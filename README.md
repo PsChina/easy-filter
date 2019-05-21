@@ -192,7 +192,7 @@ Use multiple options:
     name: "easyFilter.filter",
     data() {
       return {
-        match: null,
+        match: "",
         personArray: [
           { name: "Kimi", sex: "male", age: 8, id: 1 },
           { name: "Cindy", sex: "female", age: 4, id: 2 },
@@ -473,7 +473,7 @@ Limit digits
 Conversion scientific counting
 
 ```html
-<div>{{5.2e-7|number(8)}}</div>
+<div>{{ 5.2e-7 | number(8) }}</div>
 <!-- 0.00000052 -->
 ```
 
