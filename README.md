@@ -84,6 +84,13 @@ Use a different separator:
 <!-- 1000 => ¥1.000 -->
 ```
 
+Hide separator
+
+```html
+<div>{{ 1000 | currency('¥', 0, {separator: ''}) }}</div>
+<!-- 1000 => ¥1000 -->
+```
+
 Use symbol on right:
 
 ```html
@@ -482,6 +489,13 @@ Limit digits & Rounding
 ```html
 <div>{{ 3.1415 | number(3, {round: true}) }}</div>
 <!-- 3.142 -->
+```
+
+Display separator
+
+```html
+<div>{{ 10000 | number(1, {separator:','}) }}</div>
+<!-- 10,000.0 -->
 ```
 
 Limit digits & Fill zero & Rounding

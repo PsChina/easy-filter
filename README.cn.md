@@ -84,6 +84,13 @@ Vue.use(easyFilter);
 <!-- 1000 => ¥1.000 -->
 ```
 
+隐藏分隔符
+
+```html
+<div>{{ 1000 | currency('¥', 0, {separator: ''}) }}</div>
+<!-- 1000 => ¥1000 -->
+```
+
 让符号在右边显示
 
 ```html
@@ -487,6 +494,13 @@ limitTo([1, 2, 3, 4, 5], 2, { startWith: 3, cutOut: true });
 ```html
 <div>{{ 3.1415 | number(3, {round: true}) }}</div>
 <!-- 3.142 -->
+```
+
+显示分隔符
+
+```html
+<div>{{ 10000 | number(1, {separator:','}) }}</div>
+<!-- 10,000.0 -->
 ```
 
 显示 3 位小数 & 自动填充零 & 四舍五入

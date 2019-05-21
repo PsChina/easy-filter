@@ -321,11 +321,15 @@ function json (input) {
 */
 function number (input, digits = 3, options = {round:false, pad:false}) {
   const {round, pad} = options
+  let {separator} = options
   if( isEmpty(input) ){
     return pad ? `0.${'0'.padEnd(digits,'0')}` : '0'
   }
+  if(separator === undefined){
+    separator = ''
+  }
   let temp = sciNumToString(input)
-  let int = sciNumToString(input)
+  let int = formatStrToArr(sciNumToString(input)).join(separator)
   let decimal = digits ? '0' : false
   if (temp.indexOf('.') !== -1) {
     let numberArr = temp.split('.')
@@ -343,9 +347,9 @@ function number (input, digits = 3, options = {round:false, pad:false}) {
     }
     let cutStrArr = formatStrToArr(intPart)
     if(cutStrArr.includes('-')) {
-      int = `-${ cutStrArr.filter(item=>item!=='-').join(',') }`
+      int = `-${ cutStrArr.filter(item=>item!=='-').join(separator) }`
     } else {
-      int = cutStrArr.join(',')
+      int = cutStrArr.join(separator)
     }
   }
   return pad ? `${int}${decimal?`.${decimal.padEnd(digits,'0')}`:''}` : (decimal ? `${int}.${decimal}` : int)
