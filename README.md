@@ -442,6 +442,11 @@ and set options parameters to determine whether you want to round, and fill in z
 No parameter
 
 ```html
+<div>{{ -0 | number }}</div>
+<!-- -0.0 -->
+```
+
+```html
 <div>{{ 3 | number }}</div>
 <!-- 3.0 -->
 ```
@@ -456,6 +461,13 @@ Limit digits
 ```html
 <div>{{ 3.1415926 | number(4) }}</div>
 <!-- 3.1415 -->
+```
+
+Conversion scientific counting
+
+```html
+<div>{{5.2e-7|number(8)}}</div>
+<!-- 0.00000052 -->
 ```
 
 Limit digits & Fill zero

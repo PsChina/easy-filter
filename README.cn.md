@@ -448,6 +448,11 @@ limitTo([1, 2, 3, 4, 5], 2, { startWith: 3, cutOut: true });
 无参
 
 ```html
+<div>{{ -0 | number }}</div>
+<!-- -0.0 -->
+```
+
+```html
 <div>{{ 3 | number }}</div>
 <!-- 3.0 -->
 ```
@@ -462,6 +467,12 @@ limitTo([1, 2, 3, 4, 5], 2, { startWith: 3, cutOut: true });
 ```html
 <div>{{ 3.1415926 | number(4) }}</div>
 <!-- 3.1415 -->
+```
+
+转换科学计数
+```html
+<div>{{5.2e-7|number(8)}}</div>
+<!-- 0.00000052 -->
 ```
 
 限制最多显示 2 位小数，不足自动填充零。

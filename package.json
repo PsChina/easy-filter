@@ -1,6 +1,6 @@
 {
   "_from": "easy-filter",
-  "_id": "easy-filter@1.3.0",
+  "_id": "easy-filter@1.3.1",
   "_inBundle": false,
   "_integrity": "sha512-7l8863K3kPn0fuvLFhGrLStAYEG/aZ4W5dfnFlnnjUVw9JQqxUIRYIKyg6bfM+KZ5Iyue84XahTsJY+FHSZS5A==",
   "_location": "/easy-filter",
@@ -15,14 +15,6 @@
     "saveSpec": null,
     "fetchSpec": "latest"
   },
-  "_requiredBy": [
-    "#USER",
-    "/"
-  ],
-  "_resolved": "https://registry.npmjs.org/easy-filter/-/easy-filter-1.1.1.tgz",
-  "_shasum": "3e4b3e26e0229887dd4d69755646534a1b6dfb1c",
-  "_spec": "easy-filter",
-  "_where": "/Users/shanshanpan/Desktop/learn/npm",
   "author": {
     "name": "https://github.com/PsChina"
   },
@@ -42,7 +34,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "version": "1.3.0",
+  "version": "1.3.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/PsChina/easy-filter"

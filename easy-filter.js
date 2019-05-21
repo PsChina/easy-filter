@@ -324,8 +324,8 @@ function number (input, digits = 3, options = {round:false, pad:false}) {
   if( isEmpty(input) ){
     return pad ? `0.${'0'.padEnd(digits,'0')}` : '0'
   }
-  let temp = input.toString()
-  let int = String(input)
+  let temp = sciNumToString(input)
+  let int = sciNumToString(input)
   let decimal = digits ? '0' : false
   if (temp.indexOf('.') !== -1) {
     let numberArr = temp.split('.')
@@ -350,6 +350,34 @@ function number (input, digits = 3, options = {round:false, pad:false}) {
   }
   return pad ? `${int}${decimal?`.${decimal.padEnd(digits,'0')}`:''}` : (decimal ? `${int}.${decimal}` : int)
 }
+/** 
+ * @sciNumToString
+ * Converts scientific notation to a string.
+*/
+function sciNumToString(num){
+  if(num === 0){
+      if(1/num !== 1/0){
+          num = '-0'
+      }
+  }
+  const string = String(num)
+  if(string.indexOf('e')===-1){
+      return string
+  }
+  const symbol = string.charAt(0)==='-' ? '-' : ''
+  if(string.indexOf('e-')!==-1){
+    const [val,power] = string.split('e-')
+    let [left,right] = val.replace('-','').split('.')
+    left = left.padStart(Number(power)+1,'0')
+    return symbol + left.charAt(0)+ '.' +left.substring(1,left.length) + (right ? right:'')
+  }else if(string.indexOf('e')!==-1){
+    const [val,power] = string.split('e')
+    let [left,right] = val.replace('-','').split('.')
+    right = right.padEnd(Number(power),'0')
+    return symbol + left  + (right ? right:'')
+  }
+}
+
 /**
  * @limitTo
  * Creates a new array or string containing only a specified number of elements.
