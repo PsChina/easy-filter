@@ -38,6 +38,15 @@ import easyFilter from "easy-filter";
 import Vue from "vue";
 
 Vue.use(easyFilter);
+
+// or use only what you need
+import {
+  number,
+  orderBy
+  //...
+} from "easy-filter";
+Vue.use(number);
+Vue.use(orderBy);
 ```
 
 Use it in a component
@@ -506,7 +515,7 @@ Display separator
 Display positive sign
 
 ```html
-<div> { { 100.123456 | number(5, {round: true, sign: true}) } } </div>
+<div>{ { 100.123456 | number(5, {round: true, sign: true}) } }</div>
 <!-- +100.12346 -->
 ```
 

@@ -639,3 +639,93 @@ module.exports = {
     };
   }
 };
+
+module.exports.upperCase = {
+  install(Vue, options){
+    Vue.filter("upperCase", upperCase);
+    Vue.prototype.easyFilter = Vue.prototype.easyFilter || {}
+    Object.assign(Vue.prototype.easyFilter,{
+      upperCase
+    }) 
+  }
+}
+
+module.exports.lowerCase = {
+  install(Vue, options){
+    Vue.filter("lowerCase", lowerCase);
+    Vue.prototype.easyFilter = Vue.prototype.easyFilter || {}
+    Object.assign(Vue.prototype.easyFilter,{
+      lowerCase
+    }) 
+  }
+}
+
+module.exports.currency = {
+  install(Vue, options){
+    Vue.filter("currency", currency);
+    Vue.prototype.easyFilter = Vue.prototype.easyFilter || {}
+    Object.assign(Vue.prototype.easyFilter,{
+      currency
+    }) 
+  }
+}
+
+module.exports.date = {
+  install(Vue, options){
+    Vue.filter("date", date);
+    Vue.prototype.easyFilter = Vue.prototype.easyFilter || {}
+    Object.assign(Vue.prototype.easyFilter,{
+      date
+    }) 
+  }
+}
+
+module.exports.filter = {
+  install(Vue, options){
+    Vue.filter("filter", filter);
+    Vue.prototype.easyFilter = Vue.prototype.easyFilter || {}
+    Object.assign(Vue.prototype.easyFilter,{
+      filter
+    }) 
+  }
+}
+
+module.exports.json = {
+  install(Vue, options){
+    Vue.filter("json", json);
+    Vue.prototype.easyFilter = Vue.prototype.easyFilter || {}
+    Object.assign(Vue.prototype.easyFilter,{
+      json
+    }) 
+  }
+}
+
+module.exports.number = {
+  install(Vue, options){
+    Vue.filter("number", number);
+    Vue.prototype.easyFilter = Vue.prototype.easyFilter || {}
+    Object.assign(Vue.prototype.easyFilter,{
+      number
+    }) 
+  }
+}
+
+module.exports.limitTo = {
+  install(Vue, options){
+    Vue.filter("limitTo", limitTo);
+    Vue.prototype.easyFilter = Vue.prototype.easyFilter || {}
+    Object.assign(Vue.prototype.easyFilter,{
+      limitTo
+    })
+  }
+}
+
+module.exports.orderBy = {
+  install(Vue, options){
+    Vue.filter("orderBy", orderBy);
+    Vue.prototype.easyFilter = Vue.prototype.easyFilter || {}
+    Object.assign(Vue.prototype.easyFilter,{
+      orderBy
+    })
+  }
+}

@@ -38,6 +38,15 @@ import easyFilter from "easy-filter";
 import Vue from "vue";
 
 Vue.use(easyFilter);
+
+// 或者按需引用
+import {
+  number,
+  orderBy
+  //...
+} from "easy-filter";
+Vue.use(number);
+Vue.use(orderBy);
 ```
 
 在组件中使用:
