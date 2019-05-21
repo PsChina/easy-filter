@@ -498,6 +498,13 @@ Display separator
 <!-- 10,000.0 -->
 ```
 
+Display positive sign
+
+```html
+<div> { { 100.123456 | number(5, {round: true, sign: true}) } } </div>
+<!-- +100.12346 -->
+```
+
 Limit digits & Fill zero & Rounding
 
 ```jsx

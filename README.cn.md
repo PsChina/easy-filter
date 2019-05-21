@@ -500,8 +500,15 @@ limitTo([1, 2, 3, 4, 5], 2, { startWith: 3, cutOut: true });
 显示分隔符
 
 ```html
-<div>{{ 10000 | number(1, {separator:','}) }}</div>
+<div>{{ 10000 | number(1, {separator: ','}) }}</div>
 <!-- 10,000.0 -->
+```
+
+正数显示符号
+
+```html
+<div> { { 100.123456 | number(5, {round: true, sign: true}) } } </div>
+<!-- +100.12346 -->
 ```
 
 显示 3 位小数 & 自动填充零 & 四舍五入

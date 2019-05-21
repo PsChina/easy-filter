@@ -369,11 +369,15 @@ function json(input) {
  * @param2 digits
  * @param3 options {round:false, pad:false}
  */
-function number(input, digits = 3, options = { round: false, pad: false }) {
+function number(
+  input,
+  digits = 3,
+  options = { round: false, pad: false, sign: false }
+) {
   if (isNaN(input)) {
     return input;
   }
-  const { round, pad } = options;
+  const { round, pad, sign } = options;
   let { separator } = options;
   if (isEmpty(input)) {
     return pad ? `0.${"0".padEnd(digits, "0")}` : "0";
@@ -406,6 +410,9 @@ function number(input, digits = 3, options = { round: false, pad: false }) {
     } else {
       int = cutStrArr.join(separator);
     }
+  }
+  if (int > 0 && sign) {
+    int = `+${int}`;
   }
   return pad
     ? `${int}${decimal ? `.${decimal.padEnd(digits, "0")}` : ""}`
