@@ -464,11 +464,6 @@ limitTo([1, 2, 3, 4, 5], 2, { startWith: 3, cutOut: true });
 无参
 
 ```html
-<div>{{ +0 | number }}</div>
-<!-- +0.0 -->
-```
-
-```html
 <div>{{ -0 | number }}</div>
 <!-- -0.0 -->
 ```

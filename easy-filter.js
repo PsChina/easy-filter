@@ -428,8 +428,6 @@ function sciNumToString(num) {
   if (num === 0) {
     if (1 / num !== 1 / 0) {
       num = "-0";
-    } else {
-      num = '+0'
     }
   }
   const string = String(num);

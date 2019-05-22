@@ -458,11 +458,6 @@ and set options parameters to determine whether you want to round, and fill in z
 No parameter
 
 ```html
-<div>{{ +0 | number }}</div>
-<!-- +0.0 -->
-```
-
-```html
 <div>{{ -0 | number }}</div>
 <!-- -0.0 -->
 ```
