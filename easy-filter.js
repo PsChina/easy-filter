@@ -411,7 +411,7 @@ function number(
       int = cutStrArr.join(separator);
     }
   }
-  if (int > 0 && sign) {
+  if (input > 0 && sign) {
     int = `+${int}`;
   }
   return pad
