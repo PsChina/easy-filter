@@ -472,6 +472,12 @@ No parameter
 <!-- 3.14 -->
 ```
 
+Displays a maximum of 8 decimal places by default and does not round
+```html
+<div>{{ 0.123456789 | number }}</div>
+<!-- 0.12345678 -->
+```
+
 Limit digits
 
 ```html

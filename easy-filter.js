@@ -371,7 +371,7 @@ function json(input) {
  */
 function number(
   input,
-  digits = 3,
+  digits = 8,
   options = { round: false, pad: false, sign: false }
 ) {
   if (isNaN(input)) {
