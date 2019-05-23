@@ -393,16 +393,24 @@ function number(
     let intPart = numberArr[0];
     let decimalPart = numberArr[1];
     if (round) {
-      decimal =
-        Number(decimalPart.substring(0, digits)) +
-        Math.round(Number(`0.${decimalPart.substr(digits, 1)}`));
-      decimal = String(decimal);
-      if (decimal.length > digits) {
-        intPart = String(Number(intPart) + 1);
-        decimal = "0";
+      let reservedPortion = decimalPart.substr(0, digits);
+      let roundPart = Number(decimalPart.substr(digits, 1));
+      if (roundPart >= 5) {
+        decimal =
+          Number(`0.${reservedPortion}`) +
+          Number(`0.${"1".padStart(digits, "0")}`);
+        if (decimal >= 1) {
+          intPart = String(Number(intPart) + 1);
+          decimal = "0";
+        } else {
+          decimal = `${decimal}`.substr(2, digits);
+        }
       }
     } else {
       decimal = String(decimalPart.substring(0, digits));
+    }
+    if(decimal == 0){
+      decimal = '0'
     }
     let cutStrArr = formatStrToArr(intPart);
     if (cutStrArr.includes("-")) {
@@ -639,91 +647,91 @@ module.exports = {
 };
 
 module.exports.upperCase = {
-  install(Vue, options){
+  install(Vue, options) {
     Vue.filter("upperCase", upperCase);
-    Vue.prototype.easyFilter = Vue.prototype.easyFilter || {}
-    Object.assign(Vue.prototype.easyFilter,{
+    Vue.prototype.easyFilter = Vue.prototype.easyFilter || {};
+    Object.assign(Vue.prototype.easyFilter, {
       upperCase
-    }) 
+    });
   }
-}
+};
 
 module.exports.lowerCase = {
-  install(Vue, options){
+  install(Vue, options) {
     Vue.filter("lowerCase", lowerCase);
-    Vue.prototype.easyFilter = Vue.prototype.easyFilter || {}
-    Object.assign(Vue.prototype.easyFilter,{
+    Vue.prototype.easyFilter = Vue.prototype.easyFilter || {};
+    Object.assign(Vue.prototype.easyFilter, {
       lowerCase
-    }) 
+    });
   }
-}
+};
 
 module.exports.currency = {
-  install(Vue, options){
+  install(Vue, options) {
     Vue.filter("currency", currency);
-    Vue.prototype.easyFilter = Vue.prototype.easyFilter || {}
-    Object.assign(Vue.prototype.easyFilter,{
+    Vue.prototype.easyFilter = Vue.prototype.easyFilter || {};
+    Object.assign(Vue.prototype.easyFilter, {
       currency
-    }) 
+    });
   }
-}
+};
 
 module.exports.date = {
-  install(Vue, options){
+  install(Vue, options) {
     Vue.filter("date", date);
-    Vue.prototype.easyFilter = Vue.prototype.easyFilter || {}
-    Object.assign(Vue.prototype.easyFilter,{
+    Vue.prototype.easyFilter = Vue.prototype.easyFilter || {};
+    Object.assign(Vue.prototype.easyFilter, {
       date
-    }) 
+    });
   }
-}
+};
 
 module.exports.filter = {
-  install(Vue, options){
+  install(Vue, options) {
     Vue.filter("filter", filter);
-    Vue.prototype.easyFilter = Vue.prototype.easyFilter || {}
-    Object.assign(Vue.prototype.easyFilter,{
+    Vue.prototype.easyFilter = Vue.prototype.easyFilter || {};
+    Object.assign(Vue.prototype.easyFilter, {
       filter
-    }) 
+    });
   }
-}
+};
 
 module.exports.json = {
-  install(Vue, options){
+  install(Vue, options) {
     Vue.filter("json", json);
-    Vue.prototype.easyFilter = Vue.prototype.easyFilter || {}
-    Object.assign(Vue.prototype.easyFilter,{
+    Vue.prototype.easyFilter = Vue.prototype.easyFilter || {};
+    Object.assign(Vue.prototype.easyFilter, {
       json
-    }) 
+    });
   }
-}
+};
 
 module.exports.number = {
-  install(Vue, options){
+  install(Vue, options) {
     Vue.filter("number", number);
-    Vue.prototype.easyFilter = Vue.prototype.easyFilter || {}
-    Object.assign(Vue.prototype.easyFilter,{
+    Vue.prototype.easyFilter = Vue.prototype.easyFilter || {};
+    Object.assign(Vue.prototype.easyFilter, {
       number
-    }) 
+    });
   }
-}
+};
 
 module.exports.limitTo = {
-  install(Vue, options){
+  install(Vue, options) {
     Vue.filter("limitTo", limitTo);
-    Vue.prototype.easyFilter = Vue.prototype.easyFilter || {}
-    Object.assign(Vue.prototype.easyFilter,{
+    Vue.prototype.easyFilter = Vue.prototype.easyFilter || {};
+    Object.assign(Vue.prototype.easyFilter, {
       limitTo
-    })
+    });
   }
-}
+};
 
 module.exports.orderBy = {
-  install(Vue, options){
+  install(Vue, options) {
     Vue.filter("orderBy", orderBy);
-    Vue.prototype.easyFilter = Vue.prototype.easyFilter || {}
-    Object.assign(Vue.prototype.easyFilter,{
+    Vue.prototype.easyFilter = Vue.prototype.easyFilter || {};
+    Object.assign(Vue.prototype.easyFilter, {
       orderBy
-    })
+    });
   }
-}
+};
