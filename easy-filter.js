@@ -1,3 +1,4 @@
+const plus = require("./plus.js");
 /**
  * @description This plug-in defines a portion of the Vue custom filter.
  */
@@ -60,81 +61,70 @@ function formatStrToArr(str, arr = []) {
   }
 }
 /**
+ * @dealNegativeSin
+ * @param {array} cutStrArr
+ * @param {string} separator
+ * @return {string}
+ */
+function dealNegativeSign(cutStrArr = [], separator = "") {
+  let int = "";
+  if (cutStrArr.includes("-")) {
+    int = `-${cutStrArr.filter(item => item !== "-").join(separator)}`;
+  } else {
+    int = cutStrArr.join(separator);
+  }
+  return int;
+}
+/**
  * @currency
  * Formats a number as a currency (ie $1,234.56).
  * When no currency symbol is provided,
- * default symbol for current locale is used.
  */
 function currency(
   input,
   currencySymbol = "$",
   digits = 2,
-  options = {
-    symbolOnLeft: true,
-    separator: ",",
-    addSpace: false,
-    pad: true,
-    round: false
-  }
+  {
+    symbolOnLeft = true,
+    separator = ",",
+    addSpace = false,
+    pad = true,
+    round = false
+  } = {}
 ) {
   let output = input;
   const type = typeof input;
-  let { separator, symbolOnLeft, addSpace, pad, round } = options;
-  if (pad === undefined) {
-    pad = true;
-  }
-  if (symbolOnLeft === undefined) {
-    symbolOnLeft = true;
-  }
-  if (separator === undefined) {
-    separator = ",";
-  }
-  if (addSpace === undefined) {
-    addSpace = false;
-  }
   if (type === "number" || type === "string") {
-    let data = input.toString();
+    let data = sciNumToString(input);
     // Gets the position of the decimal point.
     // Decide if you're a decimal.
     if (data.indexOf(".") !== -1 && digits != 0) {
       // If it is a decimal, separate the decimal part from the integer part.
       let numberArr = data.split(".");
       let intPart = numberArr[0];
-      let decimalsPart = numberArr[1];
-      let decimals =
-        Number(decimalsPart.substring(0, digits)) +
-        (round
-          ? Math.round(Number("0." + decimalsPart.substr(digits, 1)))
-          : Math.floor(Number("0." + decimalsPart.substr(digits, 1))));
-      if (String(decimals).length > digits) {
-        intPart = String(Number(intPart) + 1);
-        decimals = 0;
-      }
-      // Partition the integer part.
-      let cutStrArr = formatStrToArr(intPart);
+      let decimalPart = numberArr[1];
       // Round the decimal part and add the thousandth.
-      let int;
-      if (cutStrArr.includes("-")) {
-        int = `-${cutStrArr.filter(item => item !== "-").join(separator)}`;
-      } else {
-        int = cutStrArr.join(separator);
-      }
-      data = `${int}.${pad ? String(decimals).padEnd(digits, "0") : decimals}`;
+      let decimal = "0";
+      [intPart, decimal] = roundDecimalPart(
+        round,
+        intPart,
+        decimalPart,
+        digits
+      );
+      // deal int part
+      let cutStrArr = formatStrToArr(intPart);
+      let int = dealNegativeSign(cutStrArr, separator);
+      data = `${int}.${pad ? String(decimal).padEnd(digits, "0") : decimal}`;
     } else {
       let numberArr = data.split(".");
       let intPart = numberArr[0];
-      let decimalsPart = numberArr[1];
-      if (round && decimalsPart) {
+      let decimalPart = numberArr[1];
+      if (round && decimalPart) {
         intPart = String(Math.round(input));
       }
       // Else, split the integer part directly.
       let cutStrArr = formatStrToArr(intPart);
-      let int;
-      if (cutStrArr.includes("-")) {
-        int = `-${cutStrArr.filter(item => item !== "-").join(separator)}`;
-      } else {
-        int = cutStrArr.join(separator);
-      }
+      let int = dealNegativeSign(cutStrArr, separator);
       // Add the decimal part.
       data = `${int}${pad ? ".".padEnd(digits + 1, "0") : ""}`;
       if (digits <= 0) {
@@ -372,52 +362,24 @@ function json(input) {
 function number(
   input,
   digits = 8,
-  options = { round: false, pad: false, sign: false }
+  { round = false, pad = false, sign = false, separator = "" } = {}
 ) {
   if (isNaN(input)) {
     return input;
   }
-  const { round, pad, sign } = options;
-  let { separator } = options;
   if (isEmpty(input)) {
     return pad ? `0.${"0".padEnd(digits, "0")}` : "0";
   }
-  if (separator === undefined) {
-    separator = "";
-  }
   let temp = sciNumToString(input);
-  let int = formatStrToArr(sciNumToString(input)).join(separator);
+  let int = dealNegativeSign(formatStrToArr(sciNumToString(input)), separator);
   let decimal = digits ? "0" : false;
   if (temp.indexOf(".") !== -1) {
     let numberArr = temp.split(".");
     let intPart = numberArr[0];
     let decimalPart = numberArr[1];
-    if (round) {
-      let reservedPortion = decimalPart.substr(0, digits);
-      let roundPart = Number(decimalPart.substr(digits, 1));
-      if (roundPart >= 5) {
-        decimal =
-          Number(`0.${reservedPortion}`) +
-          Number(`0.${"1".padStart(digits, "0")}`);
-        if (decimal >= 1) {
-          intPart = String(Number(intPart) + 1);
-          decimal = "0";
-        } else {
-          decimal = `${decimal}`.substr(2, digits);
-        }
-      }
-    } else {
-      decimal = String(decimalPart.substring(0, digits));
-    }
-    if(decimal == 0){
-      decimal = '0'
-    }
+    [intPart, decimal] = roundDecimalPart(round, intPart, decimalPart, digits);
     let cutStrArr = formatStrToArr(intPart);
-    if (cutStrArr.includes("-")) {
-      int = `-${cutStrArr.filter(item => item !== "-").join(separator)}`;
-    } else {
-      int = cutStrArr.join(separator);
-    }
+    int = dealNegativeSign(cutStrArr, separator);
   }
   if (input > 0 && sign) {
     int = `+${int}`;
@@ -438,7 +400,7 @@ function sciNumToString(num) {
       num = "-0";
     }
   }
-  const string = String(num);
+  const string = String(num).toLowerCase();
   if (string.indexOf("e") === -1) {
     return string;
   }
@@ -455,11 +417,44 @@ function sciNumToString(num) {
       (right ? right : "")
     );
   } else if (string.indexOf("e") !== -1) {
-    const [val, power] = string.split("e");
+    let [val, power] = string.split("e");
     let [left, right] = val.replace("-", "").split(".");
+    right = right
+      ? right
+      : ((power = +power + 1), (right = left), (left = ""), right);
     right = right.padEnd(Number(power), "0");
     return symbol + left + (right ? right : "");
   }
+}
+
+/**
+ * @roundDecimalPart
+ * @param {boolean} round
+ * @param {string} decimalPart
+ * @param {number} digits
+ * @return {array}
+ */
+function roundDecimalPart(round, intPart, decimalPart, digits) {
+  let decimal = "";
+  if (round) {
+    let reservedPortion = decimalPart.substr(0, digits);
+    let roundPart = Number(decimalPart.substr(digits, 1));
+    if (roundPart >= 5) {
+      decimal = plus(
+        Number(`0.${reservedPortion}`),
+        Number(`0.${"1".padStart(digits, "0")}`)
+      );
+      if (decimal >= 1) {
+        intPart = String(Number(intPart) + 1);
+        decimal = "0";
+      } else {
+        decimal = `${decimal}`.substr(2, digits);
+      }
+    }
+  } else {
+    decimal = String(decimalPart.substring(0, digits));
+  }
+  return [intPart, decimal == 0 ? "0" : decimal];
 }
 
 /**
