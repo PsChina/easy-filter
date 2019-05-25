@@ -396,7 +396,7 @@ export default {
 <!-- hell -->
 ```
 
-- 如果你想剪掉前面的部分，你这样裁剪。
+- 如果您想剪掉前面的部分，可以这样裁剪。
 
 ```html
 <div>{{ 'hello' | limitTo(3, {startWithIndex:1, cutOut: true}) }}</div>
