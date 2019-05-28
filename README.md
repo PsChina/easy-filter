@@ -306,7 +306,7 @@ The filter can also filter the range conditions.
         return this.easyFilter.orderBy(input, rule, reverse);
       }
       // or
-      // orderBy(input, callBack = (v1,v2)=> v1.att > v2 .att ? 1 : -1) {
+      // orderBy(input, callBack = (v1,v2)=> v1.att > v2.att ? 1 : -1) {
       //   return this.easyFilter.orderBy(input, callBack)
       // }
     }
