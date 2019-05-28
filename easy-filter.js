@@ -186,7 +186,11 @@ function date(input, formatMode, country) {
         case "dd": // Replace the date.
           return `${date.getDate()}`.padStart(2, 0);
         case "hh": // Replace the hours (12-hour system).
-          return `${date.getHours() - 12}`.padStart(2, 0);
+          const hours = date.getHours()
+          if(hours>12){
+            return `${hours - 12}`.padStart(2, 0);
+          }
+          return `${hours}`.padStart(2, 0);
         case "HH": // Replace the hours (24 hour system).
           return `${date.getHours()}`.padStart(2, 0);
         case "mm": // Replace the minutes.
@@ -215,18 +219,18 @@ function date(input, formatMode, country) {
   if (!input) {
     // Determine whether the input to be filtered is not present and the input is ''.
     return "";
-  } else if (typeof input === "number" || input instanceof Date) {
+  } else {
+    const _old = input
+    input = new Date(input)
     // Determines whether the parameter is legally invalid and returns the original input.
-    if (input instanceof Date) {
-      input = input.getTime();
+    if (input.toString()==='Invalid Date') {
+      return _old
     }
     if (typeof formatMode === "string") {
       return formatTimeWithMode(input, formatMode, country);
     } else {
       return input;
     }
-  } else {
-    return input;
   }
 }
 /**
@@ -552,36 +556,37 @@ function getOutput(array, { startIndex, limit, ignore, type, cutOut }) {
   }
 }
 // Default Comparator
-function builtInComparator(v1, v2) {
+function builtInComparator(item1, item2, key, reverse) {
+  const v1 = item1[key]
+  const v2 = item2[key]
   if (typeof v1 === "string" && typeof v1 === "string") {
-    return v1 > v2 ? 1 : -1;
+    return (reverse ? v1 < v2 : v1 > v2) ? 1 : -1;
   }
-  return v1 - v2;
+  return reverse ? v2 - v1 : v1 - v2;
 }
 /**
  * @orderBy
  */
 function orderBy(input, expression, reverse, comparator = builtInComparator) {
   let key;
-  if (expression) {
+  const expressionType = typeof expression
+  if(expressionType === 'string'){
     if (expression.charAt(0) === "-") {
       reverse = true;
       key = expression.substr(1);
     } else {
       key = expression;
     }
-    if (input instanceof Array) {
-      let newArr = input.concat();
-      window._newArr = newArr;
-      newArr = newArr.sort((value, nextValue) => {
-        return comparator(value[key], nextValue[key]);
-      });
-      input = newArr;
-      if (reverse) {
-        input = input.reverse();
-      }
-      return input;
-    }
+  } else if(expressionType === 'function') {
+    comparator = expression
+  }
+  if (input instanceof Array) {
+    let newArr = input.concat();
+    newArr = newArr.sort((value, nextValue) => {
+      return comparator(value, nextValue,key,reverse);
+    });
+    input = newArr;
+    return input;
   }
   return input;
 }

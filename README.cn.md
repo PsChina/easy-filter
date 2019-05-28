@@ -305,6 +305,10 @@ filter 过滤器还支持范围过滤。
       orderBy(input, rule, reverse) {
         return this.easyFilter.orderBy(input, rule, reverse);
       }
+      // 或者自定义排序函数 (数组 sort 回调)
+      // orderBy(input, callBack = (v1,v2)=> v1.att > v2 .att ? 1 : -1) {
+      //   return this.easyFilter.orderBy(input, callBack)
+      // }
     }
   };
 </script>
