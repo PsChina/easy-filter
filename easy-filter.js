@@ -454,6 +454,8 @@ function roundDecimalPart(round, intPart, decimalPart, digits) {
       } else {
         decimal = `${decimal}`.substr(2, digits);
       }
+    } else {
+      decimal = String(decimalPart.substring(0, digits));
     }
   } else {
     decimal = String(decimalPart.substring(0, digits));

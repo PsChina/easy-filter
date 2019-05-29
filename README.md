@@ -544,6 +544,13 @@ var arr = [
 // 5.556
 ```
 
+More than 8 decimal places need to pass in the number of parameters
+
+```html
+<div>{{ 3.14e-20 | number(21) }}</div>
+<!-- 0.000000000000000000031 -->
+```
+
 ## License
 
 [Anti-996 License](LICENSE)
