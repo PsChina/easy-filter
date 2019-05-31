@@ -49,7 +49,13 @@ Vue.use(number);
 Vue.use(orderBy);
 ```
 
-Use it in a component
+Direct `<script>` Include.
+
+```html
+<script src="./easy-filter.min.js"><script/>
+```
+
+Use it in a component:
 
 ## lowerCase
 
