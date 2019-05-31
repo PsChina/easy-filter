@@ -1,6 +1,6 @@
 {
   "_from": "easy-filter",
-  "_id": "easy-filter@1.4.4",
+  "_id": "easy-filter@1.4.41",
   "_inBundle": false,
   "_integrity": "sha512-7l8863K3kPn0fuvLFhGrLStAYEG/aZ4W5dfnFlnnjUVw9JQqxUIRYIKyg6bfM+KZ5Iyue84XahTsJY+FHSZS5A==",
   "_location": "/easy-filter",
@@ -34,7 +34,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "version": "1.4.4",
+  "version": "1.4.41",
   "repository": {
     "type": "git",
     "url": "https://github.com/PsChina/easy-filter"

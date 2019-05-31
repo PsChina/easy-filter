@@ -52,7 +52,7 @@ Vue.use(orderBy);
 Direct `<script>` Include.
 
 ```html
-<script src="./easy-filter.min.js"><script/>
+<script src="./xxx_path_xxx/easy-filter.min.js"></script>
 ```
 
 Use it in a component:

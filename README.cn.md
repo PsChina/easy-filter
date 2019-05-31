@@ -52,7 +52,7 @@ Vue.use(orderBy);
 直接用 `<script>` 引入。
 
 ```html
-<script src="./easy-filter.min.js"><script/>
+<script src="./xxx_path_xxx/easy-filter.min.js"></script>
 ```
 
 在组件中使用:
