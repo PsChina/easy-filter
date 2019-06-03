@@ -9,6 +9,62 @@ This package is very small and it only contains nine functions.
 [![LICENSE](https://img.shields.io/badge/license-Anti%20996-blue.svg)](https://github.com/996icu/996.ICU/blob/master/LICENSE)
 [![996.icu](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu)
 
+## New Features(v1.4.5)
+
+The plus or minus sign of 0 can be set when the sign is added to a positive number.
+
+Display symbol is negative 0:
+```html
+<template>
+  <div>{{ 0 | number(2, option) }}</div> 
+</template>
+<script>
+export default {
+    data(){
+        return {
+            option:{
+                sign:{
+                    zero:'-'
+                }
+            }
+        }
+    }
+}
+</script>
+<!-- -0.0 -->
+```
+Display symbol is positive 0:
+```html
+<template>
+  <div>{{ 0 | number(2, option) }}</div> 
+</template>
+<script>
+export default {
+    data(){
+        return {
+            option:{
+                sign:{
+                    zero:'+'
+                }
+            }
+        }
+    }
+}
+</script>
+<!-- +0.0 -->
+```
+Boolean value:
+```html
+<div> {{ 1 | number(2, {sign:true}}) }} </div>
+<!-- +1.0 -->
+
+<div> {{ 0 | number(2, {sign:true}}) }} </div>
+<!-- 0.0 -->
+
+<div> {{ -1 | number }} </div>
+<!-- -1.0 -->
+```
+
 ## filter list
 
 - [currency](#currency)
@@ -536,16 +592,16 @@ Limit digits & Fill zero & Rounding
 var arr = [
   1,
   2.2,
-  3.333,
-  4.4444,
-  5.55555
+  3.33,
+  4.444,
+  5.5555
   ]
 
-<div v-for="num in arr">{{ num | number(3, {pad: true, round: true}) }}</div>
+<div v-for="num in arr">{{ num | number(3, {pad: true, round: true} )}}</div>
 
 // 1.000
 // 2.200
-// 3.333
+// 3.330
 // 4.444
 // 5.556
 ```

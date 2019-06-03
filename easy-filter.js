@@ -366,13 +366,16 @@ function json(input) {
 function number(
   input,
   digits = 8,
-  { round = false, pad = false, sign = false, separator = "" } = {}
+  { round = false, pad = false, sign = false, separator = ""} = {}
 ) {
   if (isNaN(input)) {
     return input;
   }
   if (isEmpty(input)) {
     return pad ? `0.${"0".padEnd(digits, "0")}` : "0";
+  }
+  if(input == 0 && typeof sign === 'object'){
+    input = `${sign.zero}0`
   }
   let temp = sciNumToString(input);
   let int = dealNegativeSign(formatStrToArr(sciNumToString(input)), separator);

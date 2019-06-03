@@ -9,6 +9,61 @@
 [![LICENSE](https://img.shields.io/badge/license-Anti%20996-blue.svg)](https://github.com/996icu/996.ICU/blob/master/LICENSE)
 [![996.icu](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu)
 
+## 新特性(v1.4.5)
+
+为正数加上符号时可以设置 0 的正负号。
+
+显示符号为负的0:
+```html
+<template>
+  <div>{{ 0 | number(2, option) }}</div> 
+</template>
+<script>
+export default {
+    data(){
+        return {
+            option:{
+                sign:{
+                    zero:'-'
+                }
+            }
+        }
+    }
+}
+</script>
+<!-- -0.0 -->
+```
+
+显示符号正的0:
+```html
+<template>
+  <div>{{ 0 | number(2, option) }}</div> 
+</template>
+<script>
+export default {
+    data(){
+        return {
+            option:{
+                sign:{
+                    zero:'+'
+                }
+            }
+        }
+    }
+}
+</script>
+<!-- +0.0 -->
+```
+
+布尔值:
+```html
+<div> {{ 1 | number(2, {sign:true}}) }} </div>
+<!-- +1.0 -->
+
+<div> {{ 0 | number(2, {sign:true}}) }} </div>
+<!-- 0.0 -->
+```
+
 ## 过滤器列表
 
 - [currency](#currency)
@@ -542,16 +597,16 @@ limitTo([1, 2, 3, 4, 5], 2, { startWith: 3, cutOut: true });
 var arr = [
   1,
   2.2,
-  3.333,
-  4.4444,
-  5.55555
+  3.33,
+  4.444,
+  5.5555
   ]
 
 <div v-for="num in arr">{{ num | number(3, {pad: true, round: true} )}}</div>
 
 // 1.000
 // 2.200
-// 3.333
+// 3.330
 // 4.444
 // 5.556
 ```
