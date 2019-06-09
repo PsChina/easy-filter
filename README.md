@@ -9,61 +9,9 @@ This package is very small and it only contains nine functions.
 [![LICENSE](https://img.shields.io/badge/license-Anti%20996-blue.svg)](https://github.com/996icu/996.ICU/blob/master/LICENSE)
 [![996.icu](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu)
 
-## New Features(v1.4.5)
+## Demo
 
-The plus or minus sign of 0 can be set when the sign is added to a positive number.
-
-Display symbol is negative 0:
-```html
-<template>
-  <div>{{ 0 | number(2, option) }}</div> 
-</template>
-<script>
-export default {
-    data(){
-        return {
-            option:{
-                sign:{
-                    zero:'-'
-                }
-            }
-        }
-    }
-}
-</script>
-<!-- -0.0 -->
-```
-Display symbol is positive 0:
-```html
-<template>
-  <div>{{ 0 | number(2, option) }}</div> 
-</template>
-<script>
-export default {
-    data(){
-        return {
-            option:{
-                sign:{
-                    zero:'+'
-                }
-            }
-        }
-    }
-}
-</script>
-<!-- +0.0 -->
-```
-Boolean value:
-```html
-<div> {{ 1 | number(2, {sign:true}}) }} </div>
-<!-- +1.0 -->
-
-<div> {{ 0 | number(2, {sign:true}}) }} </div>
-<!-- 0.0 -->
-
-<div> {{ -1 | number }} </div>
-<!-- -1.0 -->
-```
+[Demo](https://pschina.github.io/easy-filter/)
 
 ## filter list
 

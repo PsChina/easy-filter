@@ -9,60 +9,9 @@
 [![LICENSE](https://img.shields.io/badge/license-Anti%20996-blue.svg)](https://github.com/996icu/996.ICU/blob/master/LICENSE)
 [![996.icu](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu)
 
-## 新特性(v1.4.5)
+## Demo
 
-为正数加上符号时可以设置 0 的正负号。
-
-显示符号为负的0:
-```html
-<template>
-  <div>{{ 0 | number(2, option) }}</div> 
-</template>
-<script>
-export default {
-    data(){
-        return {
-            option:{
-                sign:{
-                    zero:'-'
-                }
-            }
-        }
-    }
-}
-</script>
-<!-- -0.0 -->
-```
-
-显示符号正的0:
-```html
-<template>
-  <div>{{ 0 | number(2, option) }}</div> 
-</template>
-<script>
-export default {
-    data(){
-        return {
-            option:{
-                sign:{
-                    zero:'+'
-                }
-            }
-        }
-    }
-}
-</script>
-<!-- +0.0 -->
-```
-
-布尔值:
-```html
-<div> {{ 1 | number(2, {sign:true}}) }} </div>
-<!-- +1.0 -->
-
-<div> {{ 0 | number(2, {sign:true}}) }} </div>
-<!-- 0.0 -->
-```
+[Demo](https://pschina.github.io/easy-filter/)
 
 ## 过滤器列表
 
