@@ -1,42 +1,27 @@
 {
-  "_from": "easy-filter",
-  "_id": "easy-filter@1.4.6",
-  "_inBundle": false,
-  "_integrity": "sha512-7l8863K3kPn0fuvLFhGrLStAYEG/aZ4W5dfnFlnnjUVw9JQqxUIRYIKyg6bfM+KZ5Iyue84XahTsJY+FHSZS5A==",
-  "_location": "/easy-filter",
-  "_phantomChildren": {},
-  "_requested": {
-    "type": "tag",
-    "registry": true,
-    "raw": "easy-filter",
-    "name": "easy-filter",
-    "escapedName": "easy-filter",
-    "rawSpec": "",
-    "saveSpec": null,
-    "fetchSpec": "latest"
+  "name": "easy-filter",
+  "version": "1.4.7",
+  "description": "Easy Filter is a third-party filter that makes Vue.js more convenient for working with numbers, strings, and arrays.",
+  "main": "easy-filter.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": {
-    "name": "https://github.com/PsChina"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PsChina/easy-filter.git"
   },
-  "bundleDependencies": false,
-  "deprecated": false,
-  "description": "The simple implementation of some angularjs built-in filters in vue.",
   "keywords": [
     "easy-filter",
     "vue-filter",
     "filter",
-    "vue",
-    "vue2-filter"
+    "vue"
   ],
-  "license": "MIT-996",
-  "main": "easy-filter.js",
-  "name": "easy-filter",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "author": {
+    "name": "https://github.com/PsChina"
   },
-  "version": "1.4.6",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/PsChina/easy-filter"
-  }
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/PsChina/easy-filter/issues"
+  },
+  "homepage": "https://github.com/PsChina/easy-filter#readme"
 }

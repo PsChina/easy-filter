@@ -9,20 +9,20 @@ This package is very small and it only contains nine functions.
 [![LICENSE](https://img.shields.io/badge/license-Anti%20996-blue.svg)](https://github.com/996icu/996.ICU/blob/master/LICENSE)
 [![996.icu](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu)
 
-## Demo
+## Documentation
 
-[Demo](https://pschina.github.io/easy-filter/)
+To check out live examples and docs, visit [easy-filter](https://pschina.github.io/easy-filter/).
 
-## filter list
+## Filter list
 
 - [currency](#currency)
 - [date](#date)
 - [filter](#filter)
 - [json](#json)
 - [limitTo](#limitto)
-- [lowerCase](#lowercase)
+- [lowercase](#lowercase)
 - [number](#number)
-- [upperCase](#uppercase)
+- [uppercase](#uppercase)
 - [orderBy](#orderby)
 
 ## Get start
@@ -61,17 +61,17 @@ Direct `<script>` Include.
 
 Use it in a component:
 
-## lowerCase
+## lowercase
 
 ```html
-<div>{{ 'Hello' | lowerCase }}</div>
+<div>{{ 'Hello' | lowercase }}</div>
 <!-- hello -->
 ```
 
-## upperCase
+## uppercase
 
 ```html
-<div>{{ 'Hello' | upperCase }}</div>
+<div>{{ 'Hello' | uppercase }}</div>
 <!-- HELLO -->
 ```
 
@@ -226,7 +226,7 @@ Use multiple options:
         // Used in js
         return this.easyFilter.filter(input, match);
         // Use of other filters.
-        // this.easyFilter.lowerCase('WORLD')
+        // this.easyFilter.lowercase('WORLD')
         // this.easyFilter.currency(1000,'¥')
         // this.easyFilter.date(1523169365575,'yy-MM-dd')
         // ...

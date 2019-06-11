@@ -9,9 +9,9 @@
 [![LICENSE](https://img.shields.io/badge/license-Anti%20996-blue.svg)](https://github.com/996icu/996.ICU/blob/master/LICENSE)
 [![996.icu](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu)
 
-## Demo
+## 文档
 
-[Demo](https://pschina.github.io/easy-filter/)
+要查看实际例子和文档，请访问[easy-filter](https://pschina.github.io/easy-filter/)。
 
 ## 过滤器列表
 
@@ -20,9 +20,9 @@
 - [filter](#filter)
 - [json](#json)
 - [limitTo](#limitto)
-- [lowerCase](#lowercase)
+- [lowercase](#lowercase)
 - [number](#number)
-- [upperCase](#uppercase)
+- [uppercase](#uppercase)
 - [orderBy](#orderby)
 
 ## 用 npm 下载
@@ -61,17 +61,17 @@ Vue.use(orderBy);
 
 在组件中使用:
 
-## lowerCase
+## lowercase
 
 ```html
-<div>{{ 'Hello' | lowerCase }}</div>
+<div>{{ 'Hello' | lowercase }}</div>
 <!-- hello -->
 ```
 
-## upperCase
+## uppercase
 
 ```html
-<div>{{ 'Hello' | upperCase }}</div>
+<div>{{ 'Hello' | uppercase }}</div>
 <!-- HELLO -->
 ```
 
@@ -226,7 +226,7 @@ Vue.use(orderBy);
         // 在js中使用
         return this.easyFilter.filter(input, match);
         // 使用其他过滤器
-        // this.easyFilter.lowerCase('WORLD')
+        // this.easyFilter.lowercase('WORLD')
         // this.easyFilter.currency(1000,'¥')
         // this.easyFilter.date(1523169365575,'yy-MM-dd')
         // ...

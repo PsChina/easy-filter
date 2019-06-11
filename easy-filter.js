@@ -12,9 +12,9 @@ function isEmpty(val) {
   );
 }
 /**
- * @upperCase Uppercase string.
+ * @uppercase Uppercase string.
  */
-function upperCase(input) {
+function uppercase(input) {
   let output = input;
   if (typeof input === "string") {
     // uppercase.
@@ -23,9 +23,9 @@ function upperCase(input) {
   return output;
 }
 /**
- * @lowerCase LowerCase string.
+ * @lowercase LowerCase string.
  */
-function lowerCase(input) {
+function lowercase(input) {
   let output = input;
   if (typeof input === "string") {
     // lowercase.
@@ -599,13 +599,13 @@ function orderBy(input, expression, reverse, comparator = builtInComparator) {
 module.exports = {
   install(Vue, options) {
     /**
-     * @upperCase
+     * @uppercase
      */
-    Vue.filter("upperCase", upperCase);
+    Vue.filter("uppercase", uppercase);
     /**
-     * @lowerCase
+     * @lowercase
      */
-    Vue.filter("lowerCase", lowerCase);
+    Vue.filter("lowercase", lowercase);
     /**
      * @currency
      */
@@ -638,8 +638,8 @@ module.exports = {
      *Mount the filter to the prototype.
      */
     Vue.prototype.easyFilter = {
-      upperCase,
-      lowerCase,
+      uppercase,
+      lowercase,
       currency,
       date,
       filter,
@@ -651,22 +651,22 @@ module.exports = {
   }
 };
 
-module.exports.upperCase = {
+module.exports.uppercase = {
   install(Vue, options) {
-    Vue.filter("upperCase", upperCase);
+    Vue.filter("uppercase", uppercase);
     Vue.prototype.easyFilter = Vue.prototype.easyFilter || {};
     Object.assign(Vue.prototype.easyFilter, {
-      upperCase
+      uppercase
     });
   }
 };
 
-module.exports.lowerCase = {
+module.exports.lowercase = {
   install(Vue, options) {
-    Vue.filter("lowerCase", lowerCase);
+    Vue.filter("lowercase", lowercase);
     Vue.prototype.easyFilter = Vue.prototype.easyFilter || {};
     Object.assign(Vue.prototype.easyFilter, {
-      lowerCase
+      lowercase
     });
   }
 };
