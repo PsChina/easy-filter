@@ -11,7 +11,7 @@
 
 ## 文档
 
-要查看实际例子和文档，请访问[easy-filter](https://pschina.github.io/easy-filter/)。
+要查看实际例子和文档，请访问 [easy-filter](https://pschina.github.io/easy-filter/index.html) 。
 
 ## 过滤器列表
 
@@ -56,7 +56,7 @@ Vue.use(orderBy);
 直接用 `<script>` 引入。
 
 ```html
-<script src="./xxx_path_xxx/easy-filter.min.js"></script>
+<script src="./path/to/easy-filter.min.js"></script>
 ```
 
 在组件中使用:

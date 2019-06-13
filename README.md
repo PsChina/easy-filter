@@ -11,7 +11,7 @@ This package is very small and it only contains nine functions.
 
 ## Documentation
 
-To check out live examples and docs, visit [easy-filter](https://pschina.github.io/easy-filter/).
+To check out live examples and docs, visit [easy-filter](https://pschina.github.io/easy-filter/index.html).
 
 ## Filter list
 
@@ -56,7 +56,7 @@ Vue.use(orderBy);
 Direct `<script>` Include.
 
 ```html
-<script src="./xxx_path_xxx/easy-filter.min.js"></script>
+<script src="./path/to/easy-filter.min.js"></script>
 ```
 
 Use it in a component:
@@ -375,22 +375,22 @@ export default {
 
 The first parameter `input` is the data to be filtered, which can be an array, a number, or a string.
 
-The second parameter is the limit count to limit `input`'s length.
+The second parameter is the length you want to limit.
 
-| second parameter |   instructions   |  type  |      default value       |
-| :--------------: | :--------------: | :----: | :----------------------: |
-|      limit       | Limit the length | number | Number.POSITIVE_INFINITY |
+| Second Parameter | Description | Type | Default |
+| :--------: | :------: | :------: | :----------------------: |
+| Limit | limit length | number | Number.POSITIVE_INFINITY |
 
-The third parameter is the configuration item which says how do I filter this data.
+The third parameter is the configuration item, which tells the filter how to filter the data.
 
-The fields for the configuration item are:
+The fields of the configuration item are:
 
-|      attr      |         instructions          |      type       | default value |
-| :------------: | :---------------------------: | :-------------: | :-----------: |
-| startWithIndex |    Start counting by index    |     number      |       0       |
-|   startWith    |   Start counting by element   |   not number    |   undefined   |
-|     ignore     | Elements that are not counted | RegExp , object |   undefined   |
-|     cutOut     |        Whether to cut         |     boolean     |     fasle     |
+| Attribute | Description | Type | Default |
+| :------------: | :---------------------------------: | :-------------: | :-------: |
+| startWithIndex | Calculates the number of elements to limit based on the index | number | 0 |
+| startWith | Calculate the number of elements to limit based on the element | not number | undefined |
+| ignore | Ignore matched elements when counting | RegExp , object | undefined |
+| cutOut | Whether to intercept | boolean | false |
 
 ### Example
 
