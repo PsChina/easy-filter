@@ -61,15 +61,18 @@ function formatStrToArr(str, arr = []) {
   }
 }
 /**
- * @dealNegativeSin
+ * @dealSign
  * @param {array} cutStrArr
  * @param {string} separator
  * @return {string}
  */
-function dealNegativeSign(cutStrArr = [], separator = "") {
+function dealSign(cutStrArr = [], separator = "") {
   let int = "";
+  const { length } = cutStrArr;
   if (cutStrArr.includes("-")) {
-    int = `-${cutStrArr.filter(item => item !== "-").join(separator)}`;
+    int = `-${cutStrArr.slice(1, length).join(separator)}`;
+  } else if(cutStrArr.includes("+")) {
+    int = `+${cutStrArr.slice(1, length).join(separator)}`;
   } else {
     int = cutStrArr.join(separator);
   }
@@ -113,7 +116,7 @@ function currency(
       );
       // deal int part
       let cutStrArr = formatStrToArr(intPart);
-      let int = dealNegativeSign(cutStrArr, separator);
+      let int = dealSign(cutStrArr, separator);
       data = `${int}.${pad ? String(decimal).padEnd(digits, "0") : decimal}`;
     } else {
       let numberArr = data.split(".");
@@ -124,7 +127,7 @@ function currency(
       }
       // Else, split the integer part directly.
       let cutStrArr = formatStrToArr(intPart);
-      let int = dealNegativeSign(cutStrArr, separator);
+      let int = dealSign(cutStrArr, separator);
       // Add the decimal part.
       data = `${int}${pad ? ".".padEnd(digits + 1, "0") : ""}`;
       if (digits <= 0) {
@@ -378,7 +381,7 @@ function number(
     input = `${sign.zero}0`
   }
   let temp = sciNumToString(input);
-  let int = dealNegativeSign(formatStrToArr(sciNumToString(input)), separator);
+  let int = dealSign(formatStrToArr(sciNumToString(input)), separator);
   let decimal = digits ? "0" : false;
   if (temp.indexOf(".") !== -1) {
     let numberArr = temp.split(".");
@@ -386,7 +389,7 @@ function number(
     let decimalPart = numberArr[1];
     [intPart, decimal] = roundDecimalPart(round, intPart, decimalPart, digits);
     let cutStrArr = formatStrToArr(intPart);
-    int = dealNegativeSign(cutStrArr, separator);
+    int = dealSign(cutStrArr, separator);
   }
   if (input > 0 && sign) {
     int = `+${int}`;
