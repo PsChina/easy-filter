@@ -260,12 +260,12 @@ function date(input: DateData, formatMode: string = 'yyyy/MM/dd HH:mm:ss EEE', o
           // Replace the years and week.
           if (value.indexOf('y') !== -1) {
             // y{1,4} Replace the years.
-            const year = dateData.getFullYear();
+            const year: number = dateData.getFullYear();
             return value.length <= 2 ? String(year % 100) : String(year);
           } else {
             // E{1,4} Replace the week.
-            const weekDay = dateData.getDay();
-            const weekMap = [week[weekDay], shortWeek[weekDay]];
+            const weekDay: number = dateData.getDay();
+            const weekMap: string[] = [week[weekDay], shortWeek[weekDay]];
             return value.length <= 2 ? weekMap[1] : weekMap[0];
           }
       }
@@ -276,7 +276,7 @@ function date(input: DateData, formatMode: string = 'yyyy/MM/dd HH:mm:ss EEE', o
     // Determine whether the input to be filtered is not present and the input is ''.
     return '';
   } else {
-    const old = input;
+    const old: DateData = input;
     input = new Date(input);
     // Determines whether the parameter is legally invalid and returns the original input.
     if (input.toString() === 'Invalid Date') {
