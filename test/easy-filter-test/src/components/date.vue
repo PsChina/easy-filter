@@ -18,8 +18,29 @@
     <div class="hours-12">
       {{ 1523169365575 | date('hh') }}
     </div>
-    <div class="hours-12">
-      {{ 1523169365575 | date('hh') }}
+    <div class="minutes">
+      {{ 1523169365575 | date('mm') }}
+    </div>
+    <div class="second">
+      {{ 1523169365575 | date('ss') }}
+    </div>
+    <div class="week">
+      {{ 1523169365575 | date('EEE') }}
+    </div>
+    <div class="short-week">
+      {{ 1523169365575 | date('EE') }}
+    </div>
+    <div class="week-cn">
+      {{ 1523169365575 | date('EEE','cn') }} 
+    </div>
+    <div class="short-week-cn">
+      {{ 1523169365575 | date('EE','cn') }}
+    </div>
+    <div class="customize">
+      {{ 1523169365575 | date('EEE',{week:['日','一','二','三','四','五','六'],shortWeek:[7,1,2,3,4,5,6]}) }} 
+    </div>
+    <div class="customize-short">
+      {{ 1523169365575 | date('EE',{week:['日','一','二','三','四','五','六'],shortWeek:[7,1,2,3,4,5,6]}) }} 
     </div>
   </div>
 </template>
@@ -83,6 +104,54 @@ export default class DateTest extends Vue {
         window.it(`12小时制 {{ 1523169365575 | date('hh') }} 应该等于 02`, () => {
           const text = (date as any).querySelector('.hours-12').textContent.trim()
           if (text !== '02') {
+            throw new Error('错误结果为' + text);
+          }
+        })
+        window.it(`分 {{ 1523169365575 | date('mm') }} 应该等于 36`, () => {
+          const text = (date as any).querySelector('.minutes').textContent.trim()
+          if (text !== '36') {
+            throw new Error('错误结果为' + text);
+          }
+        })
+        window.it(`秒 {{ 1523169365575 | date('ss') }} 应该等于 05`, () => {
+          const text = (date as any).querySelector('.second').textContent.trim()
+          if (text !== '05') {
+            throw new Error('错误结果为' + text);
+          }
+        })
+        window.it(`星期 {{ 1523169365575 | date('EEE') }} 应该等于 Sunday`, () => {
+          const text = (date as any).querySelector('.week').textContent.trim()
+          if (text !== 'Sunday') {
+            throw new Error('错误结果为' + text);
+          }
+        })
+        window.it(`星期(简写) {{ 1523169365575 | date('EE') }} 应该等于 Sun`, () => {
+          const text = (date as any).querySelector('.short-week').textContent.trim()
+          if (text !== 'Sun') {
+            throw new Error('错误结果为' + text);
+          }
+        })
+        window.it(`星期(中文) {{ 1523169365575 | date('EEE','cn') }}  应该等于 星期日`, () => {
+          const text = (date as any).querySelector('.week-cn').textContent.trim()
+          if (text !== '星期日') {
+            throw new Error('错误结果为' + text);
+          }
+        })
+        window.it(`星期(中文简写) {{ 1523169365575 | date('EE','cn') }}  应该等于 周日`, () => {
+          const text = (date as any).querySelector('.short-week-cn').textContent.trim()
+          if (text !== '周日') {
+            throw new Error('错误结果为' + text);
+          }
+        })
+        window.it(`自定义星期  {{ 1523169365575 | date('EEE',{week:['日','一','二','三','四','五','六'],shortWeek:[7,1,2,3,4,5,6]}) }} 应该等于 日`, () => {
+          const text = (date as any).querySelector('.customize').textContent.trim()
+          if (text !== '日') {
+            throw new Error('错误结果为' + text);
+          }
+        })
+        window.it(`自定义星期(简写)  {{ 1523169365575 | date('EE',{week:['日','一','二','三','四','五','六'],shortWeek:[7,1,2,3,4,5,6]}) }}  应该等于 7`, () => {
+          const text = (date as any).querySelector('.customize-short').textContent.trim()
+          if (text !== '7') {
             throw new Error('错误结果为' + text);
           }
         })
