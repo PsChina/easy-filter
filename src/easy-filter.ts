@@ -187,7 +187,7 @@ function roundDecimalPart(round: boolean, intPart: string, decimalPart: string, 
  * @date
  * 格式化时间戳 'yyyy/MM/dd HH:mm:ss EEE'
  */
-function date(input: DateData, formatMode: string = 'yyyy/MM/dd HH:mm:ss EEE', option: WeekConfig = 'en') {
+function date(input: DateData, formatMode: string = 'yyyy/MM/dd HH:mm:ss EEE', option: WeekConfig = 'en'): DateData {
   function formatTimeWithMode(time: DateData, mode: string, opt: WeekConfig): string {
     const dateData = new Date(time);
     const optionType = typeof opt;
