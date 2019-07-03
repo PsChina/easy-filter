@@ -159,6 +159,13 @@ export default class CurrencyTest extends Vue {
       description: `undefined {{ undefined | currency('¥',2) }} 应该等于 ¥undefined.00`,
       result: '¥undefined.00',
     },
+    {
+      className: 'empty-string',
+      data: '',
+      params: [],
+      description: `空字符串 {{ '' | currency }} 应该等于 $0.00`,
+      result: '$0.00',
+    },
   ];
   constructor() {
     super();
