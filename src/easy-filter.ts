@@ -48,63 +48,61 @@ function currency(input: NumberDate, symbol: string = '$', digits: number = 2, {
   round: false,
 }): string {
   const digitsType = typeof digits;
-  const output = input;
   const inputType = typeof input;
   if (digitsType !== 'number') {
     digits = 2;
   }
-  if (inputType === 'number' || inputType === 'string') {
-    // 转换科学计数法
-    let data = sciNumToString(input);
-    // 判断小数
-    if (data.indexOf('.') !== -1 && digits !== 0) {
-      // 将小数部分与整数部分分开
-      const numberArr = data.split('.');
-      let intPart = numberArr[0];
-      const decimalPart = numberArr[1];
-      // 四舍五入
-      let decimal = '0';
-      [intPart, decimal] = roundDecimalPart(
-        round,
-        intPart,
-        decimalPart,
-        digits,
-      );
-      // 处理整数部分
-      const int = intPart.replace(/\B(?=(?:\d{3})+(?!\d))/g, separator);
-      if (numberArr[0] < intPart && pad === false) {
-        data = int;
-      } else {
-        data = `${int}.${pad ? String(decimal).padEnd(digits, '0') : decimal}`;
-      }
-    } else {
-      // 整数
-      const numberArr = data.split('.');
-      let intPart = numberArr[0];
-      const decimalPart = numberArr[1];
-      if (round && decimalPart) {
-        intPart = String(Math.round(Number(input)));
-      }
-      // 拆分
-      const int = intPart.replace(/\B(?=(?:\d{3})+(?!\d))/g, separator);
-      // 添加小数部分
-      data = `${int}${pad ? '.'.padEnd(digits + 1, '0') : ''}`;
-      if (digits <= 0) {
-        data = `${int}`;
-      }
-    }
-    if (data.charAt(0) === separator) {
-      data = data.substring(1, data.length);
-    }
-    if (addSpace) {
-      return symbolOnLeft
-        ? `${symbol} ${data}`
-        : `${data} ${symbol}`;
-    }
-    return symbolOnLeft ? symbol + data : data + symbol;
-  } else {
-    return String(output);
+  if (inputType !== 'number' && inputType !== 'string') {
+    input = String(input);
   }
+  // 转换科学计数法
+  let data = sciNumToString(input);
+  // 判断小数
+  if (data.indexOf('.') !== -1 && digits !== 0) {
+    // 将小数部分与整数部分分开
+    const numberArr = data.split('.');
+    let intPart = numberArr[0];
+    const decimalPart = numberArr[1];
+    // 四舍五入
+    let decimal = '0';
+    [intPart, decimal] = roundDecimalPart(
+      round,
+      intPart,
+      decimalPart,
+      digits,
+    );
+    // 处理整数部分
+    const int = intPart.replace(/\B(?=(?:\d{3})+(?!\d))/g, separator);
+    if (numberArr[0] < intPart && pad === false) {
+      data = int;
+    } else {
+      data = `${int ? int : '0'}.${pad ? String(decimal).padEnd(digits, '0') : decimal}`;
+    }
+  } else {
+    // 整数
+    const numberArr = data.split('.');
+    let intPart = numberArr[0];
+    const decimalPart = numberArr[1];
+    if (round && decimalPart) {
+      intPart = String(Math.round(Number(input)));
+    }
+    // 拆分
+    const int = intPart.replace(/\B(?=(?:\d{3})+(?!\d))/g, separator);
+    // 添加小数部分
+    data = `${int ? int : '0'}${pad ? '.'.padEnd(digits + 1, '0') : ''}`;
+    if (digits <= 0) {
+      data = `${int}`;
+    }
+  }
+  if (data.charAt(0) === separator) {
+    data = data.substring(1, data.length);
+  }
+  if (addSpace) {
+    return symbolOnLeft
+      ? `${symbol} ${data}`
+      : `${data} ${symbol}`;
+  }
+  return symbolOnLeft ? symbol + data : data + symbol;
 }
 
 /**
@@ -120,6 +118,9 @@ function sciNumToString(num: NumberDate): string {
     }
   }
   const str: string = String(num).toLowerCase();
+  if ( isNaN(Number(str)) ) {
+    return str;
+  }
   if (str.indexOf('e') === -1) {
     return str;
   }
