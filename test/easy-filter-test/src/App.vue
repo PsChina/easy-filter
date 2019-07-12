@@ -2,6 +2,7 @@
   <div id="app">
     <router-link to="/currency">currency</router-link>
     <router-link to="/date">date</router-link>
+    <router-link to="/orderby/default">orderBy</router-link>
     <router-view></router-view>
   </div>
 </template>

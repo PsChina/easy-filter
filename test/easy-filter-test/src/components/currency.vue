@@ -7,18 +7,13 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
-interface CheckItem {
-  [key: string]: any;
-  className?: string;
-  data?: any;
-  params?: any[];
-  description: string;
-  result: string;
-}
+import { Component, Prop, Mixins } from 'vue-property-decorator';
+import TestBase from '../mixin/base-test';
+
 @Component
-export default class CurrencyTest extends Vue {
-  private readonly testCases: Array<CheckItem> = [
+export default class CurrencyTest extends Mixins(TestBase) {
+  public readonly functionName: string = 'currency';
+  public readonly testCases: Array<CheckItem> = [
     {
       className: 'default',
       data: 1000,
@@ -167,35 +162,6 @@ export default class CurrencyTest extends Vue {
       result: '$0.00',
     },
   ];
-  constructor() {
-    super();
-  }
-  public beforeCreate(): void {
-      if(window.loadMoreThanOnce) {
-        window.location.reload()
-      }
-  }
-  public checkout(item: CheckItem): void {
-      window.it(item.description, () => {
-        const text: string = (document as any).querySelector(`.${item.className}`).textContent.trim();
-        if (text !== item.result) {
-          throw new Error('错误结果为' + text);
-        }
-      });
-  }
-  public mounted(): void {
-    if(window.loadMoreThanOnce){
-      return
-    }
-    window.describe('测试 currency', () => {
-      const currencyContext:any = document.querySelector('#currency');
-      this.testCases.forEach((item: CheckItem) => {
-        this.checkout(item);
-      });
-    });
-    window.mocha.run();
-    window.loadMoreThanOnce = true;
-  }
 }
 </script>
 
