@@ -37,11 +37,11 @@ npm install easy-filter --save
 Import this plugin.
 
 ```js
-import easyFilter from "easy-filter";
+import EasyFilter from "easy-filter";
 
 import Vue from "vue";
 
-Vue.use(easyFilter);
+Vue.use(EasyFilter);
 
 // or use only what you need
 import {

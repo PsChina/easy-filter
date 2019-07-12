@@ -189,6 +189,11 @@ function roundDecimalPart(round: boolean, intPart: string, decimalPart: string, 
  * 格式化时间戳 'yyyy/MM/dd HH:mm:ss EEE'
  */
 function date(input: DateData, formatMode: string = 'yyyy/MM/dd HH:mm:ss EEE', option: WeekConfig = 'en'): DateData {
+  if (navigator.userAgent.includes('Safari')) {
+    if (typeof input === 'string') {
+      input = input.replace(/-/g, '/');
+    }
+  }
   function formatTimeWithMode(time: DateData, mode: string, opt: WeekConfig): string {
     const dateData = new Date(time);
     const optionType = typeof opt;
@@ -291,9 +296,57 @@ function date(input: DateData, formatMode: string = 'yyyy/MM/dd HH:mm:ss EEE', o
   }
 }
 
+type Comparator = (item1: any, item2: any, key: string, reverse: boolean) => number;
+
+// Default Comparator
+const builtInComparator = (item1: any, item2: any, key: string, reverse: boolean) => item1[key] > item2[key] ?
+                                                                                     (reverse ? -1 :  1)
+                                                                                     :
+                                                                                     (reverse ?  1 : -1);
+
+/**
+ * @orderBy
+ */
+function orderBy(input: any[],
+                 expression: Comparator | string,
+                 reverse: boolean,
+                 comparator: Comparator | string = builtInComparator,
+                 ): any[] {
+  let key: string;
+  const expressionType = typeof expression;
+  if (expressionType === 'string') {
+    if ( (expression as string).charAt(0) === '-') {
+      reverse = true;
+      key = (expression as string).substr(1);
+    } else {
+      key = (expression as string);
+    }
+  } else if (expressionType === 'function') {
+    comparator = expression as Comparator;
+  }
+  if (input instanceof Array) {
+    let newArr = input.concat();
+    newArr = newArr.sort((value, nextValue) => {
+      return (comparator as Comparator)(value, nextValue, key, reverse);
+    });
+    input = newArr;
+    return input;
+  }
+  return input;
+}
+
+const easyFilter = {
+  currency,
+  date,
+  orderBy,
+};
+
 export default {
   install(Vue: any, options: any) {
     Vue.filter('currency', currency);
     Vue.filter('date', date);
+    Vue.filter('orderBy', orderBy);
+    Vue.prototype.$easyFilter = easyFilter;
+    Vue.easyFilter = easyFilter;
   },
 };

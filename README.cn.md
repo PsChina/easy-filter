@@ -37,11 +37,11 @@ npm install easy-filter --save
 引入插件
 
 ```js
-import easyFilter from "easy-filter";
+import EasyFilter from "easy-filter";
 
 import Vue from "vue";
 
-Vue.use(easyFilter);
+Vue.use(EasyFilter);
 
 // 或者按需引用
 import {
