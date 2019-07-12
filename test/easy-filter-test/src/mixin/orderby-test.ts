@@ -1,7 +1,8 @@
-import { Vue, Component } from 'vue-property-decorator';
+import Base from './base';
+import { Component } from 'vue-property-decorator';
 
 @Component
-class OrderByTest extends Vue {
+class OrderByTest extends Base {
   public elementClass: string = '';
   public reverse: boolean = false;
   public sortAttr: string = 'name';
@@ -39,8 +40,12 @@ class OrderByTest extends Vue {
     window.location.reload();
   }
   public mounted() {
+    if (window.loadMoreThanOnce) {
+      return;
+    }
     this.test();
     window.mocha.run();
+    this.setLoad();
   }
 }
 

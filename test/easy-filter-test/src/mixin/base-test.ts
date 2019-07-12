@@ -1,4 +1,6 @@
-import { Vue, Component } from 'vue-property-decorator';
+import Base from './base';
+
+import { Component } from 'vue-property-decorator';
 
 declare global {
   interface Window {
@@ -17,10 +19,8 @@ declare global {
   }
 }
 
-
-
 @Component
-class Test extends Vue {
+class Test extends Base {
   public functionName: string = '';
   public testCases: CheckItem[] = [];
   public checkout(item: CheckItem): void {
@@ -31,15 +31,7 @@ class Test extends Vue {
       }
     });
   }
-  public beforeCreate(): void {
-      if (window.loadMoreThanOnce) {
-        window.location.reload();
-      }
-  }
   public mounted(): void {
-    if (window.loadMoreThanOnce) {
-      return;
-    }
     window.describe(`测试 ${this.functionName}`, () => {
       this.testCases.forEach((item: CheckItem) => {
         if (item.doNotCheck) {
@@ -49,7 +41,7 @@ class Test extends Vue {
       });
     });
     window.mocha.run();
-    window.loadMoreThanOnce = true;
+    this.setLoad();
   }
 }
 
