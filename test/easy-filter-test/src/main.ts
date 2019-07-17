@@ -3,7 +3,6 @@ import App from './App.vue';
 import VueRouter from 'vue-router';
 import EasyFilter from '../../../src/easy-filter';
 import routes from './router/router';
-
 Vue.config.productionTip = false;
 
 Vue.use(EasyFilter);

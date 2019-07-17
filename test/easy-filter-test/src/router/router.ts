@@ -3,11 +3,12 @@ import DateTest from '../components/date.vue';
 import OrderByTest from '../components/orderBy/index.vue';
 import OrderByDefaultTest from '../components/orderBy/orderByDefault.vue';
 import OrderByCustomizeFuncTest from '../components/orderBy/orderByCustomizeFunc.vue';
+import FilterTest from '../components/filter.vue';
 
 export default [
-  { path: '/currency', component: CurrencyTest, meta: { keepAlive: true} },
-  { path: '/date', component: DateTest, meta: { keepAlive: true} },
-  { path: '/orderby', component: OrderByTest, meta: { keepAlive: true}, children: [
+  { path: '/currency', component: CurrencyTest },
+  { path: '/date', component: DateTest },
+  { path: '/orderby', component: OrderByTest, children: [
     {
       path: 'default',
       component: OrderByDefaultTest,
@@ -17,4 +18,7 @@ export default [
       component: OrderByCustomizeFuncTest,
     },
   ] },
+  {
+    path: '/filter', component: FilterTest,
+  },
 ];

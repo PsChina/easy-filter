@@ -58,7 +58,7 @@ function currency(input: NumberDate, symbol: string = '$', digits: number = 2, {
   // 转换科学计数法
   let data = sciNumToString(input);
   // 判断小数
-  if (data.indexOf('.') !== -1 && digits !== 0) {
+  if ( data.includes('.')  && digits !== 0) {
     // 将小数部分与整数部分分开
     const numberArr = data.split('.');
     let intPart = numberArr[0];
@@ -121,11 +121,11 @@ function sciNumToString(num: NumberDate): string {
   if ( isNaN(Number(str)) ) {
     return str;
   }
-  if (str.indexOf('e') === -1) {
+  if (!str.includes('e')) {
     return str;
   }
   const symbol: string = str.charAt(0) === '-' ? '-' : '';
-  if (str.indexOf('e-') !== -1) {
+  if (str.includes('e-')) {
     const [val, power] = str.split('e-');
     const valArr = val.replace('-', '').split('.');
     let left = valArr[0];
@@ -138,7 +138,7 @@ function sciNumToString(num: NumberDate): string {
       left.substring(1, left.length) +
       (right ? right : '')
     );
-  } else if (str.indexOf('e') !== -1) {
+  } else if (str.includes('e')) {
     const strArr = str.split('e');
     const val = strArr[0];
     let power = strArr[1];
@@ -264,7 +264,7 @@ function date(input: DateData, formatMode: string = 'yyyy/MM/dd HH:mm:ss EEE', o
           return `${dateData.getSeconds()}`.padStart(2, '0');
         default:
           // Replace the years and week.
-          if (value.indexOf('y') !== -1) {
+          if (value.includes('y')) {
             // y{1,4} Replace the years.
             const year: number = dateData.getFullYear();
             return value.length <= 2 ? String(year % 100) : String(year);
@@ -335,17 +335,153 @@ function orderBy(input: any[],
   return input;
 }
 
+type MatchFunction = (val: any) => boolean;
+
+type Match = string | MatchFunction;
+
+export interface MatchRules {
+   match: Match;
+   ignore: string[] | string;
+}
+
+type FilterOptions = MatchRules | Match;
+
+/**
+ *  @filter Selects a subset of items from Object and returns it as a new Object.
+ */
+function filter(input: any, matchOptions: FilterOptions): any {
+  // Filter object.
+  if (!matchOptions || !input) {
+    return input;
+  }
+  function filterObj(originalObject: any, match: FilterOptions) {
+    let obj: any;
+    // Determine the type of object to be filtered to copy.
+    if (originalObject instanceof Array) {
+      obj = [];
+    } else if (originalObject instanceof Object) {
+      obj = {};
+    } else {
+      return originalObject.includes(match) ? originalObject : undefined;
+    }
+    for (const key in originalObject) {
+      if (originalObject.hasOwnProperty(key)) {
+        const value = originalObject[key];
+        if (typeof value === 'object') {
+          // Deep copy object.
+          const newObj = matchCopy(value, match);
+          if (newObj instanceof Array) {
+            if (newObj.length) {
+              // Not an empty array can be assigned.
+              obj[key] = newObj;
+            }
+          } else {
+            if (Object.keys(newObj).length > 0) {
+              // Not empty objects can be assigned.
+              obj[key] = newObj;
+            }
+          }
+        } else {
+          if (value.includes(match)) {
+            // What is needed is saved.
+            obj[key] = value;
+          }
+        }
+      }
+    }
+    if (obj instanceof Array) {
+      obj = obj.filter((item) => item !== undefined);
+    }
+    return obj;
+  }
+  if (matchOptions instanceof Function) {
+    if (input instanceof Array) {
+      return input.filter((value, index, array) => {
+        return matchOptions(value);
+      });
+    } else {
+      const obj: any = {};
+      for (const key in input) {
+        if ( input.hasOwnProperty(key) ) {
+          const value = input[key];
+          if (matchOptions(value)) {
+            obj[key] = value;
+          }
+        }
+      }
+      return obj;
+    }
+  } else {
+    return filterObj(input, matchOptions);
+  }
+}
+
+/**
+ * childExists
+ */
+function childExists(obj: any, match: FilterOptions): boolean {
+  for (const key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      const value = obj[key];
+      const type = typeof value;
+      if (type === 'string' || type === 'number') {
+        if (
+          new RegExp(match as string, 'ig').test(value) ||
+          value.toString().includes(match)
+        ) {
+          return true;
+        }
+      } else {
+        return childExists(value, match);
+      }
+    }
+  }
+  return false;
+}
+
+/**
+ * matchCopy
+ */
+function matchCopy(obj: any, match: FilterOptions) {
+  let newObj: any;
+  if ( obj instanceof Array) {
+    newObj = [];
+  } else {
+    newObj = {};
+  }
+  for (const key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      const value = obj[key];
+      if (typeof value === 'object' && childExists(value, match)) {
+        newObj[key] = matchCopy(value, '');
+      } else {
+        if (childExists(obj, match)) {
+          newObj[key] = value;
+        }
+      }
+    }
+  }
+  if (newObj instanceof Array) {
+    newObj = newObj.filter((item) => item !== undefined);
+  }
+  return newObj;
+}
+
 const easyFilter = {
   currency,
   date,
   orderBy,
+  filter,
 };
+
+
 
 export default {
   install(Vue: any, options: any) {
     Vue.filter('currency', currency);
     Vue.filter('date', date);
     Vue.filter('orderBy', orderBy);
+    Vue.filter('filter', filter);
     Vue.prototype.$easyFilter = easyFilter;
     Vue.easyFilter = easyFilter;
   },

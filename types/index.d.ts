@@ -27,6 +27,17 @@ interface DateOptions {
 
 type Comparator = (item1: any, item2: any, key: string, reverse: boolean) => number;
 
+type MatchFunction = (val: any) => boolean;
+
+type Match = string | MatchFunction;
+
+interface MatchRules {
+   match: Match;
+   ignore: string[] | string;
+}
+
+type FilterOptions = MatchRules | Match | RegExp;
+
 export function install(vue: typeof Vue): void;
 
 
@@ -47,9 +58,10 @@ export declare interface EasyFilter {
   date(input: DateData, formatMode: string, option: WeekConfig): DateData;
 
   orderBy(input: any[],
-    expression: Comparator | string,
-    reverse: boolean,
-    comparator: Comparator | string,
-  ): any[];
+          expression: Comparator | string,
+          reverse: boolean,
+          comparator: Comparator | string,
+          ): any[];
 
+  filter(input: any, matchOptions: FilterOptions): any;
 }
