@@ -4,6 +4,7 @@
     <router-link to="/date">date</router-link>
     <router-link to="/orderby/default">orderBy</router-link>
     <router-link to="/filter">filter</router-link>
+    <router-link to="/number">number</router-link>
     <router-view></router-view>
   </div>
 </template>

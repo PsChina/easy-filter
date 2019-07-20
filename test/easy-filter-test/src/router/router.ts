@@ -4,6 +4,7 @@ import OrderByTest from '../components/orderBy/index.vue';
 import OrderByDefaultTest from '../components/orderBy/orderByDefault.vue';
 import OrderByCustomizeFuncTest from '../components/orderBy/orderByCustomizeFunc.vue';
 import FilterTest from '../components/filter.vue';
+import NumberTest from '../components/number.vue';
 
 export default [
   { path: '/currency', component: CurrencyTest },
@@ -20,5 +21,8 @@ export default [
   ] },
   {
     path: '/filter', component: FilterTest,
+  },
+  {
+    path: '/number', component: NumberTest,
   },
 ];

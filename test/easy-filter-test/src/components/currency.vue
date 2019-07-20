@@ -161,6 +161,20 @@ export default class CurrencyTest extends Mixins(TestBase) {
       description: `空字符串 {{ '' | currency }} 应该等于 $0.00`,
       result: '$0.00',
     },
+    {
+      className: 'conversion-science-notation',
+      data: 5.2e-7,
+      params: ['$',8],
+      description: `科学计数法 {{ 5.2e-7 | currency('$',8) }} 应该等于 $0.00000052`,
+      result: '$0.00000052',
+    },
+    {
+      className: 'no-decimal',
+      data: 0.9,
+      params: ['$',0,{round:true}],
+      description: `四舍五入无小数 {{ 0.9 | currency('$',0,{round:true}) }} 应该等于 $1`,
+      result: '$1',
+    },
   ];
 }
 </script>
