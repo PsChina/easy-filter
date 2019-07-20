@@ -167,7 +167,7 @@ function roundDecimalPart(round: boolean, intPart: string, decimalPart: string, 
     if (roundPart >= 5) {
       decimal = String(plus(
         Number(`0.${reservedPortion}`),
-        Number(`0.${'1'.padStart(digits, '0')}`),
+        Number(digits ? `0.${'1'.padStart(digits, '0')}` : '1'),
       ));
       if (Number(decimal) >= 1) {
         intPart = String(Number(intPart) + 1);
@@ -337,7 +337,7 @@ function orderBy(input: any[],
 
 type MatchFunction = (val: any) => boolean;
 
-type Match = string | MatchFunction;
+export type Match = string | MatchFunction;
 
 export interface MatchRules {
    match: Match;
@@ -354,7 +354,7 @@ function filter(input: any, matchOptions: FilterOptions): any {
   if (!matchOptions || !input) {
     return input;
   }
-  function filterObj(originalObject: any, match: FilterOptions) {
+  function filterObj(originalObject: any, match: FilterOptions, ignore?: string[]) {
     let obj: any;
     // Determine the type of object to be filtered to copy.
     if (originalObject instanceof Array) {
@@ -369,7 +369,7 @@ function filter(input: any, matchOptions: FilterOptions): any {
         const value = originalObject[key];
         if (typeof value === 'object') {
           // Deep copy object.
-          const newObj = matchCopy(value, match);
+          const newObj = matchCopy(value, match, ignore);
           if (newObj instanceof Array) {
             if (newObj.length) {
               // Not an empty array can be assigned.
@@ -395,21 +395,15 @@ function filter(input: any, matchOptions: FilterOptions): any {
     return obj;
   }
   if (matchOptions instanceof Function) {
-    if (input instanceof Array) {
-      return input.filter((value, index, array) => {
-        return matchOptions(value);
-      });
+
+    return matchFunc(input, matchOptions);
+
+  } else if (typeof matchOptions === 'object' ) {
+    const { ignore, match } = matchOptions;
+    if (match instanceof Function) {
+      return matchFunc(input, match);
     } else {
-      const obj: any = {};
-      for (const key in input) {
-        if ( input.hasOwnProperty(key) ) {
-          const value = input[key];
-          if (matchOptions(value)) {
-            obj[key] = value;
-          }
-        }
-      }
-      return obj;
+      return filterObj(input, match, [ignore].flat());
     }
   } else {
     return filterObj(input, matchOptions);
@@ -419,7 +413,7 @@ function filter(input: any, matchOptions: FilterOptions): any {
 /**
  * childExists
  */
-function childExists(obj: any, match: FilterOptions): boolean {
+function childExists(obj: any, match: FilterOptions, ignore?: string[]): boolean {
   for (const key in obj) {
     if (obj.hasOwnProperty(key)) {
       const value = obj[key];
@@ -429,10 +423,16 @@ function childExists(obj: any, match: FilterOptions): boolean {
           new RegExp(match as string, 'ig').test(value) ||
           value.toString().includes(match)
         ) {
-          return true;
+          if (ignore instanceof Array) {
+            if (!ignore.includes(key)) {
+              return true;
+            }
+          } else {
+            return true;
+          }
         }
       } else {
-        return childExists(value, match);
+        return childExists(value, match, ignore);
       }
     }
   }
@@ -442,7 +442,7 @@ function childExists(obj: any, match: FilterOptions): boolean {
 /**
  * matchCopy
  */
-function matchCopy(obj: any, match: FilterOptions) {
+function matchCopy(obj: any, match: FilterOptions, ignore?: string[]): any {
   let newObj: any;
   if ( obj instanceof Array) {
     newObj = [];
@@ -452,10 +452,10 @@ function matchCopy(obj: any, match: FilterOptions) {
   for (const key in obj) {
     if (obj.hasOwnProperty(key)) {
       const value = obj[key];
-      if (typeof value === 'object' && childExists(value, match)) {
+      if (typeof value === 'object' && childExists(value, match, ignore)) {
         newObj[key] = matchCopy(value, '');
       } else {
-        if (childExists(obj, match)) {
+        if (childExists(obj, match, ignore)) {
           newObj[key] = value;
         }
       }
@@ -467,11 +467,98 @@ function matchCopy(obj: any, match: FilterOptions) {
   return newObj;
 }
 
+/**
+ *
+ * match func
+ *
+ */
+
+function matchFunc(input: any, matchOptions: MatchFunction): any {
+  if (input instanceof Array) {
+    return input.filter((value) => {
+      return matchOptions(value);
+    });
+  } else {
+    const obj: any = {};
+    for (const key in input) {
+      if ( input.hasOwnProperty(key) ) {
+        const value = input[key];
+        if (matchOptions(value)) {
+          obj[key] = value;
+        }
+      }
+    }
+    return obj;
+  }
+}
+
+function isEmpty(val: any): boolean {
+  return (
+    val === undefined ||
+    val === '' ||
+    val === null ||
+    JSON.stringify(val) === '[]' ||
+    JSON.stringify(val) === '{}'
+  );
+}
+
+interface SignOption {
+  zero: string;
+}
+
+type Sign = SignOption | boolean;
+
+interface NumberOptions {
+  round: boolean;
+  pad: boolean;
+  sign: Sign;
+  separator: string;
+}
+
+function number(
+  input: NumberDate,
+  digits: number = 8,
+  options: NumberOptions = { round: false, pad: false, sign: false, separator: ''},
+): string {
+  if (isNaN(Number(input))) {
+    return String(input);
+  }
+  const { round, pad, sign, separator} = options;
+  if (isEmpty(input)) {
+    return pad ? `0.${'0'.padEnd(digits, '0')}` : '0';
+  }
+  if (Number(input) === 0 && typeof sign === 'object') {
+    input = `${sign.zero}0`;
+  }
+  const temp = sciNumToString(input);
+  let int = temp.replace(/\B(?=(?:\d{3})+(?!\d))/g, separator);
+  let decimal = digits ? '0' : false;
+  if (temp.includes('.')) {
+    const numberArr = temp.split('.');
+    let intPart = numberArr[0];
+    const decimalPart = numberArr[1];
+    [intPart, decimal] = roundDecimalPart(round, intPart, decimalPart, digits);
+    int = intPart.replace(/\B(?=(?:\d{3})+(?!\d))/g, separator);
+  }
+  if (input > 0 && sign) {
+    int = `+${int}`;
+  }
+  if (!digits) {
+    return String(int);
+  }
+  if (pad) {
+    return `${int}${decimal ? `.${decimal.padEnd(digits, '0')}` : ''}`;
+  } else {
+    return decimal ? `${int}.${decimal}` : int;
+  }
+}
+
 const easyFilter = {
   currency,
   date,
   orderBy,
   filter,
+  number,
 };
 
 
@@ -482,6 +569,7 @@ export default {
     Vue.filter('date', date);
     Vue.filter('orderBy', orderBy);
     Vue.filter('filter', filter);
+    Vue.filter('number', number);
     Vue.prototype.$easyFilter = easyFilter;
     Vue.easyFilter = easyFilter;
   },
