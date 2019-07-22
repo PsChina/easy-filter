@@ -36,6 +36,18 @@ interface MatchRules {
    ignore: string[] | string;
 }
 
+interface SignOption {
+  zero: string;
+}
+
+type Sign = SignOption | boolean;
+interface NumberOptions {
+  round: boolean;
+  pad: boolean;
+  sign: Sign;
+  separator: string;
+}
+
 type FilterOptions = MatchRules | Match | RegExp;
 
 export function install(vue: typeof Vue): void;
@@ -51,6 +63,14 @@ export function install(vue: typeof Vue): void;
 // limitTo,
 // orderBy
 
+
+interface LimitToOption {
+  startWithIndex: number;
+  startWith?: any;
+  ignore?: string | RegExp;
+  cutOut?: boolean;
+}
+
 export declare interface EasyFilter {
 
   currency(input: NumberDate, symbol: string, digits: number, options: CurrencyOption ): string;
@@ -64,4 +84,16 @@ export declare interface EasyFilter {
           ): any[];
 
   filter(input: any, matchOptions: FilterOptions): any;
+  
+  number(
+    input: NumberDate,
+    digits: number,
+    options: NumberOptions,
+  ): string;
+
+  limitTo(
+    input: number | string | any[],
+    limit: number,
+    option: LimitToOption,
+  ): string | number | any[]
 }

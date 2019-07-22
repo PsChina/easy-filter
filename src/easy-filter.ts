@@ -553,12 +553,121 @@ function number(
   }
 }
 
+interface LimitToOption {
+  startWithIndex: number;
+  startWith?: any;
+  ignore?: string | RegExp;
+  cutOut?: boolean;
+}
+
+/**
+ * @limitTo
+ * Creates a new array or string containing only a specified number of elements.
+ * The elements are taken from either the beginning or the end of the source array,
+ * string or number,
+ * as specified by the value and sign (positive or negative) of limit.
+ */
+function limitTo(
+  input: number | string | any[],
+  limit: number = Number.POSITIVE_INFINITY,
+  option: LimitToOption = { startWithIndex: 0, cutOut: false },
+): string | number | any[] {
+  const {startWithIndex, startWith, ignore, cutOut} = option;
+  const type = typeof input;
+  switch (type) {
+    case 'string': {
+      const arrayData = (input as string) .split('');
+      const itemIndex = arrayData.indexOf(startWith);
+      const startIndex = itemIndex === -1 ? startWithIndex : itemIndex;
+      return getOutput(arrayData, { startIndex, limit, ignore, type, cutOut });
+    }
+    case 'number': {
+      const arrayData = (input).toString().split('');
+      const itemIndex = arrayData.indexOf(startWith);
+      const startIndex = itemIndex === -1 ? startWithIndex : itemIndex;
+      return getOutput(arrayData, {
+        startIndex,
+        limit,
+        ignore,
+        type,
+        cutOut,
+      });
+    }
+    default: {
+      if (input instanceof Array) {
+        const arrayData = input.concat();
+        const itemIndex = arrayData.indexOf(startWith);
+        const startIndex = itemIndex === -1 ? startWithIndex : itemIndex;
+        return getOutput(arrayData, {
+          startIndex,
+          limit,
+          ignore,
+          type,
+          cutOut,
+        });
+      }
+      return input;
+    }
+  }
+}
+
+interface GetOutputOption {
+  startIndex: number;
+  limit: number;
+  ignore?: string | RegExp;
+  type: string;
+  cutOut?: boolean;
+}
+
+function getOutput(array: any[], option: GetOutputOption): number | string | any[] {
+  const { startIndex, limit, ignore, type, cutOut } = option;
+  let endIndex = startIndex + Number(limit);
+  const newArr: any[] = [];
+  let count = 0;
+  array.forEach((item, index) => {
+    if (index >= startIndex && index < endIndex) {
+      const regExp = new RegExp(ignore ? ignore : '');
+      if (!ignore) {
+        count++;
+      } else if (!regExp.test(item)) {
+        count++;
+        endIndex++;
+      }
+      if (count <= limit && cutOut) {
+        if (
+          (limit === 0 && index <= startIndex && startIndex !== 0) ||
+          (limit !== 0 && index < endIndex)
+        ) {
+          newArr.push(item);
+        }
+      }
+    }
+    if (count <= limit && !cutOut) {
+      if (
+        (limit === 0 && index <= startIndex && startIndex !== 0) ||
+        (limit !== 0 && index < endIndex)
+      ) {
+        newArr.push(item);
+      }
+    }
+  });
+  switch (type) {
+    case 'number':
+      return Number(newArr.join(''));
+    case 'string':
+      return newArr.join('');
+    default:
+      return newArr;
+  }
+}
+
 const easyFilter = {
   currency,
   date,
   orderBy,
   filter,
   number,
+  limitTo,
 };
 
 
@@ -570,6 +679,7 @@ export default {
     Vue.filter('orderBy', orderBy);
     Vue.filter('filter', filter);
     Vue.filter('number', number);
+    Vue.filter('limitTo', limitTo);
     Vue.prototype.$easyFilter = easyFilter;
     Vue.easyFilter = easyFilter;
   },
