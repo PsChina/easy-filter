@@ -5,6 +5,7 @@
     <router-link to="/orderby/default">orderBy</router-link>
     <router-link to="/filter">filter</router-link>
     <router-link to="/number">number</router-link>
+    <router-link to="/limitTo">limitTo</router-link>
     <router-view></router-view>
   </div>
 </template>

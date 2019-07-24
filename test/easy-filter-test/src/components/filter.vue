@@ -3,6 +3,7 @@
     <div @click="useOption=!useOption" v-text="useOption ? '使用配置项' : '使用字符串参数直接匹配'"></div>
     <div @click="useFunction(useOption)"> 选择自定义函数筛选大于等于六岁的小朋友 </div>
     <div v-if="useOption">
+      <div>ignore:</div>
       <div v-for="key in ['name','sex','age','id']">
         <label :for="key">
           <span v-text="key"></span><input type="checkbox" :value="key" @change="select">
@@ -37,7 +38,7 @@ import Base from '../mixin/base';
 import { MatchRules, Match } from '../../../../src/easy-filter';
 
 @Component
-export default class TestFilter extends Mixins(Base) {
+export default class FilterTest extends Mixins(Base) {
   private readonly personArray: any[] = [
           { name: "Kimi", sex: "male", age: 8, id: 1 },
           { name: "Cindy", sex: "female", age: 4, id: 2 },
