@@ -557,7 +557,7 @@ interface LimitToOption {
   startWithIndex: number;
   startWith?: any;
   ignore?: string | RegExp;
-  cutOut?: boolean;
+  cut?: boolean;
 }
 
 /**
@@ -570,16 +570,20 @@ interface LimitToOption {
 function limitTo(
   input: number | string | any[],
   limit: number = Number.POSITIVE_INFINITY,
-  option: LimitToOption = { startWithIndex: 0, cutOut: false },
+  option: LimitToOption = { startWithIndex: 0, cut: false },
 ): string | number | any[] {
-  const {startWithIndex, startWith, ignore, cutOut} = option;
+  const { startWith, ignore, cut } = option;
+  let {startWithIndex} = option;
+  if (startWithIndex === undefined) {
+    startWithIndex = 0;
+  }
   const type = typeof input;
   switch (type) {
     case 'string': {
       const arrayData = (input as string) .split('');
       const itemIndex = arrayData.indexOf(startWith);
       const startIndex = itemIndex === -1 ? startWithIndex : itemIndex;
-      return getOutput(arrayData, { startIndex, limit, ignore, type, cutOut });
+      return getOutput(arrayData, { startIndex, limit, ignore, type, cut });
     }
     case 'number': {
       const arrayData = (input).toString().split('');
@@ -590,7 +594,7 @@ function limitTo(
         limit,
         ignore,
         type,
-        cutOut,
+        cut,
       });
     }
     default: {
@@ -603,7 +607,7 @@ function limitTo(
           limit,
           ignore,
           type,
-          cutOut,
+          cut,
         });
       }
       return input;
@@ -616,11 +620,11 @@ interface GetOutputOption {
   limit: number;
   ignore?: string | RegExp;
   type: string;
-  cutOut?: boolean;
+  cut?: boolean;
 }
 
 function getOutput(array: any[], option: GetOutputOption): number | string | any[] {
-  const { startIndex, limit, ignore, type, cutOut } = option;
+  const { startIndex, limit, ignore, type, cut } = option;
   let endIndex = startIndex + Number(limit);
   const newArr: any[] = [];
   let count = 0;
@@ -633,7 +637,7 @@ function getOutput(array: any[], option: GetOutputOption): number | string | any
         count++;
         endIndex++;
       }
-      if (count <= limit && cutOut) {
+      if (count <= limit && cut) {
         if (
           (limit === 0 && index <= startIndex && startIndex !== 0) ||
           (limit !== 0 && index < endIndex)
@@ -642,7 +646,7 @@ function getOutput(array: any[], option: GetOutputOption): number | string | any
         }
       }
     }
-    if (count <= limit && !cutOut) {
+    if (count <= limit && !cut) {
       if (
         (limit === 0 && index <= startIndex && startIndex !== 0) ||
         (limit !== 0 && index < endIndex)
