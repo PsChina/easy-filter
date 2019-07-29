@@ -1,8 +1,8 @@
 {
   "name": "easy-filter",
-  "version": "1.4.9",
+  "version": "1.5.0",
   "description": "Easy Filter is a third-party filter that makes Vue.js more convenient for working with numbers, strings, and arrays.",
-  "main": "easy-filter.js",
+  "main": "dist/node/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -23,5 +23,23 @@
   "bugs": {
     "url": "https://github.com/PsChina/easy-filter/issues"
   },
-  "homepage": "https://github.com/PsChina/easy-filter#readme"
+  "homepage": "https://github.com/PsChina/easy-filter#readme",
+  "files": [
+    "src",
+    "dist/**/*.js",
+    "types/*.d.ts"
+  ],
+  "devDependencies": {
+    "@babel/cli": "^7.5.5",
+    "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "babel-plugin-transform-inline-environment-variables": "^0.4.3",
+    "ts-loader": "^6.0.4",
+    "tslib": "^1.10.0",
+    "typescript": "^3.5.3",
+    "vue": "^2.6.10"
+  },
+  "dependencies": {
+    "@babel/polyfill": "^7.4.4"
+  }
 }

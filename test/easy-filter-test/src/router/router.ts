@@ -6,6 +6,8 @@ import OrderByCustomizeFuncTest from '../components/orderBy/orderByCustomizeFunc
 import FilterTest from '../components/filter.vue';
 import NumberTest from '../components/number.vue';
 import LimitToTest from '../components/limitTo.vue';
+import LowercaseTest from '../components/lowercase.vue';
+import UppercaseTest from '../components/uppercase.vue';
 
 export default [
   { path: '/currency', component: CurrencyTest },
@@ -28,5 +30,11 @@ export default [
   },
   {
     path: '/limitTo', component: LimitToTest,
+  },
+  {
+    path: '/lowercase', component: LowercaseTest,
+  },
+  {
+    path: '/uppercase', component: UppercaseTest,
   },
 ];

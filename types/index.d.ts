@@ -48,28 +48,16 @@ interface NumberOptions {
   separator: string;
 }
 
-type FilterOptions = MatchRules | Match | RegExp;
-
-export function install(vue: typeof Vue): void;
-
-
-// uppercase,
-// lowercase,
-// currency,
-// date,
-// filter,
-// json,
-// number,
-// limitTo,
-// orderBy
-
-
 interface LimitToOption {
   startWithIndex: number;
   startWith?: any;
   ignore?: string | RegExp;
   cutOut?: boolean;
 }
+
+type FilterOptions = MatchRules | Match | RegExp;
+
+export function install(vue: typeof Vue): void;
 
 export declare interface EasyFilter {
 
@@ -96,4 +84,8 @@ export declare interface EasyFilter {
     limit: number,
     option: LimitToOption,
   ): string | number | any[]
+
+  uppercase(input: string, start: number, end: number): string
+
+  lowercase(input: string, start: number, end: number): string
 }

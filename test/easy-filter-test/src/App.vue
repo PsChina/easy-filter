@@ -6,6 +6,8 @@
     <router-link to="/filter">filter</router-link>
     <router-link to="/number">number</router-link>
     <router-link to="/limitTo">limitTo</router-link>
+    <router-link to="/lowercase">lowercase</router-link>
+    <router-link to="/uppercase">uppercase</router-link>
     <router-view></router-view>
   </div>
 </template>
