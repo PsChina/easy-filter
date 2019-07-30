@@ -2,3 +2,5 @@ node_modules
 yarn.lock
 test
 tslint.json
+.DS_Store
+*/.DS_Store

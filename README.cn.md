@@ -9,6 +9,10 @@
 [![LICENSE](https://img.shields.io/badge/license-Anti%20996-blue.svg)](https://github.com/996icu/996.ICU/blob/master/LICENSE)
 [![996.icu](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu)
 
+## 新特性(v1.5.x)
+
+支持 typescript 。
+
 ## 文档
 
 要查看实际例子和文档，请访问 [easy-filter](https://pschina.github.io/easy-filter/index.html) 。
@@ -55,16 +59,6 @@ const easyFilter = {
   orderBy,
 };
 Vue.prototype.$easyFilter = Vue.easyFilter = easyFilter;
-```
-
-如果你的项目使用 Typescript
-
-```ts
-import $easyFilter from "easy-filter/dist/ts";
-
-import Vue from "vue";
-
-Vue.use($easyFilter);
 ```
 
 直接用 `<script>` 引入。
