@@ -237,6 +237,13 @@ Use multiple options:
     },
     methods: {
       filter(input, match) {
+        // You can do this if you don't want some property to participate in filtering
+        // const options = {
+        //   match,
+        //   ignore: ['id'], // ignore property id
+        // }
+        // match = options
+
         // Used in js
         return this.easyFilter.filter(input, match);
         // Use of other filters.
@@ -329,13 +336,10 @@ The filter can also filter the range conditions.
       orderBy(input, rule, reverse) {
         return this.easyFilter.orderBy(input, rule, reverse);
       }
-      // or
-      // You can do this if you don't want some property to participate in filtering
-      // const options = {
-      //   match: rule,
-      //   ignore: ['id'], // ignore property id
+      // or use custom sort functions
+      // orderBy(input, callBack = (v1,v2)=> v1.att > v2.att ? 1 : -1) {
+      //   return this.easyFilter.orderBy(input, callBack)
       // }
-      // this.rule = options
     }
   };
 </script>

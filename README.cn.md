@@ -242,6 +242,13 @@ Vue.prototype.easyFilter = {
     },
     methods: {
       filter(input, match) {
+        // 如果你不想让某些属性参与过滤你可以这样做
+        // const options = {
+        //   match,
+        //   ignore: ['id'], // 忽略 id
+        // }
+        // match = options
+
         // 在js中使用
         return this.easyFilter.filter(input, match);
         // 使用其他过滤器
@@ -330,12 +337,6 @@ filter 过滤器还支持范围过滤。
     methods: {
       click(rule) {
         this.rule = rule;
-        // 如果你不想让某些属性参与过滤你可以这样做
-        // const options = {
-        //   match: rule,
-        //   ignore: ['id'], // 忽略 id
-        // }
-        // this.rule = options
       },
       orderBy(input, rule, reverse) {
         return this.easyFilter.orderBy(input, rule, reverse);
