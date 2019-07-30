@@ -43,12 +43,27 @@ import Vue from "vue";
 Vue.use(EasyFilter);
 
 // or use only what you need
+import {
+ number,
+ orderBy,
+ //...
+} from "easy-filter";
 Vue.filter('number', number);
 Vue.filter('orderBy', orderBy);
 Vue.prototype.easyFilter = {
   number,
   orderBy,
 }
+```
+
+Typescript
+
+```ts
+import EasyFilter from "easy-filter/dist/ts";
+
+import Vue from "vue";
+
+Vue.use(EasyFilter);
 ```
 
 Direct `<script>` Include.

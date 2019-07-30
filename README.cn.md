@@ -44,9 +44,9 @@ Vue.use(EasyFilter);
 
 // 或者按需引用
 import {
-  number,
-  orderBy
-  //...
+ number,
+ orderBy,
+ //...
 } from "easy-filter";
 Vue.filter('number', number);
 Vue.filter('orderBy', orderBy);
@@ -54,6 +54,16 @@ Vue.prototype.easyFilter = {
   number,
   orderBy,
 }
+```
+
+如果你的项目使用 Typescript
+
+```ts
+import EasyFilter from "easy-filter/dist/ts";
+
+import Vue from "vue";
+
+Vue.use(EasyFilter);
 ```
 
 直接用 `<script>` 引入。
