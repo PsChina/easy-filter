@@ -732,16 +732,17 @@ function transformCaseWithRange(input: string, func: () => string, start: number
   if ( Number(start) === Number(end) && Number(start) === 0) {
     return input;
   }
-  if (start) {
-    if (end) {
-      return input.substring(0, start) + func.call(input.substring(start, end + 1)) + input.substr(end + 1);
+  if (!start && !end) {
+    return func.call(input);
+  }
+  if (start > end) {
+    return input;
+  } else {
+    if (end < input.length) {
+      return input.substring(0, start - 1) + func.call(input.substring(start - 1, end)) + input.substr(end);
     }
-    return input.substring(0, start) + func.call(input.substr(start));
+    return input.substring(0, start - 1) + func.call(input.substr(start - 1));
   }
-  if (end) {
-    return func.call(input.substring(0, end + 1)) + input.substr(end + 1);
-  }
-  return func.call(input);
 }
 
 

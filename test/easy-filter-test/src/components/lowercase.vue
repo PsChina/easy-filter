@@ -25,22 +25,22 @@ export default class LowercaseTest extends Mixins(TestBase) {
       className: 'lowercase-with-range',
       data: 'HELLO',
       params: [1,3],
-      description: `根据范围小写字母 {{ 'HELLO' | lowercase(1,3) }} 应该等于 HellO`,
-      result: 'HellO',
+      description: `根据范围小写字母 {{ 'HELLO' | lowercase(1,3) }} 应该等于 helLO`,
+      result: 'helLO',
     },
     {
       className: 'lowercase-with-start-index',
       data: 'HELLO',
       params: [2],
-      description: `根据开始索引小写字母 {{ 'HELLO' | lowercase(2) }} 应该等于 HEllo`,
-      result: 'HEllo',
+      description: `根据开始索引小写字母 {{ 'HELLO' | lowercase(2) }} 应该等于 Hello`,
+      result: 'Hello',
     },
     {
       className: 'lowercase-with-range-end',
       data: 'HELLO',
       params: [0,3],
-      description: `根据结尾索引小写字母 {{ 'HELLO' | lowercase(0,3) }} 应该等于 hellO`,
-      result: 'hellO',
+      description: `根据结尾索引小写字母 {{ 'HELLO' | lowercase(0,3) }} 应该等于 helLO`,
+      result: 'helLO',
     },
     {
       className: 'lowercase-with-zero-zero',
@@ -48,6 +48,13 @@ export default class LowercaseTest extends Mixins(TestBase) {
       params: [0,0],
       description: `参数零零 {{ 'HELLO' | lowercase(0,0) }} 应该等于 HELLO`,
       result: 'HELLO',
+    },
+    {
+      className: 'lowercase-with-zero-one',
+      data: 'HELLO',
+      params: [0,1],
+      description: `参数零一 {{ 'HELLO' | lowercase(0,1) }} 应该等于 hELLO`,
+      result: 'hELLO',
     }
     ]
 }
