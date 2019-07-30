@@ -50,20 +50,21 @@ import {
 } from "easy-filter";
 Vue.filter('number', number);
 Vue.filter('orderBy', orderBy);
-Vue.prototype.easyFilter = {
+const easyFilter = {
   number,
   orderBy,
-}
+};
+Vue.prototype.$easyFilter = Vue.easyFilter = easyFilter;
 ```
 
 如果你的项目使用 Typescript
 
 ```ts
-import EasyFilter from "easy-filter/dist/ts";
+import $easyFilter from "easy-filter/dist/ts";
 
 import Vue from "vue";
 
-Vue.use(EasyFilter);
+Vue.use($easyFilter);
 ```
 
 直接用 `<script>` 引入。
@@ -315,7 +316,7 @@ ja.json
 
 <script>
   export default {
-    name: "easyFilter.filter",
+    name: "$easyFilter.filter",
     data() {
       return {
         match: "",
@@ -338,18 +339,18 @@ ja.json
         // match = options
 
         // 在js中使用
-        return this.easyFilter.filter(input, match);
+        return this.$easyFilter.filter(input, match);
         // 使用其他过滤器
-        // this.easyFilter.lowercase('WORLD')
-        // this.easyFilter.currency(1000,'¥')
-        // this.easyFilter.date(1523169365575,'yy-MM-dd')
+        // this.$easyFilter.lowercase('WORLD')
+        // this.$easyFilter.currency(1000,'¥')
+        // this.$easyFilter.date(1523169365575,'yy-MM-dd')
         // ...
       }
     },
     // 优化性能
     computed: {
       usefulData() {
-        return this.easyFilter.filter(this.personArray, new RegExp(this.match));
+        return this.$easyFilter.filter(this.personArray, new RegExp(this.match));
       }
     }
   };
@@ -384,7 +385,7 @@ filter 过滤器还支持范围过滤。
         return value.age >= 6;
     },
     filter (input, matchFn) {
-      return this.easyFilter.filter(input, matchFn);
+      return this.$easyFilter.filter(input, matchFn);
   }
 ```
 
@@ -409,7 +410,7 @@ filter 过滤器还支持范围过滤。
 </template>
 <script>
   export default {
-    name: "easyFilter.orderBy",
+    name: "$easyFilter.orderBy",
     data() {
       return {
         personArray: [
@@ -427,11 +428,11 @@ filter 过滤器还支持范围过滤。
         this.rule = rule;
       },
       orderBy(input, rule, reverse) {
-        return this.easyFilter.orderBy(input, rule, reverse);
+        return this.$easyFilter.orderBy(input, rule, reverse);
       }
       // 或者自定义排序函数 (数组 sort 回调)
       // orderBy(input, callBack = (v1,v2)=> v1.att > v2.att ? 1 : -1) {
-      //   return this.easyFilter.orderBy(input, callBack)
+      //   return this.$easyFilter.orderBy(input, callBack)
       // }
     }
   };
@@ -479,7 +480,7 @@ Tiantian	5	male
 export default {
   methods: {
     limitTo(input, limit, options) {
-      return this.easyFilter.limitTo(input, limit, options);
+      return this.$easyFilter.limitTo(input, limit, options);
     }
   }
 };

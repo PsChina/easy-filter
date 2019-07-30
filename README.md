@@ -50,20 +50,21 @@ import {
 } from "easy-filter";
 Vue.filter('number', number);
 Vue.filter('orderBy', orderBy);
-Vue.prototype.easyFilter = {
+const easyFilter = {
   number,
   orderBy,
-}
+};
+Vue.prototype.$easyFilter = Vue.easyFilter = easyFilter;
 ```
 
 Typescript
 
 ```ts
-import EasyFilter from "easy-filter/dist/ts";
+import $easyFilter from "easy-filter/dist/ts";
 
 import Vue from "vue";
 
-Vue.use(EasyFilter);
+Vue.use($easyFilter);
 ```
 
 Direct `<script>` Include.
@@ -315,7 +316,7 @@ ja.json
 
 <script>
   export default {
-    name: "easyFilter.filter",
+    name: "$easyFilter.filter",
     data() {
       return {
         match: "",
@@ -338,18 +339,18 @@ ja.json
         // match = options
 
         // Used in js
-        return this.easyFilter.filter(input, match);
+        return this.$easyFilter.filter(input, match);
         // Use of other filters.
-        // this.easyFilter.lowercase('WORLD')
-        // this.easyFilter.currency(1000,'¥')
-        // this.easyFilter.date(1523169365575,'yy-MM-dd')
+        // this.$easyFilter.lowercase('WORLD')
+        // this.$easyFilter.currency(1000,'¥')
+        // this.$easyFilter.date(1523169365575,'yy-MM-dd')
         // ...
       }
     },
     // How do you want to improve performance? You can do this.
     computed: {
       usefulData() {
-        return this.easyFilter.filter(this.personArray, new RegExp(this.match));
+        return this.$easyFilter.filter(this.personArray, new RegExp(this.match));
       }
     }
   };
@@ -384,7 +385,7 @@ The filter can also filter the range conditions.
         return value.age >= 6;
     },
     filter (input, matchFn) {
-      return this.easyFilter.filter(input, matchFn);
+      return this.$easyFilter.filter(input, matchFn);
   }
 ```
 
@@ -407,9 +408,9 @@ The filter can also filter the range conditions.
     </table>
   </div>
 </template>
-<script>
+<script>s
   export default {
-    name: "easyFilter.orderBy",
+    name: "$easyFilter.orderBy",
     data() {
       return {
         personArray: [
@@ -427,11 +428,11 @@ The filter can also filter the range conditions.
         this.rule = rule;
       },
       orderBy(input, rule, reverse) {
-        return this.easyFilter.orderBy(input, rule, reverse);
+        return this.$easyFilter.orderBy(input, rule, reverse);
       }
       // or use custom sort functions
       // orderBy(input, callBack = (v1,v2)=> v1.att > v2.att ? 1 : -1) {
-      //   return this.easyFilter.orderBy(input, callBack)
+      //   return this.$easyFilter.orderBy(input, callBack)
       // }
     }
   };
@@ -481,7 +482,7 @@ string or number.
 export default {
   methods: {
     limitTo(input, limit, options) {
-      return this.easyFilter.limitTo(input, limit, options);
+      return this.$easyFilter.limitTo(input, limit, options);
     }
   }
 };
