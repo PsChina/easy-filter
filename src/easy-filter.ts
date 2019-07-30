@@ -729,6 +729,9 @@ export function lowercase(input: string, start: number = 0, end: number): string
 }
 
 function transformCaseWithRange(input: string, func: () => string, start: number, end: number): string {
+  if ( Number(start) === Number(end) && Number(start) === 0) {
+    return input;
+  }
   if (start) {
     if (end) {
       return input.substring(0, start) + func.call(input.substring(start, end + 1)) + input.substr(end + 1);

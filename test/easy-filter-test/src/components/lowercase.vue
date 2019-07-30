@@ -41,6 +41,13 @@ export default class LowercaseTest extends Mixins(TestBase) {
       params: [0,3],
       description: `根据结尾索引小写字母 {{ 'HELLO' | lowercase(0,3) }} 应该等于 hellO`,
       result: 'hellO',
+    },
+    {
+      className: 'lowercase-with-zero-zero',
+      data: 'HELLO',
+      params: [0,0],
+      description: `参数零零 {{ 'HELLO' | lowercase(0,0) }} 应该等于 HELLO`,
+      result: 'HELLO',
     }
     ]
 }

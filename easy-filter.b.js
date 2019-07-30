@@ -1,2 +1,2 @@
-import EasyFilter from './src/easy-filter';
+import EasyFilter from './dist/esm/index.js';
 Vue.use(EasyFilter);

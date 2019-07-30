@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import App from './App.vue';
 import VueRouter from 'vue-router';
-import EasyFilter from '../../../dist/ts';
+import EasyFilter from '../../../src/easy-filter';
 import routes from './router/router';
 Vue.config.productionTip = false;
 

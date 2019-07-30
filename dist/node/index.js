@@ -815,6 +815,10 @@ function lowercase(input, start, end) {
 }
 
 function transformCaseWithRange(input, func, start, end) {
+  if (Number(start) === Number(end) && Number(start) === 0) {
+    return input;
+  }
+
   if (start) {
     if (end) {
       return input.substring(0, start) + func.call(input.substring(start, end + 1)) + input.substr(end + 1);
