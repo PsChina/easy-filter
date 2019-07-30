@@ -211,6 +211,84 @@ Use multiple options:
 <!-- yyyy、MM、dd、HH、hh、mm、ss、EEE, can be used alone or in combination. -->
 ```
 
+Cooperate with i18n
+
+```html
+<div>{{ 1523169365575 | date('EEE', $t('localWeek')}</div>
+```
+zh.json
+
+```json
+{
+  "localWeek":{
+    "week": [
+      "星期日",
+      "星期一",
+      "星期二",
+      "星期三",
+      "星期四",
+      "星期五",
+      "星期六",
+    ],
+    "shortWeek": [
+      "周日",
+      "周一",
+      "周二",
+      "周三",
+      "周四",
+      "周五",
+      "周六",
+    ]
+  }
+}
+```
+
+en.json
+
+```json
+{
+  "localWeek":{
+      "week": [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+      ],
+      "shortWeek": ["Sun", "Mon", "Tue", "Wed", "Thur", "Fri", "Sat"]
+  }
+}
+```
+
+ja.json
+
+```json
+{
+  "localWeek":{
+      "week": [
+        "にちようび",
+        "げつようび",
+        "かようび",
+        "すいようび",
+        "もくようび",
+        "きんようび",
+        "どようび",
+      ],
+      "shortWeek": [
+        "にちようび",
+        "げつようび",
+        "かようび",
+        "すいようび",
+        "もくようび",
+        "きんようび",
+        "どようび",
+      ]
+  }
+}
+```
+
 ## filter
 
 ```html
