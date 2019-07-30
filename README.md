@@ -4,7 +4,7 @@
 
 The simple implementation of some angularjs built-in filters in vue.
 
-This package is very small and it only contains nine functions.
+This package is very small and it only contains eight functions.
 
 [![LICENSE](https://img.shields.io/badge/license-Anti%20996-blue.svg)](https://github.com/996icu/996.ICU/blob/master/LICENSE)
 [![996.icu](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu)
@@ -18,7 +18,6 @@ To check out live examples and docs, visit [easy-filter](https://pschina.github.
 - [currency](#currency)
 - [date](#date)
 - [filter](#filter)
-- [json](#json)
 - [limitTo](#limitto)
 - [lowercase](#lowercase)
 - [number](#number)
@@ -44,13 +43,12 @@ import Vue from "vue";
 Vue.use(EasyFilter);
 
 // or use only what you need
-import {
+Vue.filter('number', number);
+Vue.filter('orderBy', orderBy);
+Vue.prototype.easyFilter = {
   number,
-  orderBy
-  //...
-} from "easy-filter";
-Vue.use(number);
-Vue.use(orderBy);
+  orderBy,
+}
 ```
 
 Direct `<script>` Include.
@@ -63,9 +61,25 @@ Use it in a component:
 
 ## lowercase
 
+Default:
+
 ```html
 <div>{{ 'Hello' | lowercase }}</div>
 <!-- hello -->
+```
+
+Specified range:
+
+```html
+<div>{{ 'HELLO' | lowercase(3,4) }}</div>
+<!-- HEllO -->
+```
+
+Specify starting position:
+
+```html
+<div>{{ 'HELLO' | lowercase(3) }}</div>
+<!-- HEllo -->
 ```
 
 ## uppercase
@@ -120,8 +134,8 @@ Use symbol on right:
 Add space between amound and symbol:
 
 ```html
-<div>{{ 1000 | currency('¥', 0, {addSpace: true}) }}</div>
-<!-- 1000 => ¥ 1,000 -->
+<div>{{ 10.012 | currency('BTC', 8, {addSpace: true}) }}</div>
+<!-- 10.012 => BTC 10.01200000 -->
 ```
 
 Open round
@@ -316,9 +330,12 @@ The filter can also filter the range conditions.
         return this.easyFilter.orderBy(input, rule, reverse);
       }
       // or
-      // orderBy(input, callBack = (v1,v2)=> v1.att > v2.att ? 1 : -1) {
-      //   return this.easyFilter.orderBy(input, callBack)
+      // You can do this if you don't want some property to participate in filtering
+      // const options = {
+      //   match: rule,
+      //   ignore: ['id'], // ignore property id
       // }
+      // this.rule = options
     }
   };
 </script>
@@ -390,7 +407,7 @@ The fields of the configuration item are:
 | startWithIndex | Calculates the number of elements to limit based on the index | number | 0 |
 | startWith | Calculate the number of elements to limit based on the element | not number | undefined |
 | ignore | Ignore matched elements when counting | RegExp , object | undefined |
-| cutOut | Whether to intercept | boolean | false |
+| cut | Whether to intercept | boolean | false |
 
 ### Example
 
@@ -408,10 +425,10 @@ The fields of the configuration item are:
 <!-- hell -->
 ```
 
-- If you want to cutout the front part you can add cutout
+- If you want to cut the front part you can add cut
 
 ```html
-<div>{{ 'hello' | limitTo(3, {startWithIndex:1, cutOut: true}) }}</div>
+<div>{{ 'hello' | limitTo(3, {startWithIndex:1, cut: true}) }}</div>
 <!-- ell -->
 ```
 
@@ -449,7 +466,7 @@ limitTo([1, 2, 3, 4, 5], 2);
 ```
 
 ```js
-limitTo([1, 2, 3, 4, 5], 2, { startWith: 3, cutOut: true });
+limitTo([1, 2, 3, 4, 5], 2, { startWith: 3, cut: true });
 // [3,4]
 ```
 

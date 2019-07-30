@@ -686,4 +686,3 @@ export default {
         Vue.easyFilter = easyFilter;
     }
 };
-//# sourceMappingURL=easy-filter.js.map

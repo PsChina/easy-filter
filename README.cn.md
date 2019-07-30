@@ -4,7 +4,7 @@
 
 这是一个简单 vue 过滤器插件，灵感来自 angularjs 的内置过滤器。
 
-这个包很小他只有 9 个函数。
+这个包很小他只有 8 个函数。
 
 [![LICENSE](https://img.shields.io/badge/license-Anti%20996-blue.svg)](https://github.com/996icu/996.ICU/blob/master/LICENSE)
 [![996.icu](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu)
@@ -18,7 +18,6 @@
 - [currency](#currency)
 - [date](#date)
 - [filter](#filter)
-- [json](#json)
 - [limitTo](#limitto)
 - [lowercase](#lowercase)
 - [number](#number)
@@ -49,8 +48,12 @@ import {
   orderBy
   //...
 } from "easy-filter";
-Vue.use(number);
-Vue.use(orderBy);
+Vue.filter('number', number);
+Vue.filter('orderBy', orderBy);
+Vue.prototype.easyFilter = {
+  number,
+  orderBy,
+}
 ```
 
 直接用 `<script>` 引入。
@@ -63,9 +66,25 @@ Vue.use(orderBy);
 
 ## lowercase
 
+默认:
+
 ```html
 <div>{{ 'Hello' | lowercase }}</div>
 <!-- hello -->
+```
+
+指定范围:
+
+```html
+<div>{{ 'HELLO' | lowercase(3,4) }}</div>
+<!-- HEllO -->
+```
+
+指定起始位置:
+
+```html
+<div>{{ 'HELLO' | lowercase(3) }}</div>
+<!-- HEllo -->
 ```
 
 ## uppercase
@@ -120,8 +139,8 @@ Vue.use(orderBy);
 在符号和数字之间增加一个空格
 
 ```html
-<div>{{ 1000 | currency('¥', 0, {addSpace: true}) }}</div>
-<!-- 1000 => ¥ 1,000 -->
+<div>{{ 10.012 | currency('BTC', 8, {addSpace: true}) }}</div>
+<!-- 10.012 => BTC 10.01200000 -->
 ```
 
 四舍五入
@@ -311,6 +330,12 @@ filter 过滤器还支持范围过滤。
     methods: {
       click(rule) {
         this.rule = rule;
+        // 如果你不想让某些属性参与过滤你可以这样做
+        // const options = {
+        //   match: rule,
+        //   ignore: ['id'], // 忽略 id
+        // }
+        // this.rule = options
       },
       orderBy(input, rule, reverse) {
         return this.easyFilter.orderBy(input, rule, reverse);
@@ -353,10 +378,6 @@ Tiantian	5	male
  -->
 ```
 
-## json
-
-Json 将会把一个 js 对象转换为一个 JSON 格式的字符串对象，它使用了 JSON.stringify。
-
 ## limitTo
 
 创建一个新数组或者字符串
@@ -392,7 +413,7 @@ export default {
 | startWithIndex | 根据索引开始计算要限制的元素个数 |     number      |     0     |
 |   startWith    | 根据元素开始计算要限制的元素个数 |   not number    | undefined |
 |     ignore     |      计数时忽略被匹配的元素      | RegExp , object | undefined |
-|     cutOut     |             是否截取             |     boolean     |   fasle   |
+|     cut     |             是否截取             |     boolean     |   fasle   |
 
 ### 例
 
@@ -413,7 +434,7 @@ export default {
 - 如果您想剪掉前面的部分，可以这样裁剪。
 
 ```html
-<div>{{ 'hello' | limitTo(3, {startWithIndex:1, cutOut: true}) }}</div>
+<div>{{ 'hello' | limitTo(3, {startWithIndex:1, cut: true}) }}</div>
 <!-- ell -->
 ```
 
@@ -451,7 +472,7 @@ limitTo([1, 2, 3, 4, 5], 2);
 ```
 
 ```js
-limitTo([1, 2, 3, 4, 5], 2, { startWith: 3, cutOut: true });
+limitTo([1, 2, 3, 4, 5], 2, { startWith: 3, cut: true });
 // [3,4]
 ```
 
