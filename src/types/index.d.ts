@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import './vue';
 
 type NumberDate = number | string;
 type WeekConfig = 'cn' | 'en' | DateOption;
@@ -25,7 +26,7 @@ interface DateOptions {
   en: DateOption;
 }
 
-type Comparator = (item1: any, item2: any, key: string, reverse: boolean) => number;
+type Comparator = (item1: any, item2: any, key: string, reverse?: boolean) => number;
 
 type MatchFunction = (val: any) => boolean;
 
@@ -33,7 +34,7 @@ type Match = string | MatchFunction;
 
 interface MatchRules {
    match: Match;
-   ignore: string[] | string;
+   ignore?: string[] | string;
 }
 
 interface SignOption {
@@ -42,10 +43,10 @@ interface SignOption {
 
 type Sign = SignOption | boolean;
 interface NumberOptions {
-  round: boolean;
-  pad: boolean;
-  sign: Sign;
-  separator: string;
+  round?: boolean;
+  pad?: boolean;
+  sign?: Sign;
+  separator?: string;
 }
 
 interface LimitToOption {
@@ -61,31 +62,31 @@ export function install(vue: typeof Vue): void;
 
 export declare interface EasyFilter {
 
-  currency(input: NumberDate, symbol: string, digits: number, options: CurrencyOption ): string;
+  currency(input: NumberDate, symbol?: string, digits?: number, options?: CurrencyOption ): string;
 
-  date(input: DateData, formatMode: string, option: WeekConfig): DateData;
+  date(input: DateData, formatMode?: string, option?: WeekConfig): DateData;
 
   orderBy(input: any[],
-          expression: Comparator | string,
-          reverse: boolean,
-          comparator: Comparator | string,
+          expression?: Comparator | string,
+          reverse?: boolean,
+          comparator?: Comparator | string,
           ): any[];
 
-  filter(input: any, matchOptions: FilterOptions): any;
+  filter(input: any, matchOptions?: FilterOptions): any;
   
   number(
     input: NumberDate,
-    digits: number,
-    options: NumberOptions,
+    digits?: number,
+    options?: NumberOptions,
   ): string;
 
   limitTo(
     input: number | string | any[],
-    limit: number,
-    option: LimitToOption,
+    limit?: number,
+    option?: LimitToOption,
   ): string | number | any[]
 
-  uppercase(input: string, start: number, end: number): string
+  uppercase(input: string, start?: number, end?: number): string
 
-  lowercase(input: string, start: number, end: number): string
+  lowercase(input: string, start?: number, end?: number): string
 }

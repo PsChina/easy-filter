@@ -68,7 +68,7 @@ export default class FilterTest extends Mixins(Base) {
     return false;
   }
   public filter(input: any, match: string): any {
-    return (this as any).$easyFilter.filter(input, match);
+    return this.$easyFilter.filter(input, match);
   }
   public select(event: any): void {
     if (event.target.checked) {
