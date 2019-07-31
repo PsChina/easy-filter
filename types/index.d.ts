@@ -53,7 +53,7 @@ export interface LimitToOption {
   startWithIndex: number;
   startWith?: any;
   ignore?: string | RegExp;
-  cutOut?: boolean;
+  cut?: boolean;
 }
 
 export type FilterOptions = MatchRules | Match | RegExp;
