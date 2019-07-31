@@ -55,6 +55,27 @@ export default class UppercaseTest extends Mixins(TestBase) {
       params: [0,1],
       description: `参数零一 {{ 'hello' | uppercase(0,1) }} 应该等于 Hello`,
       result: 'Hello',
+    },
+    {
+      className: 'uppercase-with-one-undefined',
+      data: 'hello',
+      params: [1],
+      description: `参数一 undefined {{ 'hello' | uppercase(1) }} 应该等于 HELLO`,
+      result: 'HELLO',
+    },
+    {
+      className: 'uppercase-with-one-zero',
+      data: 'hello',
+      params: [1,0],
+      description: `参数一零 {{ 'hello' | uppercase(1,0) }} 应该等于 hello`,
+      result: 'hello',
+    },
+    {
+      className: 'uppercase-with-one-more-than-max-length',
+      data: 'hello',
+      params: [1,10],
+      description: `参数零十 {{ 'hello' | uppercase(1,10) }} 应该等于 HELLO`,
+      result: 'HELLO',
     }
     ]
 }
