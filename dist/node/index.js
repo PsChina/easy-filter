@@ -13,6 +13,22 @@ exports.uppercase = uppercase;
 exports.lowercase = lowercase;
 exports.default = void 0;
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 /**
@@ -24,34 +40,27 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
  * @param {CurrencyOption} options symbolOnLeft 符号位置 separator 分隔符 addSpace 是否有空格 pad 是否补零 round 四舍五入
  * @return {String} String 输出
  */
-function currency(input, symbol, digits, _a) {
-  var _b;
+function currency(input) {
+  var symbol = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '$';
+  var digits = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 2;
 
-  if (symbol === void 0) {
-    symbol = '$';
-  }
-
-  if (digits === void 0) {
-    digits = 2;
-  }
-
-  var _c = _a === void 0 ? {
+  var _ref = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {
     symbolOnLeft: true,
     separator: ',',
     addSpace: false,
     pad: true,
     round: false
-  } : _a,
-      _d = _c.symbolOnLeft,
-      symbolOnLeft = _d === void 0 ? true : _d,
-      _e = _c.separator,
-      separator = _e === void 0 ? ',' : _e,
-      _f = _c.addSpace,
-      addSpace = _f === void 0 ? false : _f,
-      _g = _c.pad,
-      pad = _g === void 0 ? true : _g,
-      _h = _c.round,
-      round = _h === void 0 ? false : _h;
+  },
+      _ref$symbolOnLeft = _ref.symbolOnLeft,
+      symbolOnLeft = _ref$symbolOnLeft === void 0 ? true : _ref$symbolOnLeft,
+      _ref$separator = _ref.separator,
+      separator = _ref$separator === void 0 ? ',' : _ref$separator,
+      _ref$addSpace = _ref.addSpace,
+      addSpace = _ref$addSpace === void 0 ? false : _ref$addSpace,
+      _ref$pad = _ref.pad,
+      pad = _ref$pad === void 0 ? true : _ref$pad,
+      _ref$round = _ref.round,
+      round = _ref$round === void 0 ? false : _ref$round;
 
   var digitsType = _typeof(digits);
 
@@ -75,32 +84,40 @@ function currency(input, symbol, digits, _a) {
     var decimalPart = numberArr[1]; // 四舍五入
 
     var decimal = '0';
-    _b = roundDecimalPart(round, intPart, decimalPart, digits), intPart = _b[0], decimal = _b[1]; // 处理整数部分
 
+    var _roundDecimalPart = roundDecimalPart(round, intPart, decimalPart, digits);
+
+    var _roundDecimalPart2 = _slicedToArray(_roundDecimalPart, 2);
+
+    intPart = _roundDecimalPart2[0];
+    decimal = _roundDecimalPart2[1];
+    // 处理整数部分
     var int = intPart.replace(/\B(?=(?:\d{3})+(?!\d))/g, separator);
 
     if (numberArr[0] < intPart && pad === false) {
       data = int;
     } else {
-      data = (int ? int : '0') + "." + (pad ? String(decimal).padEnd(digits, '0') : decimal);
+      data = "".concat(int ? int : '0', ".").concat(pad ? String(decimal).padEnd(digits, '0') : decimal);
     }
   } else {
     // 整数
-    var numberArr = data.split('.');
-    var intPart = numberArr[0];
-    var decimalPart = numberArr[1];
+    var _numberArr = data.split('.');
 
-    if (round && decimalPart) {
-      intPart = String(Math.round(Number(input)));
+    var _intPart = _numberArr[0];
+    var _decimalPart = _numberArr[1];
+
+    if (round && _decimalPart) {
+      _intPart = String(Math.round(Number(input)));
     } // 拆分
 
 
-    var int = intPart.replace(/\B(?=(?:\d{3})+(?!\d))/g, separator); // 添加小数部分
+    var _int = _intPart.replace(/\B(?=(?:\d{3})+(?!\d))/g, separator); // 添加小数部分
 
-    data = "" + (int ? int : '0') + (pad ? '.'.padEnd(digits + 1, '0') : '');
+
+    data = "".concat(_int ? _int : '0').concat(pad ? '.'.padEnd(digits + 1, '0') : '');
 
     if (digits <= 0) {
-      data = "" + int;
+      data = "".concat(_int);
     }
   }
 
@@ -109,7 +126,7 @@ function currency(input, symbol, digits, _a) {
   }
 
   if (addSpace) {
-    return symbolOnLeft ? symbol + " " + data : data + " " + symbol;
+    return symbolOnLeft ? "".concat(symbol, " ").concat(data) : "".concat(data, " ").concat(symbol);
   }
 
   return symbolOnLeft ? symbol + data : data + symbol;
@@ -142,9 +159,10 @@ function sciNumToString(num) {
   var symbol = str.charAt(0) === '-' ? '-' : '';
 
   if (str.includes('e-')) {
-    var _a = str.split('e-'),
-        val = _a[0],
-        power = _a[1];
+    var _str$split = str.split('e-'),
+        _str$split2 = _slicedToArray(_str$split, 2),
+        val = _str$split2[0],
+        power = _str$split2[1];
 
     var valArr = val.replace('-', '').split('.');
     var left = valArr[0];
@@ -153,30 +171,29 @@ function sciNumToString(num) {
     return symbol + left.charAt(0) + '.' + left.substring(1, left.length) + (right ? right : '');
   } else if (str.includes('e')) {
     var strArr = str.split('e');
-    var val = strArr[0];
-    var power = strArr[1];
+    var _val = strArr[0];
+    var _power = strArr[1];
 
-    var _b = val.replace('-', '').split('.'),
-        left = _b[0],
-        right = _b[1];
+    var _val$replace$split = _val.replace('-', '').split('.'),
+        _val$replace$split2 = _slicedToArray(_val$replace$split, 2),
+        _left = _val$replace$split2[0],
+        _right = _val$replace$split2[1];
 
-    right = right ? right : (power = String(+power + 1), right = left, left = '', right);
-    right = right.padEnd(Number(power), '0');
-    return symbol + left + (right ? right : '');
+    _right = _right ? _right : (_power = String(+_power + 1), _right = _left, _left = '', _right);
+    _right = _right.padEnd(Number(_power), '0');
+    return symbol + _left + (_right ? _right : '');
   }
 
   return String(num);
 }
 
 function plus(num1, num2) {
-  var others = [];
-
-  for (var _i = 2; _i < arguments.length; _i++) {
-    others[_i - 2] = arguments[_i];
+  for (var _len = arguments.length, others = new Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
+    others[_key - 2] = arguments[_key];
   }
 
   if (others.length > 0) {
-    return plus.apply(void 0, [plus(num1, num2), others[0]].concat(others.slice(1)));
+    return plus.apply(void 0, [plus(num1, num2), others[0]].concat(_toConsumableArray(others.slice(1))));
   }
 
   var baseNum = Math.pow(10, Math.max(digitLength(num1), digitLength(num2)));
@@ -191,14 +208,12 @@ function digitLength(num) {
 }
 
 function times(num1, num2) {
-  var others = [];
-
-  for (var _i = 2; _i < arguments.length; _i++) {
-    others[_i - 2] = arguments[_i];
+  for (var _len2 = arguments.length, others = new Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
+    others[_key2 - 2] = arguments[_key2];
   }
 
   if (others.length > 0) {
-    return times.apply(void 0, [times(num1, num2), others[0]].concat(others.slice(1)));
+    return times.apply(void 0, [times(num1, num2), others[0]].concat(_toConsumableArray(others.slice(1))));
   }
 
   var num1Changed = float2Fixed(num1);
@@ -242,13 +257,13 @@ function roundDecimalPart(round, intPart, decimalPart, digits) {
     var roundPart = Number(decimalPart.substr(digits, 1));
 
     if (roundPart >= 5) {
-      decimal = String(plus(Number("0." + reservedPortion), Number(digits ? "0." + '1'.padStart(digits, '0') : '1')));
+      decimal = String(plus(Number("0.".concat(reservedPortion)), Number(digits ? "0.".concat('1'.padStart(digits, '0')) : '1')));
 
       if (Number(decimal) >= 1) {
         intPart = String(Number(intPart) + 1);
         decimal = '0';
       } else {
-        decimal = ("" + decimal).substr(2, digits);
+        decimal = "".concat(decimal).substr(2, digits);
       }
     } else {
       decimal = String(decimalPart.substring(0, digits));
@@ -265,14 +280,9 @@ function roundDecimalPart(round, intPart, decimalPart, digits) {
  */
 
 
-function date(input, formatMode, option) {
-  if (formatMode === void 0) {
-    formatMode = 'yyyy/MM/dd HH:mm:ss EEE';
-  }
-
-  if (option === void 0) {
-    option = 'en';
-  }
+function date(input) {
+  var formatMode = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'yyyy/MM/dd HH:mm:ss EEE';
+  var option = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'en';
 
   if (navigator.userAgent.includes('Safari')) {
     if (typeof input === 'string') {
@@ -313,33 +323,33 @@ function date(input, formatMode, option) {
       switch (value) {
         case 'MM':
           // Replace the month.
-          return ("" + (dateData.getMonth() + 1)).padStart(2, '0');
+          return "".concat(dateData.getMonth() + 1).padStart(2, '0');
 
         case 'dd':
           // Replace the date.
-          return ("" + dateData.getDate()).padStart(2, '0');
+          return "".concat(dateData.getDate()).padStart(2, '0');
 
         case 'hh':
           // Replace the hours (12-hour system).
           var hours = dateData.getHours();
 
           if (hours > 12) {
-            return ("" + (hours - 12)).padStart(2, '0');
+            return "".concat(hours - 12).padStart(2, '0');
           }
 
-          return ("" + hours).padStart(2, '0');
+          return "".concat(hours).padStart(2, '0');
 
         case 'HH':
           // Replace the hours (24 hour system).
-          return ("" + dateData.getHours()).padStart(2, '0');
+          return "".concat(dateData.getHours()).padStart(2, '0');
 
         case 'mm':
           // Replace the minutes.
-          return ("" + dateData.getMinutes()).padStart(2, '0');
+          return "".concat(dateData.getMinutes()).padStart(2, '0');
 
         case 'ss':
           // Replace the second.
-          return ("" + dateData.getSeconds()).padStart(2, '0');
+          return "".concat(dateData.getSeconds()).padStart(2, '0');
 
         default:
           // Replace the years and week.
@@ -387,11 +397,8 @@ var builtInComparator = function builtInComparator(item1, item2, key, reverse) {
  */
 
 
-function orderBy(input, expression, reverse, comparator) {
-  if (comparator === void 0) {
-    comparator = builtInComparator;
-  }
-
+function orderBy(input, expression, reverse) {
+  var comparator = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : builtInComparator;
   var key;
 
   var expressionType = _typeof(expression);
@@ -591,21 +598,14 @@ function isEmpty(val) {
   return val === undefined || val === '' || val === null || JSON.stringify(val) === '[]' || JSON.stringify(val) === '{}';
 }
 
-function number(input, digits, options) {
-  var _a;
-
-  if (digits === void 0) {
-    digits = 8;
-  }
-
-  if (options === void 0) {
-    options = {
-      round: false,
-      pad: false,
-      sign: false,
-      separator: ''
-    };
-  }
+function number(input) {
+  var digits = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 8;
+  var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {
+    round: false,
+    pad: false,
+    sign: false,
+    separator: ''
+  };
 
   if (isNaN(Number(input))) {
     return String(input);
@@ -617,27 +617,33 @@ function number(input, digits, options) {
       separator = options.separator;
 
   if (isEmpty(input)) {
-    return pad ? "0." + '0'.padEnd(digits, '0') : '0';
+    return pad ? "0.".concat('0'.padEnd(digits, '0')) : '0';
   }
 
   if (Number(input) === 0 && _typeof(sign) === 'object') {
-    input = sign.zero + "0";
+    input = "".concat(sign.zero, "0");
   }
 
   var temp = sciNumToString(input);
-  var int = temp.replace(/\B(?=(?:\d{3})+(?!\d))/g, separator);
+  var int = temp.replace(/\B(?=(?:\d{3})+(?!\d))/g, separator || '');
   var decimal = digits ? '0' : false;
 
   if (temp.includes('.')) {
     var numberArr = temp.split('.');
     var intPart = numberArr[0];
     var decimalPart = numberArr[1];
-    _a = roundDecimalPart(round, intPart, decimalPart, digits), intPart = _a[0], decimal = _a[1];
-    int = intPart.replace(/\B(?=(?:\d{3})+(?!\d))/g, separator);
+
+    var _roundDecimalPart3 = roundDecimalPart(Boolean(round), intPart, decimalPart, digits);
+
+    var _roundDecimalPart4 = _slicedToArray(_roundDecimalPart3, 2);
+
+    intPart = _roundDecimalPart4[0];
+    decimal = _roundDecimalPart4[1];
+    int = intPart.replace(/\B(?=(?:\d{3})+(?!\d))/g, separator || '');
   }
 
   if (input > 0 && sign) {
-    int = "+" + int;
+    int = "+".concat(int);
   }
 
   if (!digits) {
@@ -645,9 +651,9 @@ function number(input, digits, options) {
   }
 
   if (pad) {
-    return "" + int + (decimal ? "." + decimal.padEnd(digits, '0') : '');
+    return "".concat(int).concat(decimal ? ".".concat(decimal.padEnd(digits, '0')) : '');
   } else {
-    return decimal ? int + "." + decimal : int;
+    return decimal ? "".concat(int, ".").concat(decimal) : int;
   }
 }
 /**
@@ -659,18 +665,12 @@ function number(input, digits, options) {
  */
 
 
-function limitTo(input, limit, option) {
-  if (limit === void 0) {
-    limit = Number.POSITIVE_INFINITY;
-  }
-
-  if (option === void 0) {
-    option = {
-      startWithIndex: 0,
-      cut: false
-    };
-  }
-
+function limitTo(input) {
+  var limit = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : Number.POSITIVE_INFINITY;
+  var option = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {
+    startWithIndex: 0,
+    cut: false
+  };
   var startWith = option.startWith,
       ignore = option.ignore,
       cut = option.cut;
@@ -699,11 +699,14 @@ function limitTo(input, limit, option) {
 
     case 'number':
       {
-        var arrayData = input.toString().split('');
-        var itemIndex = arrayData.indexOf(startWith);
-        var startIndex = itemIndex === -1 ? startWithIndex : itemIndex;
-        return getOutput(arrayData, {
-          startIndex: startIndex,
+        var _arrayData = input.toString().split('');
+
+        var _itemIndex = _arrayData.indexOf(startWith);
+
+        var _startIndex = _itemIndex === -1 ? startWithIndex : _itemIndex;
+
+        return getOutput(_arrayData, {
+          startIndex: _startIndex,
           limit: limit,
           ignore: ignore,
           type: type,
@@ -714,11 +717,14 @@ function limitTo(input, limit, option) {
     default:
       {
         if (input instanceof Array) {
-          var arrayData = input.concat();
-          var itemIndex = arrayData.indexOf(startWith);
-          var startIndex = itemIndex === -1 ? startWithIndex : itemIndex;
-          return getOutput(arrayData, {
-            startIndex: startIndex,
+          var _arrayData2 = input.concat();
+
+          var _itemIndex2 = _arrayData2.indexOf(startWith);
+
+          var _startIndex2 = _itemIndex2 === -1 ? startWithIndex : _itemIndex2;
+
+          return getOutput(_arrayData2, {
+            startIndex: _startIndex2,
             limit: limit,
             ignore: ignore,
             type: type,
@@ -781,11 +787,9 @@ function getOutput(array, option) {
  */
 
 
-function uppercase(input, start, end) {
-  if (start === void 0) {
-    start = 0;
-  }
-
+function uppercase(input) {
+  var start = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+  var end = arguments.length > 2 ? arguments[2] : undefined;
   var output = input;
 
   if (typeof input === 'string') {
@@ -800,11 +804,9 @@ function uppercase(input, start, end) {
  */
 
 
-function lowercase(input, start, end) {
-  if (start === void 0) {
-    start = 0;
-  }
-
+function lowercase(input) {
+  var start = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+  var end = arguments.length > 2 ? arguments[2] : undefined;
   var output = input;
 
   if (typeof input === 'string') {
@@ -815,6 +817,10 @@ function lowercase(input, start, end) {
 }
 
 function transformCaseWithRange(input, func, start, end) {
+  if (end === '') {
+    end = undefined;
+  }
+
   if (Number(start) === Number(end) && Number(start) === 0) {
     return input;
   }
@@ -830,7 +836,8 @@ function transformCaseWithRange(input, func, start, end) {
       return input.substring(0, start - 1) + func.call(input.substring(start - 1, end)) + input.substr(end);
     }
 
-    return input.substring(0, start - 1) + func.call(input.substr(start - 1));
+    var length = start ? start - 1 : 0;
+    return input.substring(0, length) + func.call(input.substr(length));
   }
 }
 

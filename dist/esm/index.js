@@ -7,19 +7,15 @@
  * @param {CurrencyOption} options symbolOnLeft 符号位置 separator 分隔符 addSpace 是否有空格 pad 是否补零 round 四舍五入
  * @return {String} String 输出
  */
-export function currency(input, symbol, digits, _a) {
-    var _b;
-    if (symbol === void 0) { symbol = '$'; }
-    if (digits === void 0) { digits = 2; }
-    var _c = _a === void 0 ? {
-        symbolOnLeft: true,
-        separator: ',',
-        addSpace: false,
-        pad: true,
-        round: false
-    } : _a, _d = _c.symbolOnLeft, symbolOnLeft = _d === void 0 ? true : _d, _e = _c.separator, separator = _e === void 0 ? ',' : _e, _f = _c.addSpace, addSpace = _f === void 0 ? false : _f, _g = _c.pad, pad = _g === void 0 ? true : _g, _h = _c.round, round = _h === void 0 ? false : _h;
-    var digitsType = typeof digits;
-    var inputType = typeof input;
+export function currency(input, symbol = '$', digits = 2, { symbolOnLeft = true, separator = ',', addSpace = false, pad = true, round = false, } = {
+    symbolOnLeft: true,
+    separator: ',',
+    addSpace: false,
+    pad: true,
+    round: false,
+}) {
+    const digitsType = typeof digits;
+    const inputType = typeof input;
     if (digitsType !== 'number') {
         digits = 2;
     }
@@ -27,39 +23,39 @@ export function currency(input, symbol, digits, _a) {
         input = String(input);
     }
     // 转换科学计数法
-    var data = sciNumToString(input);
+    let data = sciNumToString(input);
     // 判断小数
     if (data.includes('.') && digits !== 0) {
         // 将小数部分与整数部分分开
-        var numberArr = data.split('.');
-        var intPart = numberArr[0];
-        var decimalPart = numberArr[1];
+        const numberArr = data.split('.');
+        let intPart = numberArr[0];
+        const decimalPart = numberArr[1];
         // 四舍五入
-        var decimal = '0';
-        _b = roundDecimalPart(round, intPart, decimalPart, digits), intPart = _b[0], decimal = _b[1];
+        let decimal = '0';
+        [intPart, decimal] = roundDecimalPart(round, intPart, decimalPart, digits);
         // 处理整数部分
-        var int = intPart.replace(/\B(?=(?:\d{3})+(?!\d))/g, separator);
+        const int = intPart.replace(/\B(?=(?:\d{3})+(?!\d))/g, separator);
         if (numberArr[0] < intPart && pad === false) {
             data = int;
         }
         else {
-            data = (int ? int : '0') + "." + (pad ? String(decimal).padEnd(digits, '0') : decimal);
+            data = `${int ? int : '0'}.${pad ? String(decimal).padEnd(digits, '0') : decimal}`;
         }
     }
     else {
         // 整数
-        var numberArr = data.split('.');
-        var intPart = numberArr[0];
-        var decimalPart = numberArr[1];
+        const numberArr = data.split('.');
+        let intPart = numberArr[0];
+        const decimalPart = numberArr[1];
         if (round && decimalPart) {
             intPart = String(Math.round(Number(input)));
         }
         // 拆分
-        var int = intPart.replace(/\B(?=(?:\d{3})+(?!\d))/g, separator);
+        const int = intPart.replace(/\B(?=(?:\d{3})+(?!\d))/g, separator);
         // 添加小数部分
-        data = "" + (int ? int : '0') + (pad ? '.'.padEnd(digits + 1, '0') : '');
+        data = `${int ? int : '0'}${pad ? '.'.padEnd(digits + 1, '0') : ''}`;
         if (digits <= 0) {
-            data = "" + int;
+            data = `${int}`;
         }
     }
     if (data.charAt(0) === separator) {
@@ -67,8 +63,8 @@ export function currency(input, symbol, digits, _a) {
     }
     if (addSpace) {
         return symbolOnLeft
-            ? symbol + " " + data
-            : data + " " + symbol;
+            ? `${symbol} ${data}`
+            : `${data} ${symbol}`;
     }
     return symbolOnLeft ? symbol + data : data + symbol;
 }
@@ -84,19 +80,19 @@ function sciNumToString(num) {
             num = '-0';
         }
     }
-    var str = String(num).toLowerCase();
+    const str = String(num).toLowerCase();
     if (isNaN(Number(str))) {
         return str;
     }
     if (!str.includes('e')) {
         return str;
     }
-    var symbol = str.charAt(0) === '-' ? '-' : '';
+    const symbol = str.charAt(0) === '-' ? '-' : '';
     if (str.includes('e-')) {
-        var _a = str.split('e-'), val = _a[0], power = _a[1];
-        var valArr = val.replace('-', '').split('.');
-        var left = valArr[0];
-        var right = valArr[1];
+        const [val, power] = str.split('e-');
+        const valArr = val.replace('-', '').split('.');
+        let left = valArr[0];
+        const right = valArr[1];
         left = left.padStart(Number(power) + 1, '0');
         return (symbol +
             left.charAt(0) +
@@ -105,10 +101,10 @@ function sciNumToString(num) {
             (right ? right : ''));
     }
     else if (str.includes('e')) {
-        var strArr = str.split('e');
-        var val = strArr[0];
-        var power = strArr[1];
-        var _b = val.replace('-', '').split('.'), left = _b[0], right = _b[1];
+        const strArr = str.split('e');
+        const val = strArr[0];
+        let power = strArr[1];
+        let [left, right] = val.replace('-', '').split('.');
         right = right
             ? right
             : ((power = String(+power + 1)), (right = left), (left = ''), right);
@@ -117,49 +113,41 @@ function sciNumToString(num) {
     }
     return String(num);
 }
-function plus(num1, num2) {
-    var others = [];
-    for (var _i = 2; _i < arguments.length; _i++) {
-        others[_i - 2] = arguments[_i];
-    }
+function plus(num1, num2, ...others) {
     if (others.length > 0) {
-        return plus.apply(void 0, [plus(num1, num2), others[0]].concat(others.slice(1)));
+        return plus(plus(num1, num2), others[0], ...others.slice(1));
     }
-    var baseNum = Math.pow(10, Math.max(digitLength(num1), digitLength(num2)));
+    const baseNum = Math.pow(10, Math.max(digitLength(num1), digitLength(num2)));
     return (times(num1, baseNum) + times(num2, baseNum)) / baseNum;
 }
 function digitLength(num) {
     // Get digit length of e
-    var eSplit = num.toString().split(/[eE]/);
-    var len = (eSplit[0].split('.')[1] || '').length - +(eSplit[1] || 0);
+    const eSplit = num.toString().split(/[eE]/);
+    const len = (eSplit[0].split('.')[1] || '').length - +(eSplit[1] || 0);
     return len > 0 ? len : 0;
 }
-function times(num1, num2) {
-    var others = [];
-    for (var _i = 2; _i < arguments.length; _i++) {
-        others[_i - 2] = arguments[_i];
-    }
+function times(num1, num2, ...others) {
     if (others.length > 0) {
-        return times.apply(void 0, [times(num1, num2), others[0]].concat(others.slice(1)));
+        return times(times(num1, num2), others[0], ...others.slice(1));
     }
-    var num1Changed = float2Fixed(num1);
-    var num2Changed = float2Fixed(num2);
-    var baseNum = digitLength(num1) + digitLength(num2);
-    var leftValue = num1Changed * num2Changed;
+    const num1Changed = float2Fixed(num1);
+    const num2Changed = float2Fixed(num2);
+    const baseNum = digitLength(num1) + digitLength(num2);
+    const leftValue = num1Changed * num2Changed;
     return leftValue / Math.pow(10, baseNum);
 }
 function float2Fixed(num) {
     if (num.toString().indexOf('e') === -1) {
         return Number(num.toString().replace('.', ''));
     }
-    var dLen = digitLength(num);
+    const dLen = digitLength(num);
     return dLen > 0 ? strip(num * Math.pow(10, dLen)) : num;
 }
 function strip(num, precision) {
     if (precision === void 0) {
         precision = 12;
     }
-    var dLen = digitLength(num);
+    const dLen = digitLength(num);
     return dLen > 0 ? strip(num * Math.pow(10, dLen)) : num;
 }
 /**
@@ -170,18 +158,18 @@ function strip(num, precision) {
  * @return {array}
  */
 function roundDecimalPart(round, intPart, decimalPart, digits) {
-    var decimal = '';
+    let decimal = '';
     if (round) {
-        var reservedPortion = decimalPart.substr(0, digits);
-        var roundPart = Number(decimalPart.substr(digits, 1));
+        const reservedPortion = decimalPart.substr(0, digits);
+        const roundPart = Number(decimalPart.substr(digits, 1));
         if (roundPart >= 5) {
-            decimal = String(plus(Number("0." + reservedPortion), Number(digits ? "0." + '1'.padStart(digits, '0') : '1')));
+            decimal = String(plus(Number(`0.${reservedPortion}`), Number(digits ? `0.${'1'.padStart(digits, '0')}` : '1')));
             if (Number(decimal) >= 1) {
                 intPart = String(Number(intPart) + 1);
                 decimal = '0';
             }
             else {
-                decimal = ("" + decimal).substr(2, digits);
+                decimal = `${decimal}`.substr(2, digits);
             }
         }
         else {
@@ -197,18 +185,16 @@ function roundDecimalPart(round, intPart, decimalPart, digits) {
  * @date
  * 格式化时间戳 'yyyy/MM/dd HH:mm:ss EEE'
  */
-export function date(input, formatMode, option) {
-    if (formatMode === void 0) { formatMode = 'yyyy/MM/dd HH:mm:ss EEE'; }
-    if (option === void 0) { option = 'en'; }
+export function date(input, formatMode = 'yyyy/MM/dd HH:mm:ss EEE', option = 'en') {
     if (navigator.userAgent.includes('Safari')) {
         if (typeof input === 'string') {
             input = input.replace(/-/g, '/');
         }
     }
     function formatTimeWithMode(time, mode, opt) {
-        var dateData = new Date(time);
-        var optionType = typeof opt;
-        var options = {
+        const dateData = new Date(time);
+        const optionType = typeof opt;
+        const options = {
             en: {
                 week: [
                     'Sunday',
@@ -219,7 +205,7 @@ export function date(input, formatMode, option) {
                     'Friday',
                     'Saturday',
                 ],
-                shortWeek: ['Sun', 'Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat']
+                shortWeek: ['Sun', 'Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat'],
             },
             cn: {
                 week: [
@@ -239,11 +225,11 @@ export function date(input, formatMode, option) {
                     '周四',
                     '周五',
                     '周六',
-                ]
-            }
+                ],
+            },
         };
-        var week;
-        var shortWeek;
+        let week;
+        let shortWeek;
         if (optionType === 'string') {
             week = options[opt].week;
             shortWeek = options[opt].shortWeek;
@@ -253,38 +239,38 @@ export function date(input, formatMode, option) {
             shortWeek = opt.shortWeek || [];
         }
         else {
-            var log = 'date option type must be string or DateOption. (see: https://pschina.github.io/easy-filter/zh/date/#date)';
+            const log = 'date option type must be string or DateOption. (see: https://pschina.github.io/easy-filter/zh/date/#date)';
             throw new TypeError(log);
         }
-        mode = mode.replace(/y{1,4}|MM|dd|hh|HH|mm|ss|E{1,4}/g, function (value) {
+        mode = mode.replace(/y{1,4}|MM|dd|hh|HH|mm|ss|E{1,4}/g, (value) => {
             switch (value) {
                 case 'MM': // Replace the month.
-                    return ("" + (dateData.getMonth() + 1)).padStart(2, '0');
+                    return `${dateData.getMonth() + 1}`.padStart(2, '0');
                 case 'dd': // Replace the date.
-                    return ("" + dateData.getDate()).padStart(2, '0');
+                    return `${dateData.getDate()}`.padStart(2, '0');
                 case 'hh': // Replace the hours (12-hour system).
-                    var hours = dateData.getHours();
+                    const hours = dateData.getHours();
                     if (hours > 12) {
-                        return ("" + (hours - 12)).padStart(2, '0');
+                        return `${hours - 12}`.padStart(2, '0');
                     }
-                    return ("" + hours).padStart(2, '0');
+                    return `${hours}`.padStart(2, '0');
                 case 'HH': // Replace the hours (24 hour system).
-                    return ("" + dateData.getHours()).padStart(2, '0');
+                    return `${dateData.getHours()}`.padStart(2, '0');
                 case 'mm': // Replace the minutes.
-                    return ("" + dateData.getMinutes()).padStart(2, '0');
+                    return `${dateData.getMinutes()}`.padStart(2, '0');
                 case 'ss': // Replace the second.
-                    return ("" + dateData.getSeconds()).padStart(2, '0');
+                    return `${dateData.getSeconds()}`.padStart(2, '0');
                 default:
                     // Replace the years and week.
                     if (value.includes('y')) {
                         // y{1,4} Replace the years.
-                        var year = dateData.getFullYear();
+                        const year = dateData.getFullYear();
                         return value.length <= 2 ? String(year % 100) : String(year);
                     }
                     else {
                         // E{1,4} Replace the week.
-                        var weekDay = dateData.getDay();
-                        var weekMap = [week[weekDay], shortWeek[weekDay]];
+                        const weekDay = dateData.getDay();
+                        const weekMap = [week[weekDay], shortWeek[weekDay]];
                         return value.length <= 2 ? weekMap[1] : weekMap[0];
                     }
             }
@@ -296,7 +282,7 @@ export function date(input, formatMode, option) {
         return '';
     }
     else {
-        var old = input;
+        const old = input;
         input = new Date(input);
         // Determines whether the parameter is legally invalid and returns the original input.
         if (input.toString() === 'Invalid Date') {
@@ -311,17 +297,16 @@ export function date(input, formatMode, option) {
     }
 }
 // Default Comparator
-var builtInComparator = function (item1, item2, key, reverse) { return item1[key] > item2[key] ?
+const builtInComparator = (item1, item2, key, reverse) => item1[key] > item2[key] ?
     (reverse ? -1 : 1)
     :
-        (reverse ? 1 : -1); };
+        (reverse ? 1 : -1);
 /**
  * @orderBy
  */
-export function orderBy(input, expression, reverse, comparator) {
-    if (comparator === void 0) { comparator = builtInComparator; }
-    var key;
-    var expressionType = typeof expression;
+export function orderBy(input, expression, reverse, comparator = builtInComparator) {
+    let key;
+    const expressionType = typeof expression;
     if (expressionType === 'string') {
         if (expression.charAt(0) === '-') {
             reverse = true;
@@ -335,8 +320,8 @@ export function orderBy(input, expression, reverse, comparator) {
         comparator = expression;
     }
     if (input instanceof Array) {
-        var newArr = input.concat();
-        newArr = newArr.sort(function (value, nextValue) {
+        let newArr = input.concat();
+        newArr = newArr.sort((value, nextValue) => {
             return comparator(value, nextValue, key, reverse);
         });
         input = newArr;
@@ -353,7 +338,7 @@ export function filter(input, matchOptions) {
         return input;
     }
     function filterObj(originalObject, match, ignore) {
-        var obj;
+        let obj;
         // Determine the type of object to be filtered to copy.
         if (originalObject instanceof Array) {
             obj = [];
@@ -364,12 +349,12 @@ export function filter(input, matchOptions) {
         else {
             return originalObject.includes(match) ? originalObject : undefined;
         }
-        for (var key in originalObject) {
+        for (const key in originalObject) {
             if (originalObject.hasOwnProperty(key)) {
-                var value = originalObject[key];
+                const value = originalObject[key];
                 if (typeof value === 'object') {
                     // Deep copy object.
-                    var newObj = matchCopy(value, match, ignore);
+                    const newObj = matchCopy(value, match, ignore);
                     if (newObj instanceof Array) {
                         if (newObj.length) {
                             // Not an empty array can be assigned.
@@ -392,7 +377,7 @@ export function filter(input, matchOptions) {
             }
         }
         if (obj instanceof Array) {
-            obj = obj.filter(function (item) { return item !== undefined; });
+            obj = obj.filter((item) => item !== undefined);
         }
         return obj;
     }
@@ -400,7 +385,7 @@ export function filter(input, matchOptions) {
         return matchFunc(input, matchOptions);
     }
     else if (typeof matchOptions === 'object') {
-        var ignore = matchOptions.ignore, match = matchOptions.match;
+        const { ignore, match } = matchOptions;
         if (match instanceof Function) {
             return matchFunc(input, match);
         }
@@ -416,10 +401,10 @@ export function filter(input, matchOptions) {
  * childExists
  */
 function childExists(obj, match, ignore) {
-    for (var key in obj) {
+    for (const key in obj) {
         if (obj.hasOwnProperty(key)) {
-            var value = obj[key];
-            var type = typeof value;
+            const value = obj[key];
+            const type = typeof value;
             if (type === 'string' || type === 'number') {
                 if (new RegExp(match, 'ig').test(value) ||
                     value.toString().includes(match)) {
@@ -444,16 +429,16 @@ function childExists(obj, match, ignore) {
  * matchCopy
  */
 function matchCopy(obj, match, ignore) {
-    var newObj;
+    let newObj;
     if (obj instanceof Array) {
         newObj = [];
     }
     else {
         newObj = {};
     }
-    for (var key in obj) {
+    for (const key in obj) {
         if (obj.hasOwnProperty(key)) {
-            var value = obj[key];
+            const value = obj[key];
             if (typeof value === 'object' && childExists(value, match, ignore)) {
                 newObj[key] = matchCopy(value, '');
             }
@@ -465,7 +450,7 @@ function matchCopy(obj, match, ignore) {
         }
     }
     if (newObj instanceof Array) {
-        newObj = newObj.filter(function (item) { return item !== undefined; });
+        newObj = newObj.filter((item) => item !== undefined);
     }
     return newObj;
 }
@@ -476,15 +461,15 @@ function matchCopy(obj, match, ignore) {
  */
 function matchFunc(input, matchOptions) {
     if (input instanceof Array) {
-        return input.filter(function (value) {
+        return input.filter((value) => {
             return matchOptions(value);
         });
     }
     else {
-        var obj = {};
-        for (var key in input) {
+        const obj = {};
+        for (const key in input) {
             if (input.hasOwnProperty(key)) {
-                var value = input[key];
+                const value = input[key];
                 if (matchOptions(value)) {
                     obj[key] = value;
                 }
@@ -500,41 +485,38 @@ function isEmpty(val) {
         JSON.stringify(val) === '[]' ||
         JSON.stringify(val) === '{}');
 }
-export function number(input, digits, options) {
-    var _a;
-    if (digits === void 0) { digits = 8; }
-    if (options === void 0) { options = { round: false, pad: false, sign: false, separator: '' }; }
+export function number(input, digits = 8, options = { round: false, pad: false, sign: false, separator: '' }) {
     if (isNaN(Number(input))) {
         return String(input);
     }
-    var round = options.round, pad = options.pad, sign = options.sign, separator = options.separator;
+    const { round, pad, sign, separator } = options;
     if (isEmpty(input)) {
-        return pad ? "0." + '0'.padEnd(digits, '0') : '0';
+        return pad ? `0.${'0'.padEnd(digits, '0')}` : '0';
     }
     if (Number(input) === 0 && typeof sign === 'object') {
-        input = sign.zero + "0";
+        input = `${sign.zero}0`;
     }
-    var temp = sciNumToString(input);
-    var int = temp.replace(/\B(?=(?:\d{3})+(?!\d))/g, separator);
-    var decimal = digits ? '0' : false;
+    const temp = sciNumToString(input);
+    let int = temp.replace(/\B(?=(?:\d{3})+(?!\d))/g, separator || '');
+    let decimal = digits ? '0' : false;
     if (temp.includes('.')) {
-        var numberArr = temp.split('.');
-        var intPart = numberArr[0];
-        var decimalPart = numberArr[1];
-        _a = roundDecimalPart(round, intPart, decimalPart, digits), intPart = _a[0], decimal = _a[1];
-        int = intPart.replace(/\B(?=(?:\d{3})+(?!\d))/g, separator);
+        const numberArr = temp.split('.');
+        let intPart = numberArr[0];
+        const decimalPart = numberArr[1];
+        [intPart, decimal] = roundDecimalPart(Boolean(round), intPart, decimalPart, digits);
+        int = intPart.replace(/\B(?=(?:\d{3})+(?!\d))/g, separator || '');
     }
     if (input > 0 && sign) {
-        int = "+" + int;
+        int = `+${int}`;
     }
     if (!digits) {
         return String(int);
     }
     if (pad) {
-        return "" + int + (decimal ? "." + decimal.padEnd(digits, '0') : '');
+        return `${int}${decimal ? `.${decimal.padEnd(digits, '0')}` : ''}`;
     }
     else {
-        return decimal ? int + "." + decimal : int;
+        return decimal ? `${int}.${decimal}` : int;
     }
 }
 /**
@@ -544,45 +526,43 @@ export function number(input, digits, options) {
  * string or number,
  * as specified by the value and sign (positive or negative) of limit.
  */
-export function limitTo(input, limit, option) {
-    if (limit === void 0) { limit = Number.POSITIVE_INFINITY; }
-    if (option === void 0) { option = { startWithIndex: 0, cut: false }; }
-    var startWith = option.startWith, ignore = option.ignore, cut = option.cut;
-    var startWithIndex = option.startWithIndex;
+export function limitTo(input, limit = Number.POSITIVE_INFINITY, option = { startWithIndex: 0, cut: false }) {
+    const { startWith, ignore, cut } = option;
+    let { startWithIndex } = option;
     if (startWithIndex === undefined) {
         startWithIndex = 0;
     }
-    var type = typeof input;
+    const type = typeof input;
     switch (type) {
         case 'string': {
-            var arrayData = input.split('');
-            var itemIndex = arrayData.indexOf(startWith);
-            var startIndex = itemIndex === -1 ? startWithIndex : itemIndex;
-            return getOutput(arrayData, { startIndex: startIndex, limit: limit, ignore: ignore, type: type, cut: cut });
+            const arrayData = input.split('');
+            const itemIndex = arrayData.indexOf(startWith);
+            const startIndex = itemIndex === -1 ? startWithIndex : itemIndex;
+            return getOutput(arrayData, { startIndex, limit, ignore, type, cut });
         }
         case 'number': {
-            var arrayData = (input).toString().split('');
-            var itemIndex = arrayData.indexOf(startWith);
-            var startIndex = itemIndex === -1 ? startWithIndex : itemIndex;
+            const arrayData = (input).toString().split('');
+            const itemIndex = arrayData.indexOf(startWith);
+            const startIndex = itemIndex === -1 ? startWithIndex : itemIndex;
             return getOutput(arrayData, {
-                startIndex: startIndex,
-                limit: limit,
-                ignore: ignore,
-                type: type,
-                cut: cut
+                startIndex,
+                limit,
+                ignore,
+                type,
+                cut,
             });
         }
         default: {
             if (input instanceof Array) {
-                var arrayData = input.concat();
-                var itemIndex = arrayData.indexOf(startWith);
-                var startIndex = itemIndex === -1 ? startWithIndex : itemIndex;
+                const arrayData = input.concat();
+                const itemIndex = arrayData.indexOf(startWith);
+                const startIndex = itemIndex === -1 ? startWithIndex : itemIndex;
                 return getOutput(arrayData, {
-                    startIndex: startIndex,
-                    limit: limit,
-                    ignore: ignore,
-                    type: type,
-                    cut: cut
+                    startIndex,
+                    limit,
+                    ignore,
+                    type,
+                    cut,
                 });
             }
             return input;
@@ -590,13 +570,13 @@ export function limitTo(input, limit, option) {
     }
 }
 function getOutput(array, option) {
-    var startIndex = option.startIndex, limit = option.limit, ignore = option.ignore, type = option.type, cut = option.cut;
-    var endIndex = startIndex + Number(limit);
-    var newArr = [];
-    var count = 0;
-    array.forEach(function (item, index) {
+    const { startIndex, limit, ignore, type, cut } = option;
+    let endIndex = startIndex + Number(limit);
+    const newArr = [];
+    let count = 0;
+    array.forEach((item, index) => {
         if (index >= startIndex && index < endIndex) {
-            var regExp = new RegExp(ignore ? ignore : '');
+            const regExp = new RegExp(ignore ? ignore : '');
             if (!ignore) {
                 count++;
             }
@@ -630,9 +610,8 @@ function getOutput(array, option) {
 /**
  * @uppercase Uppercase string.
  */
-export function uppercase(input, start, end) {
-    if (start === void 0) { start = 0; }
-    var output = input;
+export function uppercase(input, start = 0, end) {
+    const output = input;
     if (typeof input === 'string') {
         // uppercase.
         return transformCaseWithRange(input, ''.toLocaleUpperCase, start, end);
@@ -642,15 +621,17 @@ export function uppercase(input, start, end) {
 /**
  * @lowercase LowerCase string.
  */
-export function lowercase(input, start, end) {
-    if (start === void 0) { start = 0; }
-    var output = input;
+export function lowercase(input, start = 0, end) {
+    const output = input;
     if (typeof input === 'string') {
         return transformCaseWithRange(input, ''.toLocaleLowerCase, start, end);
     }
     return output;
 }
 function transformCaseWithRange(input, func, start, end) {
+    if (end === '') {
+        end = undefined;
+    }
     if (Number(start) === Number(end) && Number(start) === 0) {
         return input;
     }
@@ -664,21 +645,22 @@ function transformCaseWithRange(input, func, start, end) {
         if (end < input.length) {
             return input.substring(0, start - 1) + func.call(input.substring(start - 1, end)) + input.substr(end);
         }
-        return input.substring(0, start - 1) + func.call(input.substr(start - 1));
+        const length = start ? start - 1 : 0;
+        return input.substring(0, length) + func.call(input.substr(length));
     }
 }
-var easyFilter = {
-    currency: currency,
-    date: date,
-    orderBy: orderBy,
-    filter: filter,
-    number: number,
-    limitTo: limitTo,
-    uppercase: uppercase,
-    lowercase: lowercase
+const easyFilter = {
+    currency,
+    date,
+    orderBy,
+    filter,
+    number,
+    limitTo,
+    uppercase,
+    lowercase,
 };
 export default {
-    install: function (Vue, options) {
+    install(Vue, options) {
         Vue.filter('currency', currency);
         Vue.filter('date', date);
         Vue.filter('orderBy', orderBy);
@@ -689,5 +671,5 @@ export default {
         Vue.filter('lowercase', lowercase);
         Vue.prototype.$easyFilter = easyFilter;
         Vue.easyFilter = easyFilter;
-    }
+    },
 };

@@ -3,6 +3,11 @@
     <div v-for="item in testCases" :class="item.className">
       {{ item.data | uppercase(...item.params) }}
     </div>
+    <label> start: <input v-model.number="start"/> </label>
+    <label> end: <input v-model.number="end"/> </label>
+
+    <div>uppercase: hello => {{ 'hello' | uppercase(start, end) }}</div>
+    <div>lowercase: HELLO => {{ 'HELLO' | lowercase(start, end) }}</div>
   </div>
 </template>
 
@@ -12,6 +17,8 @@ import TestBase from '../mixin/base-test';
 
 @Component
 export default class UppercaseTest extends Mixins(TestBase) {
+  public start: number = 0;
+  public end: number = 0;
   public readonly functionName: string = 'uppercase';
   public readonly testCases: Array<CheckItem> = [
     {

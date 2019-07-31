@@ -462,10 +462,6 @@ For example,  <th @click="click('-name')">name</th>.
  -->
 ```
 
-## json
-
-Json will convert an object into a string using JSON.stringify.
-
 ## limitTo
 
 Creates a new array or string containing only a specified number of elements.

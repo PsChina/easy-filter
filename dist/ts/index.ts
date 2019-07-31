@@ -4,11 +4,11 @@ export type DateData = NumberDate | Date;
 
 export interface CurrencyOption {
   [key: string]: any;
-  symbolOnLeft: boolean;
-  separator: string;
-  addSpace: boolean;
-  pad: boolean;
-  round: boolean;
+  symbolOnLeft?: boolean;
+  separator?: string;
+  addSpace?: boolean;
+  pad?: boolean;
+  round?: boolean;
 }
 
 export interface DateOption {
@@ -337,10 +337,10 @@ export function date(input: DateData,
   }
 }
 
-export type Comparator = (item1: any, item2: any, key: string, reverse: boolean) => number;
+export type Comparator = (item1: any, item2: any, key: string, reverse?: boolean) => number;
 
 // Default Comparator
-const builtInComparator = (item1: any, item2: any, key: string, reverse: boolean) => item1[key] > item2[key] ?
+const builtInComparator = (item1: any, item2: any, key: string, reverse?: boolean) => item1[key] > item2[key] ?
                                                                                      (reverse ? -1 :  1)
                                                                                      :
                                                                                      (reverse ?  1 : -1);
@@ -550,10 +550,10 @@ export interface SignOption {
 export type Sign = SignOption | boolean;
 
 export interface NumberOptions {
-  round: boolean;
-  pad: boolean;
-  sign: Sign;
-  separator: string;
+  round?: boolean;
+  pad?: boolean;
+  sign?: Sign;
+  separator?: string;
 }
 
 export function number(
@@ -572,14 +572,14 @@ export function number(
     input = `${sign.zero}0`;
   }
   const temp = sciNumToString(input);
-  let int = temp.replace(/\B(?=(?:\d{3})+(?!\d))/g, separator);
+  let int = temp.replace(/\B(?=(?:\d{3})+(?!\d))/g, separator || '');
   let decimal = digits ? '0' : false;
   if (temp.includes('.')) {
     const numberArr = temp.split('.');
     let intPart = numberArr[0];
     const decimalPart = numberArr[1];
-    [intPart, decimal] = roundDecimalPart(round, intPart, decimalPart, digits);
-    int = intPart.replace(/\B(?=(?:\d{3})+(?!\d))/g, separator);
+    [intPart, decimal] = roundDecimalPart(Boolean(round), intPart, decimalPart, digits);
+    int = intPart.replace(/\B(?=(?:\d{3})+(?!\d))/g, separator || '');
   }
   if (input > 0 && sign) {
     int = `+${int}`;
@@ -595,7 +595,7 @@ export function number(
 }
 
 export interface LimitToOption {
-  startWithIndex: number;
+  startWithIndex?: number;
   startWith?: any;
   ignore?: string | RegExp;
   cut?: boolean;
@@ -660,7 +660,7 @@ interface GetOutputOption {
   startIndex: number;
   limit: number;
   ignore?: string | RegExp;
-  type: string;
+  type?: string;
   cut?: boolean;
 }
 
@@ -709,7 +709,7 @@ function getOutput(array: any[], option: GetOutputOption): number | string | any
 /**
  * @uppercase Uppercase string.
  */
-export function uppercase(input: string, start: number = 0, end: number): string {
+export function uppercase(input: string, start: number = 0, end?: number): string {
   const output = input;
   if (typeof input === 'string') {
     // uppercase.
@@ -720,7 +720,7 @@ export function uppercase(input: string, start: number = 0, end: number): string
 /**
  * @lowercase LowerCase string.
  */
-export function lowercase(input: string, start: number = 0, end: number): string {
+export function lowercase(input: string, start: number = 0, end?: number): string {
   const output = input;
   if (typeof input === 'string') {
     return transformCaseWithRange(input, ''.toLocaleLowerCase, start, end);
@@ -728,20 +728,24 @@ export function lowercase(input: string, start: number = 0, end: number): string
   return output;
 }
 
-function transformCaseWithRange(input: string, func: () => string, start: number, end: number): string {
+function transformCaseWithRange(input: string, func: () => string, start: number, end?: number): string {
+  if (end as any === '') {
+    end = undefined;
+  }
   if ( Number(start) === Number(end) && Number(start) === 0) {
     return input;
   }
   if (!start && !end) {
     return func.call(input);
   }
-  if (start > end) {
+  if (start > (end as number) ) {
     return input;
   } else {
-    if (end < input.length) {
-      return input.substring(0, start - 1) + func.call(input.substring(start - 1, end)) + input.substr(end);
+    if ((end as number) < input.length) {
+      return input.substring(0, start - 1) + func.call(input.substring(start - 1, end)) + input.substr( end as number );
     }
-    return input.substring(0, start - 1) + func.call(input.substr(start - 1));
+    const length = start ? start - 1 : 0;
+    return input.substring(0, length) + func.call(input.substr(length));
   }
 }
 
