@@ -126,7 +126,7 @@ Use a different separator:
 <div>{{ 1000 | currency('¥', 0, {separator: '.'}) }}</div>
 <!-- 1000 => ¥1.000 -->
 ```
-s
+
 Hide separator
 
 ```html
