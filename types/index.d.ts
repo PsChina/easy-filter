@@ -7,23 +7,23 @@ export type DateData = NumberDate | Date;
 
 export interface CurrencyOption {
   [key: string]: any;
-  symbolOnLeft: boolean;
-  separator: string;
-  addSpace: boolean;
-  pad: boolean;
-  round: boolean;
+  symbolOnLeft?: boolean;
+  separator?: string;
+  addSpace?: boolean;
+  pad?: boolean;
+  round?: boolean;
 }
 
 export interface DateOption {
-  [key: string]: string[];
-  week: string[];
-  shortWeek: string[];
+  [key: string]: string[]|undefined;
+  week?: string[];
+  shortWeek?: string[];
 }
 
 export interface DateOptions {
-  [key: string]: DateOption;
-  cn: DateOption;
-  en: DateOption;
+  [key: string]: DateOption|undefined;
+  cn?: DateOption;
+  en?: DateOption;
 }
 
 export type Comparator = (item1: any, item2: any, key: string, reverse?: boolean) => number;
