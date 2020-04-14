@@ -186,113 +186,121 @@ function roundDecimalPart(round, intPart, decimalPart, digits) {
  * 格式化时间戳 'yyyy/MM/dd HH:mm:ss EEE'
  */
 export function date(input, formatMode = 'yyyy/MM/dd HH:mm:ss EEE', option = 'en') {
-    if (navigator.userAgent.includes('Safari')) {
-        if (typeof input === 'string') {
-            input = input.replace(/-/g, '/');
-        }
-    }
-    function formatTimeWithMode(time, mode, opt) {
-        const dateData = new Date(time);
-        const optionType = typeof opt;
-        const options = {
-            en: {
-                week: [
-                    'Sunday',
-                    'Monday',
-                    'Tuesday',
-                    'Wednesday',
-                    'Thursday',
-                    'Friday',
-                    'Saturday',
-                ],
-                shortWeek: ['Sun', 'Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat'],
-            },
-            cn: {
-                week: [
-                    '星期日',
-                    '星期一',
-                    '星期二',
-                    '星期三',
-                    '星期四',
-                    '星期五',
-                    '星期六',
-                ],
-                shortWeek: [
-                    '周日',
-                    '周一',
-                    '周二',
-                    '周三',
-                    '周四',
-                    '周五',
-                    '周六',
-                ],
-            },
-        };
-        let week;
-        let shortWeek;
-        if (optionType === 'string') {
-            week = options[opt].week;
-            shortWeek = options[opt].shortWeek;
-        }
-        else if (optionType === 'object') {
-            week = opt.week || [];
-            shortWeek = opt.shortWeek || [];
-        }
-        else {
-            const log = 'date option type must be string or DateOption. (see: https://pschina.github.io/easy-filter/zh/date/#date)';
-            throw new TypeError(log);
-        }
-        mode = mode.replace(/y{1,4}|MM|dd|hh|HH|mm|ss|E{1,4}/g, (value) => {
-            switch (value) {
-                case 'MM': // Replace the month.
-                    return `${dateData.getMonth() + 1}`.padStart(2, '0');
-                case 'dd': // Replace the date.
-                    return `${dateData.getDate()}`.padStart(2, '0');
-                case 'hh': // Replace the hours (12-hour system).
-                    const hours = dateData.getHours();
-                    if (hours > 12) {
-                        return `${hours - 12}`.padStart(2, '0');
-                    }
-                    return `${hours}`.padStart(2, '0');
-                case 'HH': // Replace the hours (24 hour system).
-                    return `${dateData.getHours()}`.padStart(2, '0');
-                case 'mm': // Replace the minutes.
-                    return `${dateData.getMinutes()}`.padStart(2, '0');
-                case 'ss': // Replace the second.
-                    return `${dateData.getSeconds()}`.padStart(2, '0');
-                default:
-                    // Replace the years and week.
-                    if (value.includes('y')) {
-                        // y{1,4} Replace the years.
-                        const year = dateData.getFullYear();
-                        return value.length <= 2 ? String(year % 100) : String(year);
-                    }
-                    else {
-                        // E{1,4} Replace the week.
-                        const weekDay = dateData.getDay();
-                        const weekMap = [week[weekDay], shortWeek[weekDay]];
-                        return value.length <= 2 ? weekMap[1] : weekMap[0];
-                    }
+    // 兼容Safari
+    try {
+        if (navigator.userAgent.includes('Safari')) {
+            if (typeof input === 'string') {
+                input = input.replace(/-/g, '/');
             }
-        });
-        return mode;
-    }
-    if (!input) {
-        // Determine whether the input to be filtered is not present and the input is ''.
-        return '';
-    }
-    else {
-        const old = input;
-        input = new Date(input);
-        // Determines whether the parameter is legally invalid and returns the original input.
-        if (input.toString() === 'Invalid Date') {
-            return old;
         }
-        if (typeof formatMode === 'string') {
-            return formatTimeWithMode(input, formatMode, option);
+    }
+    catch (e) {
+        throw new Error(e);
+    }
+    finally {
+        function formatTimeWithMode(time, mode, opt) {
+            const dateData = new Date(time);
+            const optionType = typeof opt;
+            const options = {
+                en: {
+                    week: [
+                        'Sunday',
+                        'Monday',
+                        'Tuesday',
+                        'Wednesday',
+                        'Thursday',
+                        'Friday',
+                        'Saturday',
+                    ],
+                    shortWeek: ['Sun', 'Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat'],
+                },
+                cn: {
+                    week: [
+                        '星期日',
+                        '星期一',
+                        '星期二',
+                        '星期三',
+                        '星期四',
+                        '星期五',
+                        '星期六',
+                    ],
+                    shortWeek: [
+                        '周日',
+                        '周一',
+                        '周二',
+                        '周三',
+                        '周四',
+                        '周五',
+                        '周六',
+                    ],
+                },
+            };
+            let week;
+            let shortWeek;
+            if (optionType === 'string') {
+                week = options[opt].week;
+                shortWeek = options[opt].shortWeek;
+            }
+            else if (optionType === 'object') {
+                week = opt.week || [];
+                shortWeek = opt.shortWeek || [];
+            }
+            else {
+                const log = 'date option type must be string or DateOption. (see: https://pschina.github.io/easy-filter/zh/date/#date)';
+                throw new TypeError(log);
+            }
+            mode = mode.replace(/y{1,4}|MM|dd|hh|HH|mm|ss|E{1,4}/g, (value) => {
+                switch (value) {
+                    case 'MM': // Replace the month.
+                        return `${dateData.getMonth() + 1}`.padStart(2, '0');
+                    case 'dd': // Replace the date.
+                        return `${dateData.getDate()}`.padStart(2, '0');
+                    case 'hh': // Replace the hours (12-hour system).
+                        const hours = dateData.getHours();
+                        if (hours > 12) {
+                            return `${hours - 12}`.padStart(2, '0');
+                        }
+                        return `${hours}`.padStart(2, '0');
+                    case 'HH': // Replace the hours (24 hour system).
+                        return `${dateData.getHours()}`.padStart(2, '0');
+                    case 'mm': // Replace the minutes.
+                        return `${dateData.getMinutes()}`.padStart(2, '0');
+                    case 'ss': // Replace the second.
+                        return `${dateData.getSeconds()}`.padStart(2, '0');
+                    default:
+                        // Replace the years and week.
+                        if (value.includes('y')) {
+                            // y{1,4} Replace the years.
+                            const year = dateData.getFullYear();
+                            return value.length <= 2 ? String(year % 100) : String(year);
+                        }
+                        else {
+                            // E{1,4} Replace the week.
+                            const weekDay = dateData.getDay();
+                            const weekMap = [week[weekDay], shortWeek[weekDay]];
+                            return value.length <= 2 ? weekMap[1] : weekMap[0];
+                        }
+                }
+            });
+            return mode;
+        }
+        if (!input) {
+            // Determine whether the input to be filtered is not present and the input is ''.
+            return '';
         }
         else {
-            return input;
+            const old = input;
+            input = new Date(input);
+            // Determines whether the parameter is legally invalid and returns the original input.
+            if (input.toString() === 'Invalid Date') {
+                return old;
+            }
+            if (typeof formatMode === 'string') {
+                return formatTimeWithMode(input, formatMode, option);
+            }
+            else {
+                return input;
+            }
         }
     }
 }
