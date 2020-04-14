@@ -300,7 +300,7 @@ export function date(input, formatMode = 'yyyy/MM/dd HH:mm:ss EEE', option = 'en
 const builtInComparator = (item1, item2, key, reverse) => item1[key] > item2[key] ?
     (reverse ? -1 : 1)
     :
-        (reverse ? 1 : -1);
+    (reverse ? 1 : -1);
 /**
  * @orderBy
  */
@@ -496,6 +496,7 @@ export function number(input, digits = 8, options = { round: false, pad: false, 
     if (Number(input) === 0 && typeof sign === 'object') {
         input = `${sign.zero}0`;
     }
+    // 若输入的数据为科学计数法表示的数据，转换为非科学计数法表示。
     const temp = sciNumToString(input);
     let int = temp.replace(/\B(?=(?:\d{3})+(?!\d))/g, separator || '');
     let decimal = digits ? '0' : false;
@@ -516,6 +517,9 @@ export function number(input, digits = 8, options = { round: false, pad: false, 
         return `${int}${decimal ? `.${decimal.padEnd(digits, '0')}` : ''}`;
     }
     else {
+        if (Number(decimal) === 0) {
+            return int;
+        }
         return decimal ? `${int}.${decimal}` : int;
     }
 }

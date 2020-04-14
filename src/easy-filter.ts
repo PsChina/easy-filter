@@ -39,12 +39,12 @@ export function currency(input: NumberDate, symbol: string = '$', digits: number
   pad = true,
   round = false,
 }: CurrencyOption = {
-  symbolOnLeft: true,
-  separator: ',',
-  addSpace: false,
-  pad: true,
-  round: false,
-}): string {
+    symbolOnLeft: true,
+    separator: ',',
+    addSpace: false,
+    pad: true,
+    round: false,
+  }): string {
   const digitsType = typeof digits;
   const inputType = typeof input;
   if (digitsType !== 'number') {
@@ -56,7 +56,7 @@ export function currency(input: NumberDate, symbol: string = '$', digits: number
   // 转换科学计数法
   let data = sciNumToString(input);
   // 判断小数
-  if ( data.includes('.')  && digits !== 0) {
+  if (data.includes('.') && digits !== 0) {
     // 将小数部分与整数部分分开
     const numberArr = data.split('.');
     let intPart = numberArr[0];
@@ -116,7 +116,7 @@ function sciNumToString(num: NumberDate): string {
     }
   }
   const str: string = String(num).toLowerCase();
-  if ( isNaN(Number(str)) ) {
+  if (isNaN(Number(str))) {
     return str;
   }
   if (!str.includes('e')) {
@@ -228,8 +228,8 @@ function roundDecimalPart(round: boolean, intPart: string, decimalPart: string, 
  * 格式化时间戳 'yyyy/MM/dd HH:mm:ss EEE'
  */
 export function date(input: DateData,
-                     formatMode: string = 'yyyy/MM/dd HH:mm:ss EEE',
-                     option: WeekConfig = 'en'): DateData {
+  formatMode: string = 'yyyy/MM/dd HH:mm:ss EEE',
+  option: WeekConfig = 'en'): DateData {
   if (navigator.userAgent.includes('Safari')) {
     if (typeof input === 'string') {
       input = input.replace(/-/g, '/');
@@ -280,9 +280,9 @@ export function date(input: DateData,
     } else if (optionType === 'object') {
       week = (opt as DateOption).week || [];
       shortWeek = (opt as DateOption).shortWeek || [];
-    }  else {
+    } else {
       const log =
-      'date option type must be string or DateOption. (see: https://pschina.github.io/easy-filter/zh/date/#date)';
+        'date option type must be string or DateOption. (see: https://pschina.github.io/easy-filter/zh/date/#date)';
       throw new TypeError(log);
     }
     mode = mode.replace(/y{1,4}|MM|dd|hh|HH|mm|ss|E{1,4}/g, (value: string) => {
@@ -341,22 +341,22 @@ export type Comparator = (item1: any, item2: any, key: string, reverse?: boolean
 
 // Default Comparator
 const builtInComparator = (item1: any, item2: any, key: string, reverse?: boolean) => item1[key] > item2[key] ?
-                                                                                     (reverse ? -1 :  1)
-                                                                                     :
-                                                                                     (reverse ?  1 : -1);
+  (reverse ? -1 : 1)
+  :
+  (reverse ? 1 : -1);
 
 /**
  * @orderBy
  */
 export function orderBy(input: any[],
-                        expression: Comparator | string,
-                        reverse: boolean,
-                        comparator: Comparator | string = builtInComparator,
-                        ): any[] {
+  expression: Comparator | string,
+  reverse: boolean,
+  comparator: Comparator | string = builtInComparator,
+): any[] {
   let key: string;
   const expressionType = typeof expression;
   if (expressionType === 'string') {
-    if ( (expression as string).charAt(0) === '-') {
+    if ((expression as string).charAt(0) === '-') {
       reverse = true;
       key = (expression as string).substr(1);
     } else {
@@ -381,8 +381,8 @@ type MatchFunction = (val: any) => boolean;
 export type Match = string | MatchFunction;
 
 export interface MatchRules {
-   match: Match;
-   ignore: string[] | string;
+  match: Match;
+  ignore: string[] | string;
 }
 
 export type FilterOptions = MatchRules | Match;
@@ -439,7 +439,7 @@ export function filter(input: any, matchOptions: FilterOptions): any {
 
     return matchFunc(input, matchOptions);
 
-  } else if (typeof matchOptions === 'object' ) {
+  } else if (typeof matchOptions === 'object') {
     const { ignore, match } = matchOptions;
     if (match instanceof Function) {
       return matchFunc(input, match);
@@ -485,7 +485,7 @@ function childExists(obj: any, match: FilterOptions, ignore?: string[]): boolean
  */
 function matchCopy(obj: any, match: FilterOptions, ignore?: string[]): any {
   let newObj: any;
-  if ( obj instanceof Array) {
+  if (obj instanceof Array) {
     newObj = [];
   } else {
     newObj = {};
@@ -522,7 +522,7 @@ function matchFunc(input: any, matchOptions: MatchFunction): any {
   } else {
     const obj: any = {};
     for (const key in input) {
-      if ( input.hasOwnProperty(key) ) {
+      if (input.hasOwnProperty(key)) {
         const value = input[key];
         if (matchOptions(value)) {
           obj[key] = value;
@@ -559,18 +559,19 @@ export interface NumberOptions {
 export function number(
   input: NumberDate,
   digits: number = 8,
-  options: NumberOptions = { round: false, pad: false, sign: false, separator: ''},
+  options: NumberOptions = { round: false, pad: false, sign: false, separator: '' },
 ): string {
   if (isNaN(Number(input))) {
     return String(input);
   }
-  const { round, pad, sign, separator} = options;
+  const { round, pad, sign, separator } = options;
   if (isEmpty(input)) {
     return pad ? `0.${'0'.padEnd(digits, '0')}` : '0';
   }
   if (Number(input) === 0 && typeof sign === 'object') {
     input = `${sign.zero}0`;
   }
+  // 若输入的数据为科学计数法表示的数据，转换为非科学计数法表示。
   const temp = sciNumToString(input);
   let int = temp.replace(/\B(?=(?:\d{3})+(?!\d))/g, separator || '');
   let decimal = digits ? '0' : false;
@@ -590,6 +591,9 @@ export function number(
   if (pad) {
     return `${int}${decimal ? `.${decimal.padEnd(digits, '0')}` : ''}`;
   } else {
+    if (Number(decimal) === 0) {
+      return int;
+    }
     return decimal ? `${int}.${decimal}` : int;
   }
 }
@@ -614,14 +618,14 @@ export function limitTo(
   option: LimitToOption = { startWithIndex: 0, cut: false },
 ): string | number | any[] {
   const { startWith, ignore, cut } = option;
-  let {startWithIndex} = option;
+  let { startWithIndex } = option;
   if (startWithIndex === undefined) {
     startWithIndex = 0;
   }
   const type = typeof input;
   switch (type) {
     case 'string': {
-      const arrayData = (input as string) .split('');
+      const arrayData = (input as string).split('');
       const itemIndex = arrayData.indexOf(startWith);
       const startIndex = itemIndex === -1 ? startWithIndex : itemIndex;
       return getOutput(arrayData, { startIndex, limit, ignore, type, cut });
@@ -732,17 +736,17 @@ function transformCaseWithRange(input: string, func: () => string, start: number
   if (end as any === '') {
     end = undefined;
   }
-  if ( Number(start) === Number(end) && Number(start) === 0) {
+  if (Number(start) === Number(end) && Number(start) === 0) {
     return input;
   }
   if (!start && !end) {
     return func.call(input);
   }
-  if (start > (end as number) ) {
+  if (start > (end as number)) {
     return input;
   } else {
     if ((end as number) < input.length) {
-      return input.substring(0, start - 1) + func.call(input.substring(start - 1, end)) + input.substr( end as number );
+      return input.substring(0, start - 1) + func.call(input.substring(start - 1, end)) + input.substr(end as number);
     }
     const length = start ? start - 1 : 0;
     return input.substring(0, length) + func.call(input.substr(length));

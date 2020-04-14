@@ -15,13 +15,13 @@ export interface CurrencyOption {
 }
 
 export interface DateOption {
-  [key: string]: string[]|undefined;
+  [key: string]: string[] | undefined;
   week?: string[];
   shortWeek?: string[];
 }
 
 export interface DateOptions {
-  [key: string]: DateOption|undefined;
+  [key: string]: DateOption | undefined;
   cn?: DateOption;
   en?: DateOption;
 }
@@ -33,8 +33,8 @@ export type MatchFunction = (val: any) => boolean;
 export type Match = string | MatchFunction;
 
 export interface MatchRules {
-   match: Match;
-   ignore?: string[] | string;
+  match: Match;
+  ignore?: string[] | string;
 }
 
 export interface SignOption {
@@ -62,18 +62,18 @@ export function install(vue: typeof Vue): void;
 
 export declare interface EasyFilter {
 
-  currency(input: NumberDate, symbol?: string, digits?: number, options?: CurrencyOption ): string;
+  currency(input: NumberDate, symbol?: string, digits?: number, options?: CurrencyOption): string;
 
   date(input: DateData, formatMode?: string, option?: WeekConfig): DateData;
 
   orderBy(input: any[],
-          expression?: Comparator | string,
-          reverse?: boolean,
-          comparator?: Comparator | string,
-          ): any[];
+    expression?: Comparator | string,
+    reverse?: boolean,
+    comparator?: Comparator | string,
+  ): any[];
 
   filter(input: any, matchOptions?: FilterOptions): any;
-  
+
   number(
     input: NumberDate,
     digits?: number,
@@ -91,23 +91,23 @@ export declare interface EasyFilter {
   lowercase(input: string, start?: number, end?: number): string
 }
 
-export function currency(input: NumberDate, symbol?: string, digits?: number, options?: CurrencyOption ): string;
+export function currency(input: NumberDate, symbol?: string, digits?: number, options?: CurrencyOption): string;
 
 export function date(input: DateData, formatMode?: string, option?: WeekConfig): DateData;
 
 export function orderBy(input: any[],
-                        expression?: Comparator | string,
-                        reverse?: boolean,
-                        comparator?: Comparator | string,
-                        ): any[];
+  expression?: Comparator | string,
+  reverse?: boolean,
+  comparator?: Comparator | string,
+): any[];
 
 export function filter(input: any, matchOptions?: FilterOptions): any;
 
 export function number(
-                        input: NumberDate,
-                        digits?: number,
-                        options?: NumberOptions,
-                      ): string;
+  input: NumberDate,
+  digits?: number,
+  options?: NumberOptions,
+): string;
 
 export function limitTo(
   input: number | string | any[],
