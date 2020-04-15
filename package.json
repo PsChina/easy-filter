@@ -6,7 +6,10 @@
   "module": "dist/esm/index.js",
   "typings": "types/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "cd ./test/easy-filter-test/ && yarn serve",
+    "node": "tsc ./src/index.ts --lib 'esnext','dom','dom.iterable','scripthost','es2017.string','dom' --target ES5 --outDir ./dist/node/ ",
+    "esm": "tsc ./src/index.ts --lib 'esnext','dom','dom.iterable','scripthost','es2017.string','dom' --target ESNext --outDir ./dist/esm/",
+    "browser": "webpack"
   },
   "repository": {
     "type": "git",
@@ -16,7 +19,10 @@
     "easy-filter",
     "vue-filter",
     "filter",
-    "vue"
+    "vue",
+    "过滤器",
+    "格式化",
+    "formatting"
   ],
   "author": {
     "name": "https://github.com/PsChina"
@@ -40,6 +46,8 @@
     "ts-loader": "^6.0.4",
     "tslib": "^1.10.0",
     "typescript": "^3.5.3",
-    "vue": "^2.6.10"
+    "vue": "^2.6.10",
+    "webpack": "^4.42.1",
+    "webpack-cli": "^3.3.11"
   }
 }

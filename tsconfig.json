@@ -12,7 +12,9 @@
     "sourceMap": true,
     "baseUrl": ".",
     "paths": {
-      "@/*":["src/*"]
+      "@/*": [
+        "src/*"
+      ]
     },
     "lib": [
       "esnext",

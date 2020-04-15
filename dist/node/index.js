@@ -1,13 +1,5 @@
 "use strict";
-var __spreadArrays = (this && this.__spreadArrays) || function () {
-    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-    for (var r = Array(s), k = 0, i = 0; i < il; i++)
-        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++ , k++)
-            r[k] = a[j];
-    return r;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.lowercase = exports.uppercase = exports.limitTo = exports.number = exports.filter = exports.orderBy = exports.date = exports.currency = void 0;
 /**
  * @currency
  * 给展示金额数字加上货币符号以及分隔符。
@@ -134,7 +126,7 @@ function plus(num1, num2) {
         others[_i - 2] = arguments[_i];
     }
     if (others.length > 0) {
-        return plus.apply(void 0, __spreadArrays([plus(num1, num2), others[0]], others.slice(1)));
+        return plus.apply(void 0, [plus(num1, num2), others[0]].concat(others.slice(1)));
     }
     var baseNum = Math.pow(10, Math.max(digitLength(num1), digitLength(num2)));
     return (times(num1, baseNum) + times(num2, baseNum)) / baseNum;
@@ -151,7 +143,7 @@ function times(num1, num2) {
         others[_i - 2] = arguments[_i];
     }
     if (others.length > 0) {
-        return times.apply(void 0, __spreadArrays([times(num1, num2), others[0]], others.slice(1)));
+        return times.apply(void 0, [times(num1, num2), others[0]].concat(others.slice(1)));
     }
     var num1Changed = float2Fixed(num1);
     var num2Changed = float2Fixed(num2);
