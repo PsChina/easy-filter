@@ -1,5 +1,13 @@
 "use strict";
+var __spreadArrays = (this && this.__spreadArrays) || function () {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++ , k++)
+            r[k] = a[j];
+    return r;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.lowercase = exports.uppercase = exports.limitTo = exports.number = exports.filter = exports.orderBy = exports.date = exports.currency = void 0;
 /**
  * @currency
  * 给展示金额数字加上货币符号以及分隔符。
@@ -126,7 +134,7 @@ function plus(num1, num2) {
         others[_i - 2] = arguments[_i];
     }
     if (others.length > 0) {
-        return plus.apply(void 0, [plus(num1, num2), others[0]].concat(others.slice(1)));
+        return plus.apply(void 0, __spreadArrays([plus(num1, num2), others[0]], others.slice(1)));
     }
     var baseNum = Math.pow(10, Math.max(digitLength(num1), digitLength(num2)));
     return (times(num1, baseNum) + times(num2, baseNum)) / baseNum;
@@ -143,7 +151,7 @@ function times(num1, num2) {
         others[_i - 2] = arguments[_i];
     }
     if (others.length > 0) {
-        return times.apply(void 0, [times(num1, num2), others[0]].concat(others.slice(1)));
+        return times.apply(void 0, __spreadArrays([times(num1, num2), others[0]], others.slice(1)));
     }
     var num1Changed = float2Fixed(num1);
     var num2Changed = float2Fixed(num2);
@@ -203,113 +211,121 @@ function roundDecimalPart(round, intPart, decimalPart, digits) {
 function date(input, formatMode, option) {
     if (formatMode === void 0) { formatMode = 'yyyy/MM/dd HH:mm:ss EEE'; }
     if (option === void 0) { option = 'en'; }
-    if (navigator.userAgent.includes('Safari')) {
-        if (typeof input === 'string') {
-            input = input.replace(/-/g, '/');
-        }
-    }
-    function formatTimeWithMode(time, mode, opt) {
-        var dateData = new Date(time);
-        var optionType = typeof opt;
-        var options = {
-            en: {
-                week: [
-                    'Sunday',
-                    'Monday',
-                    'Tuesday',
-                    'Wednesday',
-                    'Thursday',
-                    'Friday',
-                    'Saturday',
-                ],
-                shortWeek: ['Sun', 'Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat'],
-            },
-            cn: {
-                week: [
-                    '星期日',
-                    '星期一',
-                    '星期二',
-                    '星期三',
-                    '星期四',
-                    '星期五',
-                    '星期六',
-                ],
-                shortWeek: [
-                    '周日',
-                    '周一',
-                    '周二',
-                    '周三',
-                    '周四',
-                    '周五',
-                    '周六',
-                ],
-            },
-        };
-        var week;
-        var shortWeek;
-        if (optionType === 'string') {
-            week = options[opt].week;
-            shortWeek = options[opt].shortWeek;
-        }
-        else if (optionType === 'object') {
-            week = opt.week || [];
-            shortWeek = opt.shortWeek || [];
-        }
-        else {
-            var log = 'date option type must be string or DateOption. (see: https://pschina.github.io/easy-filter/zh/date/#date)';
-            throw new TypeError(log);
-        }
-        mode = mode.replace(/y{1,4}|MM|dd|hh|HH|mm|ss|E{1,4}/g, function (value) {
-            switch (value) {
-                case 'MM': // Replace the month.
-                    return ("" + (dateData.getMonth() + 1)).padStart(2, '0');
-                case 'dd': // Replace the date.
-                    return ("" + dateData.getDate()).padStart(2, '0');
-                case 'hh': // Replace the hours (12-hour system).
-                    var hours = dateData.getHours();
-                    if (hours > 12) {
-                        return ("" + (hours - 12)).padStart(2, '0');
-                    }
-                    return ("" + hours).padStart(2, '0');
-                case 'HH': // Replace the hours (24 hour system).
-                    return ("" + dateData.getHours()).padStart(2, '0');
-                case 'mm': // Replace the minutes.
-                    return ("" + dateData.getMinutes()).padStart(2, '0');
-                case 'ss': // Replace the second.
-                    return ("" + dateData.getSeconds()).padStart(2, '0');
-                default:
-                    // Replace the years and week.
-                    if (value.includes('y')) {
-                        // y{1,4} Replace the years.
-                        var year = dateData.getFullYear();
-                        return value.length <= 2 ? String(year % 100) : String(year);
-                    }
-                    else {
-                        // E{1,4} Replace the week.
-                        var weekDay = dateData.getDay();
-                        var weekMap = [week[weekDay], shortWeek[weekDay]];
-                        return value.length <= 2 ? weekMap[1] : weekMap[0];
-                    }
+    // 兼容Safari
+    try {
+        if (navigator.userAgent.includes('Safari')) {
+            if (typeof input === 'string') {
+                input = input.replace(/-/g, '/');
             }
-        });
-        return mode;
-    }
-    if (!input) {
-        // Determine whether the input to be filtered is not present and the input is ''.
-        return '';
-    }
-    else {
-        var old = input;
-        input = new Date(input);
-        // Determines whether the parameter is legally invalid and returns the original input.
-        if (input.toString() === 'Invalid Date') {
-            return old;
         }
-        if (typeof formatMode === 'string') {
-            return formatTimeWithMode(input, formatMode, option);
+    }
+    catch (e) {
+        throw new Error(e);
+    }
+    finally {
+        function formatTimeWithMode(time, mode, opt) {
+            var dateData = new Date(time);
+            var optionType = typeof opt;
+            var options = {
+                en: {
+                    week: [
+                        'Sunday',
+                        'Monday',
+                        'Tuesday',
+                        'Wednesday',
+                        'Thursday',
+                        'Friday',
+                        'Saturday',
+                    ],
+                    shortWeek: ['Sun', 'Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat'],
+                },
+                cn: {
+                    week: [
+                        '星期日',
+                        '星期一',
+                        '星期二',
+                        '星期三',
+                        '星期四',
+                        '星期五',
+                        '星期六',
+                    ],
+                    shortWeek: [
+                        '周日',
+                        '周一',
+                        '周二',
+                        '周三',
+                        '周四',
+                        '周五',
+                        '周六',
+                    ],
+                },
+            };
+            var week;
+            var shortWeek;
+            if (optionType === 'string') {
+                week = options[opt].week;
+                shortWeek = options[opt].shortWeek;
+            }
+            else if (optionType === 'object') {
+                week = opt.week || [];
+                shortWeek = opt.shortWeek || [];
+            }
+            else {
+                var log = 'date option type must be string or DateOption. (see: https://pschina.github.io/easy-filter/zh/date/#date)';
+                throw new TypeError(log);
+            }
+            mode = mode.replace(/y{1,4}|MM|dd|hh|HH|mm|ss|E{1,4}/g, function (value) {
+                switch (value) {
+                    case 'MM': // Replace the month.
+                        return ("" + (dateData.getMonth() + 1)).padStart(2, '0');
+                    case 'dd': // Replace the date.
+                        return ("" + dateData.getDate()).padStart(2, '0');
+                    case 'hh': // Replace the hours (12-hour system).
+                        var hours = dateData.getHours();
+                        if (hours > 12) {
+                            return ("" + (hours - 12)).padStart(2, '0');
+                        }
+                        return ("" + hours).padStart(2, '0');
+                    case 'HH': // Replace the hours (24 hour system).
+                        return ("" + dateData.getHours()).padStart(2, '0');
+                    case 'mm': // Replace the minutes.
+                        return ("" + dateData.getMinutes()).padStart(2, '0');
+                    case 'ss': // Replace the second.
+                        return ("" + dateData.getSeconds()).padStart(2, '0');
+                    default:
+                        // Replace the years and week.
+                        if (value.includes('y')) {
+                            // y{1,4} Replace the years.
+                            var year = dateData.getFullYear();
+                            return value.length <= 2 ? String(year % 100) : String(year);
+                        }
+                        else {
+                            // E{1,4} Replace the week.
+                            var weekDay = dateData.getDay();
+                            var weekMap = [week[weekDay], shortWeek[weekDay]];
+                            return value.length <= 2 ? weekMap[1] : weekMap[0];
+                        }
+                }
+            });
+            return mode;
+        }
+        if (!input) {
+            // Determine whether the input to be filtered is not present and the input is ''.
+            return '';
         }
         else {
-            return input;
+            var old = input;
+            input = new Date(input);
+            // Determines whether the parameter is legally invalid and returns the original input.
+            if (input.toString() === 'Invalid Date') {
+                return old;
+            }
+            if (typeof formatMode === 'string') {
+                return formatTimeWithMode(input, formatMode, option);
+            }
+            else {
+                return input;
+            }
         }
     }
 }
