@@ -482,20 +482,20 @@ The first parameter `input` is the data to be filtered, which can be an array, a
 
 The second parameter is the length you want to limit.
 
-| Second Parameter | Description | Type | Default |
-| :--------: | :------: | :------: | :----------------------: |
-| Limit | limit length | number | Number.POSITIVE_INFINITY |
+| Second Parameter | Description  |  Type  |         Default          |
+|:----------------:|:------------:|:------:|:------------------------:|
+|      Limit       | limit length | number | Number.POSITIVE_INFINITY |
 
 The third parameter is the configuration item, which tells the filter how to filter the data.
 
 The fields of the configuration item are:
 
-| Attribute | Description | Type | Default |
-| :------------: | :---------------------------------: | :-------------: | :-------: |
-| startWithIndex | Calculates the number of elements to limit based on the index | number | 0 |
-| startWith | Calculate the number of elements to limit based on the element | not number | undefined |
-| ignore | Ignore matched elements when counting | RegExp , object | undefined |
-| cut | Whether to intercept | boolean | false |
+|   Attribute    |                          Description                           |      Type       |  Default  |
+|:--------------:|:--------------------------------------------------------------:|:---------------:|:---------:|
+| startWithIndex | Calculates the number of elements to limit based on the index  |     number      |     0     |
+|   startWith    | Calculate the number of elements to limit based on the element |   not number    | undefined |
+|     ignore     |             Ignore matched elements when counting              | RegExp , object | undefined |
+|      cut       |                      Whether to intercept                      |     boolean     |   false   |
 
 ### Example
 
@@ -577,16 +577,6 @@ and set options parameters to determine whether you want to round, and fill in z
 No parameter
 
 ```html
-<div>{{ -0 | number }}</div>
-<!-- -0.0 -->
-```
-
-```html
-<div>{{ 3 | number }}</div>
-<!-- 3.0 -->
-```
-
-```html
 <div>{{ 3.14 | number }}</div>
 <!-- 3.14 -->
 ```
@@ -629,7 +619,7 @@ Display separator
 
 ```html
 <div>{{ 10000 | number(1, {separator:','}) }}</div>
-<!-- 10,000.0 -->
+<!-- 10,000 -->
 ```
 
 Display positive sign
