@@ -1,13 +1,21 @@
-var path = require('path')
+const path = require('path')
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+
 module.exports = {
   entry: './easy-filter.b.js',
-  output:{
+  output: {
     path: path.resolve(__dirname, 'dist/browser/'),
     filename: 'easy-filter.min.js'
   },
-  module:{
-    rules:[
-      {test:/\.js$/, use:'babel-loader'},
+  module: {
+    rules: [
+      { test: /\.js$/, use: 'babel-loader' },
     ]
-  }
+  },
+  plugins: [
+    new CopyWebpackPlugin([{
+      from: __dirname + '/src/',
+      to: __dirname + '/dist/ts/'
+    }])
+  ]
 }

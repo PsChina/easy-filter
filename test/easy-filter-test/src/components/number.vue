@@ -127,6 +127,48 @@ export default class NumberTest extends Mixins(TestBase) {
       params: [1, { round: true }],
       description: `默认 {{0.0999 | number(1,{round: true}) }} 应该等于 0.1`,
       result: "0.1"
+    },
+    {
+      className: "empty-string",
+      data: "",
+      params: [],
+      description: `默认 {{'' | number) }} 应该等于 0`,
+      result: "0"
+    },
+    {
+      className: "undefined",
+      data: undefined,
+      params: [],
+      description: `默认 {{undefined | number) }} 应该等于 0`,
+      result: "0"
+    },
+    {
+      className: "null",
+      data: null,
+      params: [],
+      description: `默认 {{null | number) }} 应该等于 0`,
+      result: "0"
+    },
+    {
+      className: "null-and-pad",
+      data: null,
+      params: [8, { pad: true }],
+      description: `默认 {{null | number(8,{pad:true})) }} 应该等于 0.00000000`,
+      result: "0.00000000"
+    },
+    {
+      className: "undefined-and-pad",
+      data: undefined,
+      params: [8, { pad: true }],
+      description: `默认 {{undefined | number(8,{pad:true})) }} 应该等于 0.00000000`,
+      result: "0.00000000"
+    },
+    {
+      className: "empty-string-and-pad",
+      data: "",
+      params: [8, { pad: true }],
+      description: `默认 {{'' | number(8,{pad:true})) }} 应该等于 0.00000000`,
+      result: "0.00000000"
     }
   ];
 }

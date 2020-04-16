@@ -21,8 +21,7 @@
       "dom",
       "dom.iterable",
       "scripthost",
-      "es2017.string",
-      "dom",
+      "es2017.string"
     ]
   },
 }

@@ -1,15 +1,16 @@
 {
   "name": "easy-filter",
-  "version": "1.6.3",
+  "version": "1.6.4",
   "description": "Easy Filter is a third-party filter that makes Vue.js more convenient for working with numbers, strings, and arrays.",
   "main": "dist/node/index.js",
   "module": "dist/esm/index.js",
   "typings": "types/index.d.ts",
   "scripts": {
     "test": "cd ./test/easy-filter-test/ && yarn serve",
-    "node": "tsc ./src/index.ts --lib 'esnext','dom','dom.iterable','scripthost','es2017.string','dom' --target ES5 --outDir ./dist/node/ ",
-    "esm": "tsc ./src/index.ts --lib 'esnext','dom','dom.iterable','scripthost','es2017.string','dom' --target ESNext --outDir ./dist/esm/",
-    "browser": "webpack"
+    "node": "tsc ./src/index.ts --lib 'esnext','dom','dom.iterable','scripthost','es2017.string' --target ES5 --outDir ./dist/node/ ",
+    "esm": "tsc ./src/index.ts --lib 'esnext','dom','dom.iterable','scripthost','es2017.string' --target ESNext --outDir ./dist/esm/",
+    "browser": "webpack",
+    "build": "npm run esm && npm run browser && npm run node"
   },
   "repository": {
     "type": "git",
@@ -43,6 +44,7 @@
     "@babel/preset-env": "^7.5.5",
     "babel-loader": "^8.1.0",
     "babel-plugin-transform-inline-environment-variables": "^0.4.3",
+    "copy-webpack-plugin": "^5.1.1",
     "ts-loader": "^6.0.4",
     "tslib": "^1.10.0",
     "typescript": "^3.5.3",

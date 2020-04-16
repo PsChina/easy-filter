@@ -215,92 +215,6 @@ function date(input, formatMode, option) {
         throw new Error(e);
     }
     finally {
-        function formatTimeWithMode(time, mode, opt) {
-            var dateData = new Date(time);
-            var optionType = typeof opt;
-            var options = {
-                en: {
-                    week: [
-                        'Sunday',
-                        'Monday',
-                        'Tuesday',
-                        'Wednesday',
-                        'Thursday',
-                        'Friday',
-                        'Saturday',
-                    ],
-                    shortWeek: ['Sun', 'Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat'],
-                },
-                cn: {
-                    week: [
-                        '星期日',
-                        '星期一',
-                        '星期二',
-                        '星期三',
-                        '星期四',
-                        '星期五',
-                        '星期六',
-                    ],
-                    shortWeek: [
-                        '周日',
-                        '周一',
-                        '周二',
-                        '周三',
-                        '周四',
-                        '周五',
-                        '周六',
-                    ],
-                },
-            };
-            var week;
-            var shortWeek;
-            if (optionType === 'string') {
-                week = options[opt].week;
-                shortWeek = options[opt].shortWeek;
-            }
-            else if (optionType === 'object') {
-                week = opt.week || [];
-                shortWeek = opt.shortWeek || [];
-            }
-            else {
-                var log = 'date option type must be string or DateOption. (see: https://pschina.github.io/easy-filter/zh/date/#date)';
-                throw new TypeError(log);
-            }
-            mode = mode.replace(/y{1,4}|MM|dd|hh|HH|mm|ss|E{1,4}/g, function (value) {
-                switch (value) {
-                    case 'MM': // Replace the month.
-                        return ("" + (dateData.getMonth() + 1)).padStart(2, '0');
-                    case 'dd': // Replace the date.
-                        return ("" + dateData.getDate()).padStart(2, '0');
-                    case 'hh': // Replace the hours (12-hour system).
-                        var hours = dateData.getHours();
-                        if (hours > 12) {
-                            return ("" + (hours - 12)).padStart(2, '0');
-                        }
-                        return ("" + hours).padStart(2, '0');
-                    case 'HH': // Replace the hours (24 hour system).
-                        return ("" + dateData.getHours()).padStart(2, '0');
-                    case 'mm': // Replace the minutes.
-                        return ("" + dateData.getMinutes()).padStart(2, '0');
-                    case 'ss': // Replace the second.
-                        return ("" + dateData.getSeconds()).padStart(2, '0');
-                    default:
-                        // Replace the years and week.
-                        if (value.includes('y')) {
-                            // y{1,4} Replace the years.
-                            var year = dateData.getFullYear();
-                            return value.length <= 2 ? String(year % 100) : String(year);
-                        }
-                        else {
-                            // E{1,4} Replace the week.
-                            var weekDay = dateData.getDay();
-                            var weekMap = [week[weekDay], shortWeek[weekDay]];
-                            return value.length <= 2 ? weekMap[1] : weekMap[0];
-                        }
-                }
-            });
-            return mode;
-        }
         if (!input) {
             // Determine whether the input to be filtered is not present and the input is ''.
             return '';
@@ -322,13 +236,97 @@ function date(input, formatMode, option) {
     }
 }
 exports.date = date;
+function formatTimeWithMode(time, mode, opt) {
+    var dateData = new Date(time);
+    var optionType = typeof opt;
+    var options = {
+        en: {
+            week: [
+                'Sunday',
+                'Monday',
+                'Tuesday',
+                'Wednesday',
+                'Thursday',
+                'Friday',
+                'Saturday',
+            ],
+            shortWeek: ['Sun', 'Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat'],
+        },
+        cn: {
+            week: [
+                '星期日',
+                '星期一',
+                '星期二',
+                '星期三',
+                '星期四',
+                '星期五',
+                '星期六',
+            ],
+            shortWeek: [
+                '周日',
+                '周一',
+                '周二',
+                '周三',
+                '周四',
+                '周五',
+                '周六',
+            ],
+        },
+    };
+    var week;
+    var shortWeek;
+    if (optionType === 'string') {
+        week = options[opt].week;
+        shortWeek = options[opt].shortWeek;
+    }
+    else if (optionType === 'object') {
+        week = opt.week || [];
+        shortWeek = opt.shortWeek || [];
+    }
+    else {
+        var log = 'date option type must be string or DateOption. (see: https://pschina.github.io/easy-filter/zh/date/#date)';
+        throw new TypeError(log);
+    }
+    mode = mode.replace(/y{1,4}|MM|dd|hh|HH|mm|ss|E{1,4}/g, function (value) {
+        switch (value) {
+            case 'MM': // Replace the month.
+                return ("" + (dateData.getMonth() + 1)).padStart(2, '0');
+            case 'dd': // Replace the date.
+                return ("" + dateData.getDate()).padStart(2, '0');
+            case 'hh': // Replace the hours (12-hour system).
+                var hours = dateData.getHours();
+                if (hours > 12) {
+                    return ("" + (hours - 12)).padStart(2, '0');
+                }
+                return ("" + hours).padStart(2, '0');
+            case 'HH': // Replace the hours (24 hour system).
+                return ("" + dateData.getHours()).padStart(2, '0');
+            case 'mm': // Replace the minutes.
+                return ("" + dateData.getMinutes()).padStart(2, '0');
+            case 'ss': // Replace the second.
+                return ("" + dateData.getSeconds()).padStart(2, '0');
+            default:
+                // Replace the years and week.
+                if (value.includes('y')) {
+                    // y{1,4} Replace the years.
+                    var year = dateData.getFullYear();
+                    return value.length <= 2 ? String(year % 100) : String(year);
+                }
+                else {
+                    // E{1,4} Replace the week.
+                    var weekDay = dateData.getDay();
+                    var weekMap = [week[weekDay], shortWeek[weekDay]];
+                    return value.length <= 2 ? weekMap[1] : weekMap[0];
+                }
+        }
+    });
+    return mode;
+}
 // Default Comparator
-var builtInComparator = function (item1, item2, key, reverse) {
-    return item1[key] > item2[key] ?
-        (reverse ? -1 : 1)
-        :
-        (reverse ? 1 : -1);
-};
+var builtInComparator = function (item1, item2, key, reverse) { return item1[key] > item2[key] ?
+    (reverse ? -1 : 1)
+    :
+        (reverse ? 1 : -1); };
 /**
  * @orderBy
  */
@@ -520,12 +518,16 @@ function number(input, digits, options) {
     var _a;
     if (digits === void 0) { digits = 8; }
     if (options === void 0) { options = { round: false, pad: false, sign: false, separator: '' }; }
-    if (isNaN(Number(input))) {
-        return String(input);
-    }
     var round = options.round, pad = options.pad, sign = options.sign, separator = options.separator;
     if (isEmpty(input)) {
+        if (digits <= 0) {
+            return '0';
+        }
         return pad ? "0." + '0'.padEnd(digits, '0') : '0';
+    }
+    input = input;
+    if (isNaN(Number(input))) {
+        return String(input);
     }
     if (Number(input) === 0 && typeof sign === 'object') {
         input = sign.zero + "0";

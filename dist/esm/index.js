@@ -198,92 +198,6 @@ export function date(input, formatMode = 'yyyy/MM/dd HH:mm:ss EEE', option = 'en
         throw new Error(e);
     }
     finally {
-        function formatTimeWithMode(time, mode, opt) {
-            const dateData = new Date(time);
-            const optionType = typeof opt;
-            const options = {
-                en: {
-                    week: [
-                        'Sunday',
-                        'Monday',
-                        'Tuesday',
-                        'Wednesday',
-                        'Thursday',
-                        'Friday',
-                        'Saturday',
-                    ],
-                    shortWeek: ['Sun', 'Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat'],
-                },
-                cn: {
-                    week: [
-                        '星期日',
-                        '星期一',
-                        '星期二',
-                        '星期三',
-                        '星期四',
-                        '星期五',
-                        '星期六',
-                    ],
-                    shortWeek: [
-                        '周日',
-                        '周一',
-                        '周二',
-                        '周三',
-                        '周四',
-                        '周五',
-                        '周六',
-                    ],
-                },
-            };
-            let week;
-            let shortWeek;
-            if (optionType === 'string') {
-                week = options[opt].week;
-                shortWeek = options[opt].shortWeek;
-            }
-            else if (optionType === 'object') {
-                week = opt.week || [];
-                shortWeek = opt.shortWeek || [];
-            }
-            else {
-                const log = 'date option type must be string or DateOption. (see: https://pschina.github.io/easy-filter/zh/date/#date)';
-                throw new TypeError(log);
-            }
-            mode = mode.replace(/y{1,4}|MM|dd|hh|HH|mm|ss|E{1,4}/g, (value) => {
-                switch (value) {
-                    case 'MM': // Replace the month.
-                        return `${dateData.getMonth() + 1}`.padStart(2, '0');
-                    case 'dd': // Replace the date.
-                        return `${dateData.getDate()}`.padStart(2, '0');
-                    case 'hh': // Replace the hours (12-hour system).
-                        const hours = dateData.getHours();
-                        if (hours > 12) {
-                            return `${hours - 12}`.padStart(2, '0');
-                        }
-                        return `${hours}`.padStart(2, '0');
-                    case 'HH': // Replace the hours (24 hour system).
-                        return `${dateData.getHours()}`.padStart(2, '0');
-                    case 'mm': // Replace the minutes.
-                        return `${dateData.getMinutes()}`.padStart(2, '0');
-                    case 'ss': // Replace the second.
-                        return `${dateData.getSeconds()}`.padStart(2, '0');
-                    default:
-                        // Replace the years and week.
-                        if (value.includes('y')) {
-                            // y{1,4} Replace the years.
-                            const year = dateData.getFullYear();
-                            return value.length <= 2 ? String(year % 100) : String(year);
-                        }
-                        else {
-                            // E{1,4} Replace the week.
-                            const weekDay = dateData.getDay();
-                            const weekMap = [week[weekDay], shortWeek[weekDay]];
-                            return value.length <= 2 ? weekMap[1] : weekMap[0];
-                        }
-                }
-            });
-            return mode;
-        }
         if (!input) {
             // Determine whether the input to be filtered is not present and the input is ''.
             return '';
@@ -304,11 +218,97 @@ export function date(input, formatMode = 'yyyy/MM/dd HH:mm:ss EEE', option = 'en
         }
     }
 }
+function formatTimeWithMode(time, mode, opt) {
+    const dateData = new Date(time);
+    const optionType = typeof opt;
+    const options = {
+        en: {
+            week: [
+                'Sunday',
+                'Monday',
+                'Tuesday',
+                'Wednesday',
+                'Thursday',
+                'Friday',
+                'Saturday',
+            ],
+            shortWeek: ['Sun', 'Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat'],
+        },
+        cn: {
+            week: [
+                '星期日',
+                '星期一',
+                '星期二',
+                '星期三',
+                '星期四',
+                '星期五',
+                '星期六',
+            ],
+            shortWeek: [
+                '周日',
+                '周一',
+                '周二',
+                '周三',
+                '周四',
+                '周五',
+                '周六',
+            ],
+        },
+    };
+    let week;
+    let shortWeek;
+    if (optionType === 'string') {
+        week = options[opt].week;
+        shortWeek = options[opt].shortWeek;
+    }
+    else if (optionType === 'object') {
+        week = opt.week || [];
+        shortWeek = opt.shortWeek || [];
+    }
+    else {
+        const log = 'date option type must be string or DateOption. (see: https://pschina.github.io/easy-filter/zh/date/#date)';
+        throw new TypeError(log);
+    }
+    mode = mode.replace(/y{1,4}|MM|dd|hh|HH|mm|ss|E{1,4}/g, (value) => {
+        switch (value) {
+            case 'MM': // Replace the month.
+                return `${dateData.getMonth() + 1}`.padStart(2, '0');
+            case 'dd': // Replace the date.
+                return `${dateData.getDate()}`.padStart(2, '0');
+            case 'hh': // Replace the hours (12-hour system).
+                const hours = dateData.getHours();
+                if (hours > 12) {
+                    return `${hours - 12}`.padStart(2, '0');
+                }
+                return `${hours}`.padStart(2, '0');
+            case 'HH': // Replace the hours (24 hour system).
+                return `${dateData.getHours()}`.padStart(2, '0');
+            case 'mm': // Replace the minutes.
+                return `${dateData.getMinutes()}`.padStart(2, '0');
+            case 'ss': // Replace the second.
+                return `${dateData.getSeconds()}`.padStart(2, '0');
+            default:
+                // Replace the years and week.
+                if (value.includes('y')) {
+                    // y{1,4} Replace the years.
+                    const year = dateData.getFullYear();
+                    return value.length <= 2 ? String(year % 100) : String(year);
+                }
+                else {
+                    // E{1,4} Replace the week.
+                    const weekDay = dateData.getDay();
+                    const weekMap = [week[weekDay], shortWeek[weekDay]];
+                    return value.length <= 2 ? weekMap[1] : weekMap[0];
+                }
+        }
+    });
+    return mode;
+}
 // Default Comparator
 const builtInComparator = (item1, item2, key, reverse) => item1[key] > item2[key] ?
     (reverse ? -1 : 1)
     :
-    (reverse ? 1 : -1);
+        (reverse ? 1 : -1);
 /**
  * @orderBy
  */
@@ -494,12 +494,16 @@ function isEmpty(val) {
         JSON.stringify(val) === '{}');
 }
 export function number(input, digits = 8, options = { round: false, pad: false, sign: false, separator: '' }) {
-    if (isNaN(Number(input))) {
-        return String(input);
-    }
     const { round, pad, sign, separator } = options;
     if (isEmpty(input)) {
+        if (digits <= 0) {
+            return '0';
+        }
         return pad ? `0.${'0'.padEnd(digits, '0')}` : '0';
+    }
+    input = input;
+    if (isNaN(Number(input))) {
+        return String(input);
     }
     if (Number(input) === 0 && typeof sign === 'object') {
         input = `${sign.zero}0`;
