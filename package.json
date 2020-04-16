@@ -1,6 +1,6 @@
 {
   "name": "easy-filter",
-  "version": "1.6.4",
+  "version": "1.6.5",
   "description": "Easy Filter is a third-party filter that makes Vue.js more convenient for working with numbers, strings, and arrays.",
   "main": "dist/node/index.js",
   "module": "dist/esm/index.js",

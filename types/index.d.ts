@@ -4,6 +4,7 @@ import './vue';
 export type NumberDate = number | string;
 export type WeekConfig = 'cn' | 'en' | DateOption;
 export type DateData = NumberDate | Date;
+export type Empty = '' | undefined | null;
 
 export interface CurrencyOption {
   [key: string]: any;
@@ -75,7 +76,7 @@ export declare interface EasyFilter {
   filter(input: any, matchOptions?: FilterOptions): any;
 
   number(
-    input: NumberDate,
+    input: NumberDate | Empty,
     digits?: number,
     options?: NumberOptions,
   ): string;
