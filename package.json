@@ -1,6 +1,6 @@
 {
   "name": "easy-filter",
-  "version": "1.6.5",
+  "version": "1.6.6",
   "description": "Easy Filter is a third-party filter that makes Vue.js more convenient for working with numbers, strings, and arrays.",
   "main": "dist/node/index.js",
   "module": "dist/esm/index.js",
@@ -9,7 +9,7 @@
     "test": "cd ./test/easy-filter-test/ && yarn serve",
     "node": "tsc ./src/index.ts --lib 'esnext','dom','dom.iterable','scripthost','es2017.string' --target ES5 --outDir ./dist/node/ ",
     "esm": "tsc ./src/index.ts --lib 'esnext','dom','dom.iterable','scripthost','es2017.string' --target ESNext --outDir ./dist/esm/",
-    "browser": "webpack",
+    "browser": "webpack --mode production",
     "build": "npm run esm && npm run browser && npm run node"
   },
   "repository": {
@@ -35,7 +35,7 @@
   "homepage": "https://github.com/PsChina/easy-filter#readme",
   "files": [
     "src",
-    "dist/**/*.js",
+    "dist/**/*.*",
     "types/*.d.ts"
   ],
   "devDependencies": {
