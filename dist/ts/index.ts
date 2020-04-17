@@ -309,7 +309,7 @@ function formatTimeWithMode(time: DateData, mode: string, opt: WeekConfig): stri
       'date option type must be string or DateOption. (see: https://pschina.github.io/easy-filter/zh/date/#date)';
     throw new TypeError(log);
   }
-  mode = mode.replace(/y{1,4}|MM|dd|hh|HH|mm|ss|E{1,4}/g, (value: string) => {
+  mode = mode.replace(/(y|Y){1,4}|MM|dd|hh|HH|mm|ss|E{1,4}/g, (value: string) => {
     switch (value) {
       case 'MM': // Replace the month.
         return `${dateData.getMonth() + 1}`.padStart(2, '0');
@@ -329,7 +329,7 @@ function formatTimeWithMode(time: DateData, mode: string, opt: WeekConfig): stri
         return `${dateData.getSeconds()}`.padStart(2, '0');
       default:
         // Replace the years and week.
-        if (value.includes('y')) {
+        if (value.toLocaleLowerCase().includes('y')) {
           // y{1,4} Replace the years.
           const year: number = dateData.getFullYear();
           return value.length <= 2 ? String(year % 100) : String(year);
