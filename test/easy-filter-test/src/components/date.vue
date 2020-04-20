@@ -13,6 +13,27 @@ export default class DateTest extends Mixins(TestBase) {
   public functionName: string = "date";
   public readonly testCases: Array<CheckItem> = [
     {
+      className: "empty-val-undefined",
+      data: undefined,
+      params: [],
+      description: `默认 {{ undefined | date }} 应该等于 ''`,
+      result: ""
+    },
+    {
+      className: "empty-val-null",
+      data: null,
+      params: [],
+      description: `默认 {{ null | date }} 应该等于 ''`,
+      result: ""
+    },
+    {
+      className: "empty-val-string",
+      data: "",
+      params: [],
+      description: `默认 {{ '' | date }} 应该等于 ''`,
+      result: ""
+    },
+    {
       className: "test-year-uppercase",
       data: 1523169365575,
       params: ["YYYY"],

@@ -48,6 +48,7 @@ export interface NumberOptions {
   pad?: boolean;
   sign?: Sign;
   separator?: string;
+  type?: string;
 }
 
 export interface LimitToOption {
@@ -65,7 +66,7 @@ export declare interface EasyFilter {
 
   currency(input: NumberDate, symbol?: string, digits?: number, options?: CurrencyOption): string;
 
-  date(input: DateData, formatMode?: string, option?: WeekConfig): DateData;
+  date(input: DateData | Empty, formatMode?: string, option?: WeekConfig): DateData;
 
   orderBy(input: any[],
     expression?: Comparator | string,
@@ -79,7 +80,7 @@ export declare interface EasyFilter {
     input: NumberDate | Empty,
     digits?: number,
     options?: NumberOptions,
-  ): string;
+  ): string | number;
 
   limitTo(
     input: number | string | any[],

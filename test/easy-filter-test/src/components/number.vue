@@ -169,6 +169,62 @@ export default class NumberTest extends Mixins(TestBase) {
       params: [8, { pad: true }],
       description: `默认 {{'' | number(8,{pad:true})) }} 应该等于 0.00000000`,
       result: "0.00000000"
+    },
+    {
+      className: "number-result-empt-string",
+      data: "",
+      params: [0, { type: "number" }],
+      description: `默认 {{'' | number(0,{type:'number'})) }} 应该等于 0`,
+      result: 0,
+      isNotUI: true
+    },
+    {
+      className: "number-result-int",
+      data: 123456,
+      params: [0, { type: "number", separator: "," }],
+      description: `默认 {{123456 | number(0,{type:'number', separator:',' })) }} 应该等于 123456`,
+      result: 123456,
+      isNotUI: true
+    },
+    {
+      className: "number-result-decimal",
+      data: 123.456,
+      params: [8, { type: "number", separator: "," }],
+      description: `默认 {{123.456 | number(8,{type:'number', separator:',' })) }} 应该等于 123.456`,
+      result: 123.456,
+      isNotUI: true
+    },
+    {
+      className: "number-result-decimal-round",
+      data: 123.456,
+      params: [2, { type: "number", round: true }],
+      description: `默认 {{123.456 | number(2,{ type: "number", round: true })) }} 应该等于 123.46`,
+      result: 123.46,
+      isNotUI: true
+    },
+    {
+      className: "number-result-decimal-round-with-string-input",
+      data: "123.456",
+      params: [2, { type: "number", round: true }],
+      description: `默认 {{'123.456' | number(2,{ type: "number", round: true })) }} 应该等于 123.46`,
+      result: 123.46,
+      isNotUI: true
+    },
+    {
+      className: "string-to-number",
+      data: "123,456.789",
+      params: [2, { type: "number", round: true }],
+      description: `默认 {{'123,456.789' | number(2,{ type: "number", round: true })) }} 应该等于 123456.79`,
+      result: 123456.79,
+      isNotUI: true
+    },
+    {
+      className: "string-to-number-scientific-enumeration",
+      data: "12e-1",
+      params: [2, { type: "number", pad: true }],
+      description: `默认 {{'12e-1' | number(2,{ type: "number", pad: true })) }} 应该等于 1.2`,
+      result: 1.2,
+      isNotUI: true
     }
   ];
 }

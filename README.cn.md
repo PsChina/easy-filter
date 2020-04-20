@@ -562,7 +562,7 @@ limitTo([1, 2, 3, 4, 5], 2, { startWith: 3, cut: true });
 
 ## number
 
-将数字格式化为字符串。
+将数字格式化为字符串或者将字符串格式化为数字。
 
 当您传入一个整数时，默认值会有一位值为 0 的小数位，
 
@@ -660,6 +660,20 @@ var arr = [
 ```html
 <div>{{ 3.14e-20 | number(21) }}</div>
 <!-- 0.000000000000000000031 -->
+```
+
+更改返回类型
+
+```js
+import { number } from 'easy-filter';
+
+const res = number('123.456',2,{round:true,type:'number'});
+
+// 结果等于 123.46
+
+res === 123.46 
+
+// true
 ```
 
 ## 许可证

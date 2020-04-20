@@ -560,7 +560,7 @@ limitTo([1, 2, 3, 4, 5], 2, { startWith: 3, cut: true });
 
 ## number
 
-Format the number into a string.
+Formats a number as a string or a string as a number.
 When you pass in an integer, you will default to one decimal places,
 and when you enter a decimal, you will get its string.
 You can also change the exact number of digits by passing in parameters,
@@ -654,6 +654,20 @@ More than 8 decimal places need to pass in the number of parameters
 ```html
 <div>{{ 3.14e-20 | number(21) }}</div>
 <!-- 0.000000000000000000031 -->
+```
+
+Change return type 
+
+```js
+import { number } from 'easy-filter';
+
+const res = number('123.456',2,{round:true,type:'number'});
+
+// The result is equal to the 123.46
+
+res === 123.46 
+
+// true
 ```
 
 ## License
