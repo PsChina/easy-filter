@@ -186,6 +186,9 @@ function roundDecimalPart(round, intPart, decimalPart, digits) {
  * 格式化时间戳 'yyyy/MM/dd HH:mm:ss EEE'
  */
 export function date(input, formatMode = 'yyyy/MM/dd HH:mm:ss EEE', option = 'en') {
+    if (isEmpty(input)) {
+        return '';
+    }
     // 兼容Safari
     try {
         if (navigator.userAgent.includes('Safari')) {
@@ -493,17 +496,25 @@ function isEmpty(val) {
         JSON.stringify(val) === '[]' ||
         JSON.stringify(val) === '{}');
 }
-export function number(input, digits = 8, options = { round: false, pad: false, sign: false, separator: '' }) {
-    const { round, pad, sign, separator } = options;
+function typeResult(res, type) {
+    return type === 'number' ? Number(res) : res;
+}
+export function number(input, digits = 8, options = { round: false, pad: false, sign: false, separator: '', type: 'string' }) {
+    const { round, pad, sign, type } = options;
+    let { separator } = options;
+    if (type === 'number') {
+        separator = '';
+        input = String(input).replace(/[^\.\^\+\-\*/0-9eE]/g, '');
+    }
     if (isEmpty(input)) {
         if (digits <= 0) {
-            return '0';
+            return typeResult('0', type);
         }
-        return pad ? `0.${'0'.padEnd(digits, '0')}` : '0';
+        return typeResult(pad ? `0.${'0'.padEnd(digits, '0')}` : '0', type);
     }
     input = input;
     if (isNaN(Number(input))) {
-        return String(input);
+        return typeResult(String(input), type);
     }
     if (Number(input) === 0 && typeof sign === 'object') {
         input = `${sign.zero}0`;
@@ -523,16 +534,16 @@ export function number(input, digits = 8, options = { round: false, pad: false, 
         int = `+${int}`;
     }
     if (!digits) {
-        return String(int);
+        return typeResult(String(int), type);
     }
     if (pad) {
-        return `${int}${decimal ? `.${decimal.padEnd(digits, '0')}` : ''}`;
+        return typeResult(`${int}${decimal ? `.${decimal.padEnd(digits, '0')}` : ''}`, type);
     }
     else {
         if (Number(decimal) === 0) {
-            return int;
+            return typeResult(int, type);
         }
-        return decimal ? `${int}.${decimal}` : int;
+        return typeResult(decimal ? `${int}.${decimal}` : int, type);
     }
 }
 /**

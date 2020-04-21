@@ -203,6 +203,9 @@ function roundDecimalPart(round, intPart, decimalPart, digits) {
 function date(input, formatMode, option) {
     if (formatMode === void 0) { formatMode = 'yyyy/MM/dd HH:mm:ss EEE'; }
     if (option === void 0) { option = 'en'; }
+    if (isEmpty(input)) {
+        return '';
+    }
     // 兼容Safari
     try {
         if (navigator.userAgent.includes('Safari')) {
@@ -514,20 +517,28 @@ function isEmpty(val) {
         JSON.stringify(val) === '[]' ||
         JSON.stringify(val) === '{}');
 }
+function typeResult(res, type) {
+    return type === 'number' ? Number(res) : res;
+}
 function number(input, digits, options) {
     var _a;
     if (digits === void 0) { digits = 8; }
-    if (options === void 0) { options = { round: false, pad: false, sign: false, separator: '' }; }
-    var round = options.round, pad = options.pad, sign = options.sign, separator = options.separator;
+    if (options === void 0) { options = { round: false, pad: false, sign: false, separator: '', type: 'string' }; }
+    var round = options.round, pad = options.pad, sign = options.sign, type = options.type;
+    var separator = options.separator;
+    if (type === 'number') {
+        separator = '';
+        input = String(input).replace(/[^\.\^\+\-\*/0-9eE]/g, '');
+    }
     if (isEmpty(input)) {
         if (digits <= 0) {
-            return '0';
+            return typeResult('0', type);
         }
-        return pad ? "0." + '0'.padEnd(digits, '0') : '0';
+        return typeResult(pad ? "0." + '0'.padEnd(digits, '0') : '0', type);
     }
     input = input;
     if (isNaN(Number(input))) {
-        return String(input);
+        return typeResult(String(input), type);
     }
     if (Number(input) === 0 && typeof sign === 'object') {
         input = sign.zero + "0";
@@ -547,16 +558,16 @@ function number(input, digits, options) {
         int = "+" + int;
     }
     if (!digits) {
-        return String(int);
+        return typeResult(String(int), type);
     }
     if (pad) {
-        return "" + int + (decimal ? "." + decimal.padEnd(digits, '0') : '');
+        return typeResult("" + int + (decimal ? "." + decimal.padEnd(digits, '0') : ''), type);
     }
     else {
         if (Number(decimal) === 0) {
-            return int;
+            return typeResult(int, type);
         }
-        return decimal ? int + "." + decimal : int;
+        return typeResult(decimal ? int + "." + decimal : int, type);
     }
 }
 exports.number = number;
