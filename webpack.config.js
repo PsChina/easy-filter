@@ -13,9 +13,11 @@ module.exports = {
     ]
   },
   plugins: [
-    new CopyWebpackPlugin([{
-      from: __dirname + '/src/',
-      to: __dirname + '/dist/ts/'
-    }])
+    new CopyWebpackPlugin({
+      patterns: [{
+        from: __dirname + '/src/',
+        to: __dirname + '/dist/ts/'
+      }]
+    })
   ]
 }

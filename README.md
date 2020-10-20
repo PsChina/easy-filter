@@ -35,7 +35,26 @@ To check out live examples and docs, visit [easy-filter](https://pschina.github.
 npm install easy-filter --save
 ```
 
-## Usage
+
+## Used
+
+```js
+import {
+  currency,
+  date,
+  filter,
+  limitTo,
+  lowercase,
+  number,
+  uppercase,
+  orderBy
+} from "easy-filter";
+
+const currencyString = currency(100);
+// currencyString => $100.00
+```
+
+## Used in Vue
 
 Import this plugin.
 

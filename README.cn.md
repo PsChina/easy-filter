@@ -35,6 +35,24 @@
 npm install easy-filter --save
 ```
 
+## 在项目中使用
+
+```js
+import {
+  currency,
+  date,
+  filter,
+  limitTo,
+  lowercase,
+  number,
+  uppercase,
+  orderBy
+} from "easy-filter";
+
+const currencyString = currency(100);
+// currencyString => $100.00
+```
+
 ## 在 Vue 项目中使用
 
 引入插件

@@ -587,12 +587,14 @@ function limitTo(input, limit, option) {
         startWithIndex = 0;
     }
     var type = typeof input;
+    var reverse = limit < 0;
+    limit = Math.abs(limit);
     switch (type) {
         case 'string': {
             var arrayData = input.split('');
             var itemIndex = arrayData.indexOf(startWith);
             var startIndex = itemIndex === -1 ? startWithIndex : itemIndex;
-            return getOutput(arrayData, { startIndex: startIndex, limit: limit, ignore: ignore, type: type, cut: cut });
+            return getOutput(arrayData, { startIndex: startIndex, reverse: reverse, ignore: ignore, limit: limit, type: type, cut: cut });
         }
         case 'number': {
             var arrayData = (input).toString().split('');
@@ -600,8 +602,9 @@ function limitTo(input, limit, option) {
             var startIndex = itemIndex === -1 ? startWithIndex : itemIndex;
             return getOutput(arrayData, {
                 startIndex: startIndex,
-                limit: limit,
+                reverse: reverse,
                 ignore: ignore,
+                limit: limit,
                 type: type,
                 cut: cut,
             });
@@ -613,8 +616,9 @@ function limitTo(input, limit, option) {
                 var startIndex = itemIndex === -1 ? startWithIndex : itemIndex;
                 return getOutput(arrayData, {
                     startIndex: startIndex,
-                    limit: limit,
+                    reverse: reverse,
                     ignore: ignore,
+                    limit: limit,
                     type: type,
                     cut: cut,
                 });
@@ -625,10 +629,11 @@ function limitTo(input, limit, option) {
 }
 exports.limitTo = limitTo;
 function getOutput(array, option) {
-    var startIndex = option.startIndex, limit = option.limit, ignore = option.ignore, type = option.type, cut = option.cut;
+    var startIndex = option.startIndex, reverse = option.reverse, ignore = option.ignore, limit = option.limit, type = option.type, cut = option.cut;
     var endIndex = startIndex + Number(limit);
     var newArr = [];
     var count = 0;
+    array = reverse ? array.reverse() : array;
     array.forEach(function (item, index) {
         if (index >= startIndex && index < endIndex) {
             var regExp = new RegExp(ignore ? ignore : '');
@@ -653,6 +658,7 @@ function getOutput(array, option) {
             }
         }
     });
+    newArr = reverse ? newArr.reverse() : newArr;
     switch (type) {
         case 'number':
             return Number(newArr.join(''));

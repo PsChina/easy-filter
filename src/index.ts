@@ -198,7 +198,7 @@ function strip(num: number, precision?: number): number {
  * @param {number} digits
  * @return {array}
  */
-function roundDecimalPart(round: boolean, intPart: string, decimalPart: string, digits: number) {
+function roundDecimalPart(round: boolean, intPart: string, decimalPart: string, digits: number): [string, string] {
   let decimal: string = '';
   if (round) {
     const reservedPortion = decimalPart.substr(0, digits);
@@ -647,12 +647,15 @@ export function limitTo(
     startWithIndex = 0;
   }
   const type = typeof input;
+  const reverse = limit < 0;
+  limit = Math.abs(limit);
+
   switch (type) {
     case 'string': {
       const arrayData = (input as string).split('');
       const itemIndex = arrayData.indexOf(startWith);
       const startIndex = itemIndex === -1 ? startWithIndex : itemIndex;
-      return getOutput(arrayData, { startIndex, limit, ignore, type, cut });
+      return getOutput(arrayData, { startIndex, reverse, ignore, limit, type, cut });
     }
     case 'number': {
       const arrayData = (input).toString().split('');
@@ -660,8 +663,9 @@ export function limitTo(
       const startIndex = itemIndex === -1 ? startWithIndex : itemIndex;
       return getOutput(arrayData, {
         startIndex,
-        limit,
+        reverse,
         ignore,
+        limit,
         type,
         cut,
       });
@@ -673,8 +677,9 @@ export function limitTo(
         const startIndex = itemIndex === -1 ? startWithIndex : itemIndex;
         return getOutput(arrayData, {
           startIndex,
-          limit,
+          reverse,
           ignore,
+          limit,
           type,
           cut,
         });
@@ -690,13 +695,15 @@ interface GetOutputOption {
   ignore?: string | RegExp;
   type?: string;
   cut?: boolean;
+  reverse?: boolean
 }
 
 function getOutput(array: any[], option: GetOutputOption): number | string | any[] {
-  const { startIndex, limit, ignore, type, cut } = option;
+  const { startIndex, reverse, ignore, limit, type, cut } = option;
   let endIndex = startIndex + Number(limit);
-  const newArr: any[] = [];
+  let newArr: any[] = [];
   let count = 0;
+  array = reverse ? array.reverse() : array;
   array.forEach((item, index) => {
     if (index >= startIndex && index < endIndex) {
       const regExp = new RegExp(ignore ? ignore : '');
@@ -724,6 +731,7 @@ function getOutput(array: any[], option: GetOutputOption): number | string | any
       }
     }
   });
+  newArr = reverse ? newArr.reverse() : newArr;
   switch (type) {
     case 'number':
       return Number(newArr.join(''));
