@@ -71,7 +71,7 @@ export function currency(input: NumberDate, symbol: string = '$', digits: number
     );
     // 处理整数部分
     const int = intPart.replace(/\B(?=(?:\d{3})+(?!\d))/g, separator);
-    if (numberArr[0] < intPart && pad === false) {
+    if (Number(decimal) === 0 && pad === false) {
       data = int;
     } else {
       data = `${int ? int : '0'}.${pad ? String(decimal).padEnd(digits, '0') : decimal}`;
@@ -209,7 +209,7 @@ function roundDecimalPart(round: boolean, intPart: string, decimalPart: string, 
         Number(digits ? `0.${'1'.padStart(digits, '0')}` : '1'),
       ));
       if (Number(decimal) >= 1) {
-        intPart = String(Number(intPart) + 1);
+        intPart = String(Number(intPart) + (intPart.charAt(0) === '-' ? -1 : 1));
         decimal = '0';
       } else {
         decimal = `${decimal}`.substr(2, digits);
@@ -241,7 +241,7 @@ export function date(input: DateData,
       }
     }
   } catch (e) {
-    throw new Error(e);
+    throw e instanceof Error ? e : new Error(String(e));
   } finally {
     if (!input) {
       // Determine whether the input to be filtered is not present and the input is ''.
@@ -388,14 +388,31 @@ export function orderBy(input: any[],
 
 type MatchFunction = (val: any) => boolean;
 
-export type Match = string | MatchFunction;
+export type Match = string | RegExp | MatchFunction;
 
 export interface MatchRules {
   match: Match;
-  ignore: string[] | string;
+  ignore?: string[] | string;
 }
 
 export type FilterOptions = MatchRules | Match;
+
+function valueMatches(value: any, match: FilterOptions): boolean {
+  if (value === undefined || value === null) {
+    return false;
+  }
+  const valueType = typeof value;
+  if (valueType !== 'string' && valueType !== 'number') {
+    return false;
+  }
+  const valueString = value.toString();
+  if (match instanceof RegExp) {
+    match.lastIndex = 0;
+    return match.test(valueString);
+  }
+  const matchString = String(match);
+  return new RegExp(matchString, 'ig').test(valueString) || valueString.includes(matchString);
+}
 
 /**
  *  @filter Selects a subset of items from Object and returns it as a new Object.
@@ -413,12 +430,12 @@ export function filter(input: any, matchOptions: FilterOptions): any {
     } else if (originalObject instanceof Object) {
       obj = {};
     } else {
-      return originalObject.includes(match) ? originalObject : undefined;
+      return valueMatches(originalObject, match) ? originalObject : undefined;
     }
     for (const key in originalObject) {
       if (originalObject.hasOwnProperty(key)) {
         const value = originalObject[key];
-        if (typeof value === 'object') {
+        if (value !== null && typeof value === 'object') {
           // Deep copy object.
           const newObj = matchCopy(value, match, ignore);
           if (newObj instanceof Array) {
@@ -433,7 +450,7 @@ export function filter(input: any, matchOptions: FilterOptions): any {
             }
           }
         } else {
-          if (value.includes(match)) {
+          if (valueMatches(value, match)) {
             // What is needed is saved.
             obj[key] = value;
           }
@@ -449,12 +466,14 @@ export function filter(input: any, matchOptions: FilterOptions): any {
 
     return matchFunc(input, matchOptions);
 
+  } else if (matchOptions instanceof RegExp) {
+    return filterObj(input, matchOptions);
   } else if (typeof matchOptions === 'object') {
     const { ignore, match } = matchOptions;
     if (match instanceof Function) {
       return matchFunc(input, match);
     } else {
-      return filterObj(input, match, [ignore].flat());
+      return filterObj(input, match, ignore === undefined ? undefined : [ignore].flat());
     }
   } else {
     return filterObj(input, matchOptions);
@@ -465,24 +484,21 @@ export function filter(input: any, matchOptions: FilterOptions): any {
  * childExists
  */
 function childExists(obj: any, match: FilterOptions, ignore?: string[]): boolean {
+  if (obj === undefined || obj === null) {
+    return false;
+  }
   for (const key in obj) {
     if (obj.hasOwnProperty(key)) {
       const value = obj[key];
-      const type = typeof value;
-      if (type === 'string' || type === 'number') {
-        if (
-          new RegExp(match as string, 'ig').test(value) ||
-          value.toString().includes(match)
-        ) {
-          if (ignore instanceof Array) {
-            if (!ignore.includes(key)) {
-              return true;
-            }
-          } else {
+      if (valueMatches(value, match)) {
+        if (ignore instanceof Array) {
+          if (!ignore.includes(key)) {
             return true;
           }
+        } else {
+          return true;
         }
-      } else {
+      } else if (value !== null && typeof value === 'object') {
         return childExists(value, match, ignore);
       }
     }
@@ -503,7 +519,7 @@ function matchCopy(obj: any, match: FilterOptions, ignore?: string[]): any {
   for (const key in obj) {
     if (obj.hasOwnProperty(key)) {
       const value = obj[key];
-      if (typeof value === 'object' && childExists(value, match, ignore)) {
+      if (value !== null && typeof value === 'object' && childExists(value, match, ignore)) {
         newObj[key] = matchCopy(value, '');
       } else {
         if (childExists(obj, match, ignore)) {
@@ -606,7 +622,7 @@ export function number(
     [intPart, decimal] = roundDecimalPart(Boolean(round), intPart, decimalPart, digits);
     int = intPart.replace(/\B(?=(?:\d{3})+(?!\d))/g, separator || '');
   }
-  if (input > 0 && sign) {
+  if (Number(input) > 0 && sign) {
     int = `+${int}`;
   }
   if (!digits) {

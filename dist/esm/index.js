@@ -1,5 +1,12 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+};
 /**
  * @currency
  * 给展示金额数字加上货币符号以及分隔符。
@@ -9,7 +16,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * @param {CurrencyOption} options symbolOnLeft 符号位置 separator 分隔符 addSpace 是否有空格 pad 是否补零 round 四舍五入
  * @return {String} String 输出
  */
-function currency(input, symbol, digits, _a) {
+export function currency(input, symbol, digits, _a) {
     var _b;
     if (symbol === void 0) { symbol = '$'; }
     if (digits === void 0) { digits = 2; }
@@ -41,11 +48,11 @@ function currency(input, symbol, digits, _a) {
         _b = roundDecimalPart(round, intPart, decimalPart, digits), intPart = _b[0], decimal = _b[1];
         // 处理整数部分
         var int = intPart.replace(/\B(?=(?:\d{3})+(?!\d))/g, separator);
-        if (numberArr[0] < intPart && pad === false) {
+        if (Number(decimal) === 0 && pad === false) {
             data = int;
         }
         else {
-            data = (int ? int : '0') + "." + (pad ? String(decimal).padEnd(digits, '0') : decimal);
+            data = "".concat(int ? int : '0', ".").concat(pad ? String(decimal).padEnd(digits, '0') : decimal);
         }
     }
     else {
@@ -59,9 +66,9 @@ function currency(input, symbol, digits, _a) {
         // 拆分
         var int = intPart.replace(/\B(?=(?:\d{3})+(?!\d))/g, separator);
         // 添加小数部分
-        data = "" + (int ? int : '0') + (pad ? '.'.padEnd(digits + 1, '0') : '');
+        data = "".concat(int ? int : '0').concat(pad ? '.'.padEnd(digits + 1, '0') : '');
         if (digits <= 0) {
-            data = "" + int;
+            data = "".concat(int);
         }
     }
     if (data.charAt(0) === separator) {
@@ -69,12 +76,11 @@ function currency(input, symbol, digits, _a) {
     }
     if (addSpace) {
         return symbolOnLeft
-            ? symbol + " " + data
-            : data + " " + symbol;
+            ? "".concat(symbol, " ").concat(data)
+            : "".concat(data, " ").concat(symbol);
     }
     return symbolOnLeft ? symbol + data : data + symbol;
 }
-exports.currency = currency;
 /**
  * @sciNumToString
  * 将科学计数法表示的数字转换为非科学计数法表示的字符串。
@@ -126,7 +132,7 @@ function plus(num1, num2) {
         others[_i - 2] = arguments[_i];
     }
     if (others.length > 0) {
-        return plus.apply(void 0, [plus(num1, num2), others[0]].concat(others.slice(1)));
+        return plus.apply(void 0, __spreadArray([plus(num1, num2), others[0]], others.slice(1), false));
     }
     var baseNum = Math.pow(10, Math.max(digitLength(num1), digitLength(num2)));
     return (times(num1, baseNum) + times(num2, baseNum)) / baseNum;
@@ -143,7 +149,7 @@ function times(num1, num2) {
         others[_i - 2] = arguments[_i];
     }
     if (others.length > 0) {
-        return times.apply(void 0, [times(num1, num2), others[0]].concat(others.slice(1)));
+        return times.apply(void 0, __spreadArray([times(num1, num2), others[0]], others.slice(1), false));
     }
     var num1Changed = float2Fixed(num1);
     var num2Changed = float2Fixed(num2);
@@ -178,13 +184,13 @@ function roundDecimalPart(round, intPart, decimalPart, digits) {
         var reservedPortion = decimalPart.substr(0, digits);
         var roundPart = Number(decimalPart.substr(digits, 1));
         if (roundPart >= 5) {
-            decimal = String(plus(Number("0." + reservedPortion), Number(digits ? "0." + '1'.padStart(digits, '0') : '1')));
+            decimal = String(plus(Number("0.".concat(reservedPortion)), Number(digits ? "0.".concat('1'.padStart(digits, '0')) : '1')));
             if (Number(decimal) >= 1) {
-                intPart = String(Number(intPart) + 1);
+                intPart = String(Number(intPart) + (intPart.charAt(0) === '-' ? -1 : 1));
                 decimal = '0';
             }
             else {
-                decimal = ("" + decimal).substr(2, digits);
+                decimal = "".concat(decimal).substr(2, digits);
             }
         }
         else {
@@ -200,7 +206,7 @@ function roundDecimalPart(round, intPart, decimalPart, digits) {
  * @date
  * 格式化时间戳 'yyyy/MM/dd HH:mm:ss EEE'
  */
-function date(input, formatMode, option) {
+export function date(input, formatMode, option) {
     if (formatMode === void 0) { formatMode = 'yyyy/MM/dd HH:mm:ss EEE'; }
     if (option === void 0) { option = 'en'; }
     if (isEmpty(input)) {
@@ -215,7 +221,7 @@ function date(input, formatMode, option) {
         }
     }
     catch (e) {
-        throw new Error(e);
+        throw e instanceof Error ? e : new Error(String(e));
     }
     finally {
         if (!input) {
@@ -238,7 +244,6 @@ function date(input, formatMode, option) {
         }
     }
 }
-exports.date = date;
 function formatTimeWithMode(time, mode, opt) {
     var dateData = new Date(time);
     var optionType = typeof opt;
@@ -293,21 +298,21 @@ function formatTimeWithMode(time, mode, opt) {
     mode = mode.replace(/(y|Y){1,4}|MM|dd|hh|HH|mm|ss|E{1,4}/g, function (value) {
         switch (value) {
             case 'MM': // Replace the month.
-                return ("" + (dateData.getMonth() + 1)).padStart(2, '0');
+                return "".concat(dateData.getMonth() + 1).padStart(2, '0');
             case 'dd': // Replace the date.
-                return ("" + dateData.getDate()).padStart(2, '0');
+                return "".concat(dateData.getDate()).padStart(2, '0');
             case 'hh': // Replace the hours (12-hour system).
                 var hours = dateData.getHours();
                 if (hours > 12) {
-                    return ("" + (hours - 12)).padStart(2, '0');
+                    return "".concat(hours - 12).padStart(2, '0');
                 }
-                return ("" + hours).padStart(2, '0');
+                return "".concat(hours).padStart(2, '0');
             case 'HH': // Replace the hours (24 hour system).
-                return ("" + dateData.getHours()).padStart(2, '0');
+                return "".concat(dateData.getHours()).padStart(2, '0');
             case 'mm': // Replace the minutes.
-                return ("" + dateData.getMinutes()).padStart(2, '0');
+                return "".concat(dateData.getMinutes()).padStart(2, '0');
             case 'ss': // Replace the second.
-                return ("" + dateData.getSeconds()).padStart(2, '0');
+                return "".concat(dateData.getSeconds()).padStart(2, '0');
             default:
                 // Replace the years and week.
                 if (value.toLocaleLowerCase().includes('y')) {
@@ -333,7 +338,7 @@ var builtInComparator = function (item1, item2, key, reverse) { return item1[key
 /**
  * @orderBy
  */
-function orderBy(input, expression, reverse, comparator) {
+export function orderBy(input, expression, reverse, comparator) {
     if (comparator === void 0) { comparator = builtInComparator; }
     var key;
     var expressionType = typeof expression;
@@ -359,11 +364,26 @@ function orderBy(input, expression, reverse, comparator) {
     }
     return input;
 }
-exports.orderBy = orderBy;
+function valueMatches(value, match) {
+    if (value === undefined || value === null) {
+        return false;
+    }
+    var valueType = typeof value;
+    if (valueType !== 'string' && valueType !== 'number') {
+        return false;
+    }
+    var valueString = value.toString();
+    if (match instanceof RegExp) {
+        match.lastIndex = 0;
+        return match.test(valueString);
+    }
+    var matchString = String(match);
+    return new RegExp(matchString, 'ig').test(valueString) || valueString.includes(matchString);
+}
 /**
  *  @filter Selects a subset of items from Object and returns it as a new Object.
  */
-function filter(input, matchOptions) {
+export function filter(input, matchOptions) {
     // Filter object.
     if (!matchOptions || !input) {
         return input;
@@ -378,12 +398,12 @@ function filter(input, matchOptions) {
             obj = {};
         }
         else {
-            return originalObject.includes(match) ? originalObject : undefined;
+            return valueMatches(originalObject, match) ? originalObject : undefined;
         }
         for (var key in originalObject) {
             if (originalObject.hasOwnProperty(key)) {
                 var value = originalObject[key];
-                if (typeof value === 'object') {
+                if (value !== null && typeof value === 'object') {
                     // Deep copy object.
                     var newObj = matchCopy(value, match, ignore);
                     if (newObj instanceof Array) {
@@ -400,7 +420,7 @@ function filter(input, matchOptions) {
                     }
                 }
                 else {
-                    if (value.includes(match)) {
+                    if (valueMatches(value, match)) {
                         // What is needed is saved.
                         obj[key] = value;
                     }
@@ -415,42 +435,43 @@ function filter(input, matchOptions) {
     if (matchOptions instanceof Function) {
         return matchFunc(input, matchOptions);
     }
+    else if (matchOptions instanceof RegExp) {
+        return filterObj(input, matchOptions);
+    }
     else if (typeof matchOptions === 'object') {
         var ignore = matchOptions.ignore, match = matchOptions.match;
         if (match instanceof Function) {
             return matchFunc(input, match);
         }
         else {
-            return filterObj(input, match, [ignore].flat());
+            return filterObj(input, match, ignore === undefined ? undefined : [ignore].flat());
         }
     }
     else {
         return filterObj(input, matchOptions);
     }
 }
-exports.filter = filter;
 /**
  * childExists
  */
 function childExists(obj, match, ignore) {
+    if (obj === undefined || obj === null) {
+        return false;
+    }
     for (var key in obj) {
         if (obj.hasOwnProperty(key)) {
             var value = obj[key];
-            var type = typeof value;
-            if (type === 'string' || type === 'number') {
-                if (new RegExp(match, 'ig').test(value) ||
-                    value.toString().includes(match)) {
-                    if (ignore instanceof Array) {
-                        if (!ignore.includes(key)) {
-                            return true;
-                        }
-                    }
-                    else {
+            if (valueMatches(value, match)) {
+                if (ignore instanceof Array) {
+                    if (!ignore.includes(key)) {
                         return true;
                     }
                 }
+                else {
+                    return true;
+                }
             }
-            else {
+            else if (value !== null && typeof value === 'object') {
                 return childExists(value, match, ignore);
             }
         }
@@ -471,7 +492,7 @@ function matchCopy(obj, match, ignore) {
     for (var key in obj) {
         if (obj.hasOwnProperty(key)) {
             var value = obj[key];
-            if (typeof value === 'object' && childExists(value, match, ignore)) {
+            if (value !== null && typeof value === 'object' && childExists(value, match, ignore)) {
                 newObj[key] = matchCopy(value, '');
             }
             else {
@@ -520,7 +541,7 @@ function isEmpty(val) {
 function typeResult(res, type) {
     return type === 'number' ? Number(res) : res;
 }
-function number(input, digits, options) {
+export function number(input, digits, options) {
     var _a;
     if (digits === void 0) { digits = 8; }
     if (options === void 0) { options = { round: false, pad: false, sign: false, separator: '', type: 'string' }; }
@@ -534,14 +555,14 @@ function number(input, digits, options) {
         if (digits <= 0) {
             return typeResult('0', type);
         }
-        return typeResult(pad ? "0." + '0'.padEnd(digits, '0') : '0', type);
+        return typeResult(pad ? "0.".concat('0'.padEnd(digits, '0')) : '0', type);
     }
     input = input;
     if (isNaN(Number(input))) {
         return typeResult(String(input), type);
     }
     if (Number(input) === 0 && typeof sign === 'object') {
-        input = sign.zero + "0";
+        input = "".concat(sign.zero, "0");
     }
     // 若输入的数据为科学计数法表示的数据，转换为非科学计数法表示。
     var temp = sciNumToString(input);
@@ -554,23 +575,22 @@ function number(input, digits, options) {
         _a = roundDecimalPart(Boolean(round), intPart, decimalPart, digits), intPart = _a[0], decimal = _a[1];
         int = intPart.replace(/\B(?=(?:\d{3})+(?!\d))/g, separator || '');
     }
-    if (input > 0 && sign) {
-        int = "+" + int;
+    if (Number(input) > 0 && sign) {
+        int = "+".concat(int);
     }
     if (!digits) {
         return typeResult(String(int), type);
     }
     if (pad) {
-        return typeResult("" + int + (decimal ? "." + decimal.padEnd(digits, '0') : ''), type);
+        return typeResult("".concat(int).concat(decimal ? ".".concat(decimal.padEnd(digits, '0')) : ''), type);
     }
     else {
         if (Number(decimal) === 0) {
             return typeResult(int, type);
         }
-        return typeResult(decimal ? int + "." + decimal : int, type);
+        return typeResult(decimal ? "".concat(int, ".").concat(decimal) : int, type);
     }
 }
-exports.number = number;
 /**
  * @limitTo
  * Creates a new array or string containing only a specified number of elements.
@@ -578,7 +598,7 @@ exports.number = number;
  * string or number,
  * as specified by the value and sign (positive or negative) of limit.
  */
-function limitTo(input, limit, option) {
+export function limitTo(input, limit, option) {
     if (limit === void 0) { limit = Number.POSITIVE_INFINITY; }
     if (option === void 0) { option = { startWithIndex: 0, cut: false }; }
     var startWith = option.startWith, ignore = option.ignore, cut = option.cut;
@@ -627,7 +647,6 @@ function limitTo(input, limit, option) {
         }
     }
 }
-exports.limitTo = limitTo;
 function getOutput(array, option) {
     var startIndex = option.startIndex, reverse = option.reverse, ignore = option.ignore, limit = option.limit, type = option.type, cut = option.cut;
     var endIndex = startIndex + Number(limit);
@@ -671,7 +690,7 @@ function getOutput(array, option) {
 /**
  * @uppercase Uppercase string.
  */
-function uppercase(input, start, end) {
+export function uppercase(input, start, end) {
     if (start === void 0) { start = 0; }
     var output = input;
     if (typeof input === 'string') {
@@ -680,11 +699,10 @@ function uppercase(input, start, end) {
     }
     return output;
 }
-exports.uppercase = uppercase;
 /**
  * @lowercase LowerCase string.
  */
-function lowercase(input, start, end) {
+export function lowercase(input, start, end) {
     if (start === void 0) { start = 0; }
     var output = input;
     if (typeof input === 'string') {
@@ -692,7 +710,6 @@ function lowercase(input, start, end) {
     }
     return output;
 }
-exports.lowercase = lowercase;
 function transformCaseWithRange(input, func, start, end) {
     if (end === '') {
         end = undefined;
@@ -724,7 +741,7 @@ var easyFilter = {
     uppercase: uppercase,
     lowercase: lowercase,
 };
-exports.default = {
+export default {
     install: function (Vue, options) {
         Vue.filter('currency', currency);
         Vue.filter('date', date);

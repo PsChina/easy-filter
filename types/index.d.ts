@@ -48,15 +48,14 @@ export interface NumberOptions {
   pad?: boolean;
   sign?: Sign;
   separator?: string;
-  type?: string;
+  type?: 'string' | 'number';
 }
 
 export interface LimitToOption {
-  startWithIndex: number;
+  startWithIndex?: number;
   startWith?: any;
   ignore?: string | RegExp;
   cut?: boolean;
-  reverse?: boolean;
 }
 
 export type FilterOptions = MatchRules | Match | RegExp;
@@ -110,7 +109,7 @@ export function number(
   input: NumberDate,
   digits?: number,
   options?: NumberOptions,
-): string;
+): string | number;
 
 export function limitTo(
   input: number | string | any[],
