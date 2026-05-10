@@ -2,22 +2,27 @@
 
 [中文文档](README.cn.md)
 
-The simple implementation of some angularjs built-in filters in vue.
-
-This package is very small and it only contains eight functions.
-
-[![LICENSE](https://img.shields.io/badge/license-Anti%20996-blue.svg)](https://github.com/996icu/996.ICU/blob/master/LICENSE)
+[![npm version](https://img.shields.io/npm/v/easy-filter.svg)](https://www.npmjs.com/package/easy-filter)
+[![npm downloads](https://img.shields.io/npm/dm/easy-filter.svg)](https://www.npmjs.com/package/easy-filter)
+[![license](https://img.shields.io/badge/license-Anti%20996-blue.svg)](https://github.com/996icu/996.ICU/blob/master/LICENSE)
 [![996.icu](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu)
 
-## New Features (v1.5.x)
+A lightweight collection of AngularJS-inspired built-in filters for Vue.js.
 
-Support the typescript.
+This package is very small — only 8 functions.
+
+## New Features (v1.7.x)
+
+- Full TypeScript support with type declarations.
+- Enhanced `limitTo` filter with more options.
+- `number` filter supports string-to-number conversion.
+- `date` filter supports `YYYY` pattern matching.
 
 ## Documentation
 
-To check out live examples and docs, visit [easy-filter](https://pschina.github.io/easy-filter/index.html).
+For live examples and docs, visit [easy-filter](https://pschina.github.io/easy-filter/index.html).
 
-## Filter list
+## Filter List
 
 - [currency](#currency)
 - [date](#date)
@@ -28,15 +33,13 @@ To check out live examples and docs, visit [easy-filter](https://pschina.github.
 - [uppercase](#uppercase)
 - [orderBy](#orderby)
 
-## Get start
+## Installation
 
 ```bash
-# install plugin
 npm install easy-filter --save
 ```
 
-
-## Used
+## Usage
 
 ```js
 import {
@@ -54,41 +57,53 @@ const currencyString = currency(100);
 // currencyString => $100.00
 ```
 
-## Used in Vue
+### TypeScript
 
-Import this plugin.
+Type declarations are included out of the box:
+
+```ts
+import { currency, date, number, orderBy } from "easy-filter";
+
+const result: string = currency(1000, "¥", 0);
+const formatted: string = date(Date.now(), "yyyy-MM-dd");
+```
+
+## Usage in Vue
+
+Register all filters at once:
 
 ```js
 import EasyFilter from "easy-filter";
-
 import Vue from "vue";
 
 Vue.use(EasyFilter);
+```
 
-// or use only what you need
+Or pick only what you need:
+
+```js
 import {
- number,
- orderBy,
- //...
-} from "easy-filter";
-Vue.filter('number', number);
-Vue.filter('orderBy', orderBy);
-const easyFilter = {
   number,
   orderBy,
-};
+  // ...
+} from "easy-filter";
+
+Vue.filter("number", number);
+Vue.filter("orderBy", orderBy);
+
+const easyFilter = { number, orderBy };
 Vue.prototype.$easyFilter = Vue.easyFilter = easyFilter;
 ```
 
-Direct `<script>` Include.
+Direct `<script>` include:
 
 ```html
 <script src="./path/to/easy-filter.min.js"></script>
 ```
 
-Use it in a component:
+## Filters
 
-## lowercase
+### lowercase
 
 Default:
 
@@ -97,28 +112,28 @@ Default:
 <!-- hello -->
 ```
 
-Specified range:
+Specify a range:
 
 ```html
-<div>{{ 'HELLO' | lowercase(3,4) }}</div>
+<div>{{ 'HELLO' | lowercase(3, 4) }}</div>
 <!-- HEllO -->
 ```
 
-Specify starting position:
+Specify a start position:
 
 ```html
 <div>{{ 'HELLO' | lowercase(3) }}</div>
 <!-- HEllo -->
 ```
 
-## uppercase
+### uppercase
 
 ```html
 <div>{{ 'Hello' | uppercase }}</div>
 <!-- HELLO -->
 ```
 
-## currency
+### currency
 
 ```html
 <div>{{ 1000 | currency }}</div>
@@ -132,7 +147,7 @@ Use a different symbol:
 <!-- 1000 => ¥1,000.00 -->
 ```
 
-Use a different number decimal places:
+Limit decimal places:
 
 ```html
 <div>{{ 1000 | currency('¥', 0) }}</div>
@@ -146,56 +161,55 @@ Use a different separator:
 <!-- 1000 => ¥1.000 -->
 ```
 
-Hide separator
+Hide separator:
 
 ```html
 <div>{{ 1000 | currency('¥', 0, {separator: ''}) }}</div>
 <!-- 1000 => ¥1000 -->
 ```
 
-Use symbol on right:
+Place symbol on the right:
 
 ```html
 <div>{{ 1000 | currency('¥', 0, {symbolOnLeft: false}) }}</div>
 <!-- 1000 => 1,000¥ -->
 ```
 
-Add space between amound and symbol:
+Add space between amount and symbol:
 
 ```html
 <div>{{ 10.012 | currency('BTC', 8, {addSpace: true}) }}</div>
 <!-- 10.012 => BTC 10.01200000 -->
 ```
 
-Open round
+Enable rounding:
 
 ```html
 <div>{{ 1000.999 | currency('¥', 2, {round: true}) }}</div>
 <!-- 1000.999 => ¥1,001.00 -->
 ```
 
-Close padding
+Disable zero-padding:
 
 ```html
 <div>{{ 1000.5 | currency('¥', 2) }}</div>
 <!-- 1000.5 => ¥1,000.50 -->
-```
 
-```html
 <div>{{ 1000.123 | currency('¥', 2, {pad: false}) }}</div>
 <!-- 1000.123 => ¥1,000.12 -->
+
 <div>{{ 1000.5 | currency('¥', 2, {pad: false}) }}</div>
 <!-- 1000.5 => ¥1,000.5 -->
 ```
 
-Use multiple options:
+Combine multiple options:
 
 ```html
 <div>{{ 1000 | currency('¥', 0, {symbolOnLeft: false, addSpace: true}) }}</div>
 <!-- 1000 => 1,000 ¥ -->
 ```
 
-## date
+### date
 
 ```html
 <div>{{ 1523169365575 | date('yyyy-MM-dd HH:mm:ss EEE', 'cn') }}</div>
@@ -216,94 +230,72 @@ Use multiple options:
 <div>{{ 1523169365575 | date('hh:mm:ss') }}</div>
 <!-- 02:36:05 -->
 
-<div>{{ 1523169365575 | date('EEE','en') }}</div>
+<div>{{ 1523169365575 | date('EEE', 'en') }}</div>
 <!-- Sunday -->
 
-<div>{{ 1523169365575 | date('EE','en') }}</div>
+<div>{{ 1523169365575 | date('EE', 'en') }}</div>
 <!-- Sun -->
 
-<!-- yyyy、MM、dd、HH、hh、mm、ss、EEE, can be used alone or in combination. -->
+<!-- yyyy, MM, dd, HH, hh, mm, ss, EEE can be used alone or in combination. -->
 ```
 
-Cooperate with i18n
+Working with i18n:
 
 ```html
-<div>{{ 1523169365575 | date('EEE', $t('localWeek')}</div>
+<div>{{ 1523169365575 | date('EEE', $t('localWeek')) }}</div>
 ```
-zh.json
+
+`zh.json`:
 
 ```json
 {
-  "localWeek":{
+  "localWeek": {
     "week": [
-      "星期日",
-      "星期一",
-      "星期二",
-      "星期三",
-      "星期四",
-      "星期五",
-      "星期六",
+      "星期日", "星期一", "星期二", "星期三",
+      "星期四", "星期五", "星期六"
     ],
     "shortWeek": [
-      "周日",
-      "周一",
-      "周二",
-      "周三",
-      "周四",
-      "周五",
-      "周六",
+      "周日", "周一", "周二", "周三",
+      "周四", "周五", "周六"
     ]
   }
 }
 ```
 
-en.json
+`en.json`:
 
 ```json
 {
-  "localWeek":{
-      "week": [
-        "Sunday",
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday",
-      ],
-      "shortWeek": ["Sun", "Mon", "Tue", "Wed", "Thur", "Fri", "Sat"]
+  "localWeek": {
+    "week": [
+      "Sunday", "Monday", "Tuesday", "Wednesday",
+      "Thursday", "Friday", "Saturday"
+    ],
+    "shortWeek": ["Sun", "Mon", "Tue", "Wed", "Thur", "Fri", "Sat"]
   }
 }
 ```
 
-ja.json
+`ja.json`:
 
 ```json
 {
-  "localWeek":{
-      "week": [
-        "にちようび",
-        "げつようび",
-        "かようび",
-        "すいようび",
-        "もくようび",
-        "きんようび",
-        "どようび",
-      ],
-      "shortWeek": [
-        "にちようび",
-        "げつようび",
-        "かようび",
-        "すいようび",
-        "もくようび",
-        "きんようび",
-        "どようび",
-      ]
+  "localWeek": {
+    "week": [
+      "にちようび", "げつようび", "かようび",
+      "すいようび", "もくようび", "きんようび",
+      "どようび"
+    ],
+    "shortWeek": [
+      "にちようび", "げつようび", "かようび",
+      "すいようび", "もくようび", "きんようび",
+      "どようび"
+    ]
   }
 }
 ```
 
-## filter
+### filter
 
 ```html
 <template>
@@ -316,7 +308,7 @@ ja.json
         <th>sex</th>
       </tr>
       <tr
-        v-for="value in filter(personArray, new RegExp(match,'i') )"
+        v-for="value in filter(personArray, new RegExp(match,'i'))"
         :key="value.id"
       >
         <td v-text="value.name"></td>
@@ -328,81 +320,82 @@ ja.json
 </template>
 
 <script>
-  export default {
-    name: "$easyFilter.filter",
-    data() {
-      return {
-        match: "",
-        personArray: [
-          { name: "Kimi", sex: "male", age: 8, id: 1 },
-          { name: "Cindy", sex: "female", age: 4, id: 2 },
-          { name: "Angela", sex: "female", age: 6, id: 3 },
-          { name: "Shitou", sex: "male", age: 7, id: 4 },
-          { name: "Tiantian", sex: "male", age: 5, id: 5 }
-        ]
-      };
-    },
-    methods: {
-      filter(input, match) {
-        // You can do this if you don't want some property to participate in filtering
-        // const options = {
-        //   match,
-        //   ignore: ['id'], // ignore property id
-        // }
-        // match = options
+export default {
+  name: "$easyFilter.filter",
+  data() {
+    return {
+      match: "",
+      personArray: [
+        { name: "Kimi", sex: "male", age: 8, id: 1 },
+        { name: "Cindy", sex: "female", age: 4, id: 2 },
+        { name: "Angela", sex: "female", age: 6, id: 3 },
+        { name: "Shitou", sex: "male", age: 7, id: 4 },
+        { name: "Tiantian", sex: "male", age: 5, id: 5 }
+      ]
+    };
+  },
+  methods: {
+    filter(input, match) {
+      // Exclude certain properties from filtering:
+      // const options = {
+      //   match,
+      //   ignore: ['id'], // ignore the 'id' property
+      // }
+      // match = options
 
-        // Used in js
-        return this.$easyFilter.filter(input, match);
-        // Use of other filters.
-        // this.$easyFilter.lowercase('WORLD')
-        // this.$easyFilter.currency(1000,'¥')
-        // this.$easyFilter.date(1523169365575,'yy-MM-dd')
-        // ...
-      }
-    },
-    // How do you want to improve performance? You can do this.
-    computed: {
-      usefulData() {
-        return this.$easyFilter.filter(this.personArray, new RegExp(this.match));
-      }
+      // Use in JavaScript
+      return this.$easyFilter.filter(input, match);
+      // Other filters available:
+      // this.$easyFilter.lowercase('WORLD')
+      // this.$easyFilter.currency(1000, '¥')
+      // this.$easyFilter.date(1523169365575, 'yy-MM-dd')
+      // ...
     }
-  };
+  },
+  // For better performance, use a computed property:
+  computed: {
+    usefulData() {
+      return this.$easyFilter.filter(this.personArray, new RegExp(this.match));
+    }
+  }
+};
 </script>
-<!-- 
-When you enter 'an' in the input box will show:
+<!--
+When you type 'an' in the input box it will show:
 
-name	age	sex
-Angela	6	female
-Tiantian	5	male
+name      age    sex
+Angela    6      female
+Tiantian  5      male
 -->
 ```
 
-The filter can also filter the range conditions.
+The `filter` also supports range-based filtering:
 
 ```js
-  // <div v-for="item in filter(personArray, matchFn)" :key="item.id">{{item}}</div>
-  data () {
-      return {
-        personArray: [
-          {name: 'Kimi', sex: 'male', age: 8, id: 1},
-          {name: 'Cindy', sex: 'female', age: 4, id: 2},
-          {name: 'Angela', sex: 'female', age: 6, id: 3},
-          {name: 'Shitou', sex: 'male', age: 7, id: 4},
-          {name: 'Tiantian', sex: 'male', age: 5, id: 5}
-        ]
-      }
-  },
-  methods: {
-    matchFn (value) {
-    // Select children greater than or equal to 6 years old.
-        return value.age >= 6;
-    },
-    filter (input, matchFn) {
-      return this.$easyFilter.filter(input, matchFn);
+// <div v-for="item in filter(personArray, matchFn)" :key="item.id">{{item}}</div>
+data () {
+  return {
+    personArray: [
+      {name: 'Kimi', sex: 'male', age: 8, id: 1},
+      {name: 'Cindy', sex: 'female', age: 4, id: 2},
+      {name: 'Angela', sex: 'female', age: 6, id: 3},
+      {name: 'Shitou', sex: 'male', age: 7, id: 4},
+      {name: 'Tiantian', sex: 'male', age: 5, id: 5}
+    ]
   }
+},
+methods: {
+  matchFn (value) {
+    // Select children aged 6 or older
+    return value.age >= 6;
+  },
+  filter (input, matchFn) {
+    return this.$easyFilter.filter(input, matchFn);
+  }
+}
 ```
 
-## orderBy
+### orderBy
 
 ```html
 <template>
@@ -421,71 +414,70 @@ The filter can also filter the range conditions.
     </table>
   </div>
 </template>
-<script>s
-  export default {
-    name: "$easyFilter.orderBy",
-    data() {
-      return {
-        personArray: [
-          { name: "Kimi", sex: "male", age: 8, id: 1 },
-          { name: "Cindy", sex: "female", age: 4, id: 2 },
-          { name: "Angela", sex: "female", age: 6, id: 3 },
-          { name: "Shitou", sex: "male", age: 7, id: 4 },
-          { name: "Tiantian", sex: "male", age: 5, id: 5 }
-        ],
-        rule: null
-      };
+<script>
+export default {
+  name: "$easyFilter.orderBy",
+  data() {
+    return {
+      personArray: [
+        { name: "Kimi", sex: "male", age: 8, id: 1 },
+        { name: "Cindy", sex: "female", age: 4, id: 2 },
+        { name: "Angela", sex: "female", age: 6, id: 3 },
+        { name: "Shitou", sex: "male", age: 7, id: 4 },
+        { name: "Tiantian", sex: "male", age: 5, id: 5 }
+      ],
+      rule: null
+    };
+  },
+  methods: {
+    click(rule) {
+      this.rule = rule;
     },
-    methods: {
-      click(rule) {
-        this.rule = rule;
-      },
-      orderBy(input, rule, reverse) {
-        return this.$easyFilter.orderBy(input, rule, reverse);
-      }
-      // or use custom sort functions
-      // orderBy(input, callBack = (v1,v2)=> v1.att > v2.att ? 1 : -1) {
-      //   return this.$easyFilter.orderBy(input, callBack)
-      // }
+    orderBy(input, rule, reverse) {
+      return this.$easyFilter.orderBy(input, rule, reverse);
     }
-  };
+    // Or use a custom sort function:
+    // orderBy(input, callback = (v1, v2) => v1.att > v2.att ? 1 : -1) {
+    //   return this.$easyFilter.orderBy(input, callback)
+    // }
+  }
+};
 </script>
-<!-- 
-When you click on the name.
-name	age	sex
-Angela	6	female
-Cindy	4	female
-Kimi	8	male
-Shitou	7	male
-Tiantian	5	male
+<!--
+When you click 'name':
+name       age    sex
+Angela     6      female
+Cindy      4      female
+Kimi       8      male
+Shitou     7      male
+Tiantian   5      male
 
-When you click age.
-name	age	sex
-Cindy	4	female
-Tiantian	5	male
-Angela	6	female
-Shitou	7	male
-Kimi	8	male
+When you click 'age':
+name       age    sex
+Cindy      4      female
+Tiantian   5      male
+Angela     6      female
+Shitou     7      male
+Kimi       8      male
 
-When you click sex.
-Cindy	4	female
-Angela	6	female
-Kimi	8	male
-Shitou	7	male
-Tiantian	5	male
+When you click 'sex':
+Cindy      4      female
+Angela     6      female
+Kimi       8      male
+Shitou     7      male
+Tiantian   5      male
 
-The above result reverse is undefined.
-If reverse is true then the result will be reversed.
-You can also add '-' to reverse the results in front of the click parameter.
-For example,  <th @click="click('-name')">name</th>.
- -->
+The above results are in ascending order (reverse is undefined).
+Set reverse to true for descending order.
+You can also prepend '-' to the sort key to reverse results,
+e.g. <th @click="click('-name')">name</th>.
+-->
 ```
 
-## limitTo
+### limitTo
 
 Creates a new array or string containing only a specified number of elements.
-The elements are taken from either the beginning of the source array,
-string or number.
+Elements are taken from either the beginning of the source array, string, or number.
 
 ```js
 export default {
@@ -497,169 +489,158 @@ export default {
 };
 ```
 
-The first parameter `input` is the data to be filtered, which can be an array, a number, or a string.
+**Parameters:**
 
-The second parameter is the length you want to limit.
+|  Parameter  |        Description        |  Type  |         Default          |
+|:-----------:|:-------------------------:|:------:|:------------------------:|
+|   `input`   |    Data to be filtered    |  any   |            -             |
+|   `limit`   |      Length to limit      | number | Number.POSITIVE_INFINITY |
+|  `options`  |  Configuration (see below) | object |   `{startWithIndex: 0}`  |
 
-| Second Parameter | Description  |  Type  |         Default          |
-|:----------------:|:------------:|:------:|:------------------------:|
-|      Limit       | limit length | number | Number.POSITIVE_INFINITY |
+**Options:**
 
-The third parameter is the configuration item, which tells the filter how to filter the data.
+|    Attribute    |                 Description                 |     Type      |  Default  |
+|:---------------:|:-------------------------------------------:|:-------------:|:---------:|
+| `startWithIndex` | Start counting from a given index          |    number     |     0     |
+|   `startWith`   | Start counting from a given element         |  not number   | undefined |
+|    `ignore`     | Ignore matched elements when counting       | RegExp, object | undefined |
+|      `cut`      | Whether to trim the front portion           |    boolean    |   false   |
 
-The fields of the configuration item are:
+#### Examples
 
-|   Attribute    |                          Description                           |      Type       |  Default  |
-|:--------------:|:--------------------------------------------------------------:|:---------------:|:---------:|
-| startWithIndex | Calculates the number of elements to limit based on the index  |     number      |     0     |
-|   startWith    | Calculate the number of elements to limit based on the element |   not number    | undefined |
-|     ignore     |             Ignore matched elements when counting              | RegExp , object | undefined |
-|      cut       |                      Whether to intercept                      |     boolean     |   false   |
-
-### Example
-
-- Limit the length of a string to no more than 3
+Limit a string to no more than 3 characters:
 
 ```html
 <div>{{ 'hello' | limitTo(3) }}</div>
 <!-- hel -->
 ```
 
-- Limit the length of a string to no more than 3 characters starting with the second letter
+Limit a string to 3 characters starting from the second letter:
 
 ```html
-<div>{{ 'hello' | limitTo(3, {startWithIndex:1}) }}</div>
+<div>{{ 'hello' | limitTo(3, {startWithIndex: 1}) }}</div>
 <!-- hell -->
 ```
 
-- If you want to cut the front part you can add cut
+Cut the front portion:
 
 ```html
-<div>{{ 'hello' | limitTo(3, {startWithIndex:1, cut: true}) }}</div>
+<div>{{ 'hello' | limitTo(3, {startWithIndex: 1, cut: true}) }}</div>
 <!-- ell -->
 ```
 
-- You can also specify the starting position based on the element
+Start from a specific element:
 
 ```html
-<div>{{ 3.1415 | limitTo(2, {startWith:'.'}) }}</div>
+<div>{{ 3.1415 | limitTo(2, {startWith: '.'}) }}</div>
 <!-- 3.1 -->
 ```
 
-- You can ignore it if you don't want irrelevant elements to affect the count
+Ignore irrelevant elements when counting:
 
 ```html
-<div>{{ 3.1415 | limitTo(2, {startWith:'.', ignore: /\./}) }}</div>
+<div>{{ 3.1415 | limitTo(2, {startWith: '.', ignore: /\./}) }}</div>
 <!-- 3.14 -->
 ```
 
-- Displays a number of eight bits of data
+Display 8 digits:
 
 ```html
-<div>{{ 123456789 | limitTo(8, {ignore: /\./}) }}</div>
+<div>{{ 123456789 | limitTo(8) }}</div>
 <!-- 12345678 -->
-```
 
-```html
 <div>{{ 3.141592653 | limitTo(8, {ignore: /\./}) }}</div>
 <!-- 3.1415926 -->
 ```
 
-- Limit Array
+Limit arrays:
 
 ```js
 limitTo([1, 2, 3, 4, 5], 2);
-// [1,2]
-```
+// [1, 2]
 
-```js
 limitTo([1, 2, 3, 4, 5], 2, { startWith: 3, cut: true });
-// [3,4]
+// [3, 4]
 ```
 
-## number
+### number
 
-Formats a number as a string or a string as a number.
-When you pass in an integer, you will default to one decimal places,
-and when you enter a decimal, you will get its string.
-You can also change the exact number of digits by passing in parameters,
-and set options parameters to determine whether you want to round, and fill in zeros.
+Formats a number as a string (or a string as a number).
 
-@param1 input
+When you pass in an integer, it will show one decimal place by default.
+For decimals, the string representation is returned.
+You can control the number of decimal digits, rounding, and zero-padding via parameters.
 
-@param2 digits
+| Parameter | Description | Type | Default |
+|:---------:|:-----------:|:----:|:-------:|
+| `input`   | The value to format | `number \| string` | - |
+| `digits`  | Number of decimal places | `number` | `8` |
+| `options` | `{round, pad, sign, separator, type}` | `object` | `{round: false, pad: false}` |
 
-@param3 options {round:false, pad:false}
+#### Examples
 
-### Example
-
-No parameter
+No parameters:
 
 ```html
 <div>{{ 3.14 | number }}</div>
 <!-- 3.14 -->
 ```
 
-Displays a maximum of 8 decimal places by default and does not round
+Displays a maximum of 8 decimal places by default without rounding:
+
 ```html
 <div>{{ 0.123456789 | number }}</div>
 <!-- 0.12345678 -->
 ```
 
-Limit digits
+Limit decimal places:
 
 ```html
 <div>{{ 3.1415926 | number(4) }}</div>
 <!-- 3.1415 -->
 ```
 
-Conversion scientific counting
+Convert scientific notation:
 
 ```html
 <div>{{ 5.2e-7 | number(8) }}</div>
 <!-- 0.00000052 -->
 ```
 
-Limit digits & Fill zero
+Limit digits & zero-pad:
 
 ```html
-<div>{{ 1 | number(2, {pad:true}) }}</div>
+<div>{{ 1 | number(2, {pad: true}) }}</div>
 <!-- 1.00 -->
 ```
 
-Limit digits & Rounding
+Limit digits & round:
 
 ```html
 <div>{{ 3.1415 | number(3, {round: true}) }}</div>
 <!-- 3.142 -->
 ```
 
-Display separator
+Show thousands separator:
 
 ```html
-<div>{{ 10000 | number(1, {separator:','}) }}</div>
+<div>{{ 10000 | number(1, {separator: ','}) }}</div>
 <!-- 10,000 -->
 ```
 
-Display positive sign
+Show positive sign:
 
 ```html
-<div>{ { 100.123456 | number(5, {round: true, sign: true}) } }</div>
+<div>{{ 100.123456 | number(5, {round: true, sign: true}) }}</div>
 <!-- +100.12346 -->
 ```
 
-Limit digits & Fill zero & Rounding
+Limit digits, zero-pad & round:
 
 ```jsx
-var arr = [
-  1,
-  2.2,
-  3.33,
-  4.444,
-  5.5555
-  ]
+var arr = [1, 2.2, 3.33, 4.444, 5.5555];
 
-<div v-for="num in arr">{{ num | number(3, {pad: true, round: true} )}}</div>
+<div v-for="num in arr">{{ num | number(3, {pad: true, round: true}) }}</div>
 
 // 1.000
 // 2.200
@@ -668,26 +649,102 @@ var arr = [
 // 5.556
 ```
 
-More than 8 decimal places need to pass in the number of parameters
+More than 8 decimal places requires passing the `digits` parameter:
 
 ```html
 <div>{{ 3.14e-20 | number(21) }}</div>
 <!-- 0.000000000000000000031 -->
 ```
 
-Change return type 
+Return a number type instead of string:
 
 ```js
-import { number } from 'easy-filter';
+import { number } from "easy-filter";
 
-const res = number('123.456',2,{round:true,type:'number'});
+const res = number("123.456", 2, { round: true, type: "number" });
 
-// The result is equal to the 123.46
-
-res === 123.46 
-
+// res === 123.46
 // true
 ```
+
+## API Reference
+
+### currency(input, symbol?, digits?, options?)
+
+Formats a number as a currency string.
+
+| Parameter | Type | Default | Description |
+|:---------:|:----:|:-------:|:-----------:|
+| `input` | `number \| string` | - | The number to format |
+| `symbol` | `string` | `'$'` | Currency symbol |
+| `digits` | `number` | `2` | Decimal places |
+| `options.symbolOnLeft` | `boolean` | `true` | Symbol position |
+| `options.separator` | `string` | `','`` | Thousands separator |
+| `options.addSpace` | `boolean` | `false` | Add space between symbol and amount |
+| `options.pad` | `boolean` | `true` | Zero-pad decimals |
+| `options.round` | `boolean` | `false` | Round the value |
+
+### date(input, formatMode?, option?)
+
+Formats a timestamp or Date object.
+
+| Parameter | Type | Default | Description |
+|:---------:|:----:|:-------:|:-----------:|
+| `input` | `number \| string \| Date` | - | Timestamp or Date |
+| `formatMode` | `string` | `'yyyy/MM/dd HH:mm:ss EEE'` | Format pattern (`yyyy`, `MM`, `dd`, `HH`, `hh`, `mm`, `ss`, `EEE`, `EE`) |
+| `option` | `'cn' \| 'en' \| DateOption` | `'en'` | Weekday locale |
+
+### filter(input, matchOptions)
+
+Selects a subset of items from an array or object.
+
+| Parameter | Type | Description |
+|:---------:|:----:|:-----------:|
+| `input` | `array \| object` | The data to filter |
+| `matchOptions` | `string \| RegExp \| Function \| {match, ignore}` | Match criteria |
+
+### orderBy(input, expression, reverse?, comparator?)
+
+Sorts an array by a property key or custom comparator.
+
+| Parameter | Type | Default | Description |
+|:---------:|:----:|:-------:|:-----------:|
+| `input` | `any[]` | - | Array to sort |
+| `expression` | `string \| Comparator` | - | Property key or sort function |
+| `reverse` | `boolean` | - | Reverse sort order |
+| `comparator` | `Comparator` | built-in | Custom comparison function |
+
+### limitTo(input, limit?, options?)
+
+Truncates a string, number, or array to a specified length.
+
+| Parameter | Type | Default | Description |
+|:---------:|:----:|:-------:|:-----------:|
+| `input` | `string \| number \| any[]` | - | Data to limit |
+| `limit` | `number` | `Infinity` | Max length |
+| `options` | `LimitToOption` | `{startWithIndex: 0}` | Configuration |
+
+### number(input, digits?, options?)
+
+Formats a number as a string (or converts a string to a number).
+
+| Parameter | Type | Default | Description |
+|:---------:|:----:|:-------:|:-----------:|
+| `input` | `number \| string` | - | Value to format |
+| `digits` | `number` | `8` | Decimal places |
+| `options.round` | `boolean` | `false` | Round the value |
+| `options.pad` | `boolean` | `false` | Zero-pad decimals |
+| `options.sign` | `boolean \| {zero}` | `false` | Show positive sign |
+| `options.separator` | `string` | `''` | Thousands separator |
+| `options.type` | `'string' \| 'number'` | `'string'` | Return type |
+
+### uppercase(input, start?, end?)
+
+Converts a string to uppercase, optionally within a range.
+
+### lowercase(input, start?, end?)
+
+Converts a string to lowercase, optionally within a range.
 
 ## License
 
