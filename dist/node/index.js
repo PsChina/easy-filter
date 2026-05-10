@@ -1,22 +1,13 @@
 "use strict";
-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
+var __spreadArrays = (this && this.__spreadArrays) || function () {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.currency = currency;
-exports.date = date;
-exports.orderBy = orderBy;
-exports.filter = filter;
-exports.number = number;
-exports.limitTo = limitTo;
-exports.uppercase = uppercase;
-exports.lowercase = lowercase;
+exports.lowercase = exports.uppercase = exports.limitTo = exports.number = exports.filter = exports.orderBy = exports.date = exports.currency = void 0;
 /**
  * @currency
  * 给展示金额数字加上货币符号以及分隔符。
@@ -62,7 +53,7 @@ function currency(input, symbol, digits, _a) {
             data = int;
         }
         else {
-            data = "".concat(int ? int : '0', ".").concat(pad ? String(decimal).padEnd(digits, '0') : decimal);
+            data = (int ? int : '0') + "." + (pad ? String(decimal).padEnd(digits, '0') : decimal);
         }
     }
     else {
@@ -76,9 +67,9 @@ function currency(input, symbol, digits, _a) {
         // 拆分
         var int = intPart.replace(/\B(?=(?:\d{3})+(?!\d))/g, separator);
         // 添加小数部分
-        data = "".concat(int ? int : '0').concat(pad ? '.'.padEnd(digits + 1, '0') : '');
+        data = "" + (int ? int : '0') + (pad ? '.'.padEnd(digits + 1, '0') : '');
         if (digits <= 0) {
-            data = "".concat(int);
+            data = "" + int;
         }
     }
     if (data.charAt(0) === separator) {
@@ -86,11 +77,12 @@ function currency(input, symbol, digits, _a) {
     }
     if (addSpace) {
         return symbolOnLeft
-            ? "".concat(symbol, " ").concat(data)
-            : "".concat(data, " ").concat(symbol);
+            ? symbol + " " + data
+            : data + " " + symbol;
     }
     return symbolOnLeft ? symbol + data : data + symbol;
 }
+exports.currency = currency;
 /**
  * @sciNumToString
  * 将科学计数法表示的数字转换为非科学计数法表示的字符串。
@@ -142,7 +134,7 @@ function plus(num1, num2) {
         others[_i - 2] = arguments[_i];
     }
     if (others.length > 0) {
-        return plus.apply(void 0, __spreadArray([plus(num1, num2), others[0]], others.slice(1), false));
+        return plus.apply(void 0, __spreadArrays([plus(num1, num2), others[0]], others.slice(1)));
     }
     var baseNum = Math.pow(10, Math.max(digitLength(num1), digitLength(num2)));
     return (times(num1, baseNum) + times(num2, baseNum)) / baseNum;
@@ -159,7 +151,7 @@ function times(num1, num2) {
         others[_i - 2] = arguments[_i];
     }
     if (others.length > 0) {
-        return times.apply(void 0, __spreadArray([times(num1, num2), others[0]], others.slice(1), false));
+        return times.apply(void 0, __spreadArrays([times(num1, num2), others[0]], others.slice(1)));
     }
     var num1Changed = float2Fixed(num1);
     var num2Changed = float2Fixed(num2);
@@ -194,13 +186,13 @@ function roundDecimalPart(round, intPart, decimalPart, digits) {
         var reservedPortion = decimalPart.substr(0, digits);
         var roundPart = Number(decimalPart.substr(digits, 1));
         if (roundPart >= 5) {
-            decimal = String(plus(Number("0.".concat(reservedPortion)), Number(digits ? "0.".concat('1'.padStart(digits, '0')) : '1')));
+            decimal = String(plus(Number("0." + reservedPortion), Number(digits ? "0." + '1'.padStart(digits, '0') : '1')));
             if (Number(decimal) >= 1) {
                 intPart = String(Number(intPart) + (intPart.charAt(0) === '-' ? -1 : 1));
                 decimal = '0';
             }
             else {
-                decimal = "".concat(decimal).substr(2, digits);
+                decimal = ("" + decimal).substr(2, digits);
             }
         }
         else {
@@ -254,6 +246,7 @@ function date(input, formatMode, option) {
         }
     }
 }
+exports.date = date;
 function formatTimeWithMode(time, mode, opt) {
     var dateData = new Date(time);
     var optionType = typeof opt;
@@ -308,21 +301,21 @@ function formatTimeWithMode(time, mode, opt) {
     mode = mode.replace(/(y|Y){1,4}|MM|dd|hh|HH|mm|ss|E{1,4}/g, function (value) {
         switch (value) {
             case 'MM': // Replace the month.
-                return "".concat(dateData.getMonth() + 1).padStart(2, '0');
+                return ("" + (dateData.getMonth() + 1)).padStart(2, '0');
             case 'dd': // Replace the date.
-                return "".concat(dateData.getDate()).padStart(2, '0');
+                return ("" + dateData.getDate()).padStart(2, '0');
             case 'hh': // Replace the hours (12-hour system).
                 var hours = dateData.getHours();
                 if (hours > 12) {
-                    return "".concat(hours - 12).padStart(2, '0');
+                    return ("" + (hours - 12)).padStart(2, '0');
                 }
-                return "".concat(hours).padStart(2, '0');
+                return ("" + hours).padStart(2, '0');
             case 'HH': // Replace the hours (24 hour system).
-                return "".concat(dateData.getHours()).padStart(2, '0');
+                return ("" + dateData.getHours()).padStart(2, '0');
             case 'mm': // Replace the minutes.
-                return "".concat(dateData.getMinutes()).padStart(2, '0');
+                return ("" + dateData.getMinutes()).padStart(2, '0');
             case 'ss': // Replace the second.
-                return "".concat(dateData.getSeconds()).padStart(2, '0');
+                return ("" + dateData.getSeconds()).padStart(2, '0');
             default:
                 // Replace the years and week.
                 if (value.toLocaleLowerCase().includes('y')) {
@@ -374,6 +367,7 @@ function orderBy(input, expression, reverse, comparator) {
     }
     return input;
 }
+exports.orderBy = orderBy;
 function valueMatches(value, match) {
     if (value === undefined || value === null) {
         return false;
@@ -461,6 +455,7 @@ function filter(input, matchOptions) {
         return filterObj(input, matchOptions);
     }
 }
+exports.filter = filter;
 /**
  * childExists
  */
@@ -565,14 +560,14 @@ function number(input, digits, options) {
         if (digits <= 0) {
             return typeResult('0', type);
         }
-        return typeResult(pad ? "0.".concat('0'.padEnd(digits, '0')) : '0', type);
+        return typeResult(pad ? "0." + '0'.padEnd(digits, '0') : '0', type);
     }
     input = input;
     if (isNaN(Number(input))) {
         return typeResult(String(input), type);
     }
     if (Number(input) === 0 && typeof sign === 'object') {
-        input = "".concat(sign.zero, "0");
+        input = sign.zero + "0";
     }
     // 若输入的数据为科学计数法表示的数据，转换为非科学计数法表示。
     var temp = sciNumToString(input);
@@ -586,21 +581,22 @@ function number(input, digits, options) {
         int = intPart.replace(/\B(?=(?:\d{3})+(?!\d))/g, separator || '');
     }
     if (Number(input) > 0 && sign) {
-        int = "+".concat(int);
+        int = "+" + int;
     }
     if (!digits) {
         return typeResult(String(int), type);
     }
     if (pad) {
-        return typeResult("".concat(int).concat(decimal ? ".".concat(decimal.padEnd(digits, '0')) : ''), type);
+        return typeResult("" + int + (decimal ? "." + decimal.padEnd(digits, '0') : ''), type);
     }
     else {
         if (Number(decimal) === 0) {
             return typeResult(int, type);
         }
-        return typeResult(decimal ? "".concat(int, ".").concat(decimal) : int, type);
+        return typeResult(decimal ? int + "." + decimal : int, type);
     }
 }
+exports.number = number;
 /**
  * @limitTo
  * Creates a new array or string containing only a specified number of elements.
@@ -657,6 +653,7 @@ function limitTo(input, limit, option) {
         }
     }
 }
+exports.limitTo = limitTo;
 function getOutput(array, option) {
     var startIndex = option.startIndex, reverse = option.reverse, ignore = option.ignore, limit = option.limit, type = option.type, cut = option.cut;
     var endIndex = startIndex + Number(limit);
@@ -709,6 +706,7 @@ function uppercase(input, start, end) {
     }
     return output;
 }
+exports.uppercase = uppercase;
 /**
  * @lowercase LowerCase string.
  */
@@ -720,6 +718,7 @@ function lowercase(input, start, end) {
     }
     return output;
 }
+exports.lowercase = lowercase;
 function transformCaseWithRange(input, func, start, end) {
     if (end === '') {
         end = undefined;

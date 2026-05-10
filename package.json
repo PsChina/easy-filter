@@ -7,8 +7,8 @@
   "typings": "types/index.d.ts",
   "scripts": {
     "test": "cd ./test/easy-filter-test/ && yarn serve",
-    "node": "tsc ./src/index.ts --lib 'esnext','dom','dom.iterable','scripthost','es2017.string' --target ES5 --outDir ./dist/node/ ",
-    "esm": "tsc ./src/index.ts --lib 'esnext','dom' --target es5 --module ESNext --outDir ./dist/esm/",
+    "node": "tsc ./src/index.ts --lib esnext,dom,dom.iterable,scripthost,es2017.string --target ES5 --outDir ./dist/node/ ",
+    "esm": "tsc ./src/index.ts --lib esnext,dom --target es5 --module ESNext --outDir ./dist/esm/",
     "browser": "webpack --mode production",
     "build": "npm run esm && npm run browser && npm run node"
   },

@@ -4,7 +4,6 @@
     "module": "esnext",
     "strict": true,
     "jsx": "preserve",
-    "importHelpers": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
@@ -16,4 +15,8 @@
       "es2017.string"
     ]
   },
+  "exclude": [
+    "node_modules",
+    "test"
+  ]
 }
