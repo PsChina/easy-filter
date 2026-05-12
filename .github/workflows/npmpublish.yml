@@ -12,6 +12,8 @@ jobs:
     permissions:
       id-token: write
       contents: read
+    env:
+      NODE_OPTIONS: --openssl-legacy-provider
     steps:
       - uses: actions/checkout@v4
 
@@ -25,8 +27,6 @@ jobs:
 
       - name: Build
         run: npm run build
-        env:
-          NODE_OPTIONS: --openssl-legacy-provider
 
       - name: Verify build output
         run: |
